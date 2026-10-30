@@ -1,0 +1,1199 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Evaluación de Desempeño</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="icon" type="image/png" href="../public/cimba-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: barra superior fija con el isotipo municipal y la franja azul/celeste/amarilla; columna de trabajo de 1120px. El director trabaja en una sola columna (lista → formulario con barra de puntaje fija abajo); Capital Humano usa pestañas y una grilla de tarjetas. Pie azul institucional con el logo en blanco. */
+:root{
+  /* Identidad municipal: azul #0066FF, celeste #2EB1FF, amarillo #F4DC00, tinta azul marino */
+  --brand:#0066ff; --sky:#2eb1ff; --sun:#f4dc00; --navy:#0b1d3f;
+  --bg:#f4f7fc; --surface:#ffffff; --surface-2:#edf2fa;
+  --ink:#0b1d3f; --ink-2:#44536e; --muted:#67768f; --line:#dbe3ef; --line-2:#c5d0e0;
+  --accent:#0066ff; --accent-hover:#0052d6; --accent-ink:#ffffff; --accent-soft:#e5efff; --focus:#0066ff;
+  --s-now:#0066ff; --s-prev:#848fa0; --track:#d6e6ff; --grid:#e7edf6; --base:#c5d0e0;
+  --cat-1:#7fb2ff; --cat-2:#4087ff; --cat-3:#0066ff; --cat-4:#0047b3; --cat-5:#0b1d3f;
+  --cat-1-ink:#0b1d3f; --cat-2-ink:#0b1d3f; --cat-3-ink:#ffffff; --cat-4-ink:#ffffff; --cat-5-ink:#ffffff;
+  --ok:#0ca30c; --ok-fg:#0b6b0b; --ok-bg:#e3f4e3;
+  --warn:#fab219; --warn-fg:#7a5200; --warn-bg:#fdf1d6;
+  --bad:#d03b3b; --bad-fg:#a12a2a; --bad-bg:#fbe6e6;
+  --band:#0066ff; --band-ink:#ffffff; --band-ink-2:rgba(255,255,255,.8);
+  --scrim:rgba(6,14,32,.5);
+  --shadow:0 1px 2px rgba(11,29,63,.06), 0 6px 20px rgba(11,29,63,.08);
+  --shadow-up:0 -6px 20px rgba(11,29,63,.08);
+  --f-display:"Poppins",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-body:"Poppins",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --r:12px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0b1222; --surface:#131c2e; --surface-2:#1a2539;
+    --ink:#eaf0fa; --ink-2:#b2bdd0; --muted:#8793a8; --line:#26324a; --line-2:#34425e;
+    --accent:#4d94ff; --accent-hover:#70a9ff; --accent-ink:#04101f; --accent-soft:#14274a; --focus:#4d94ff;
+    --s-now:#4d94ff; --s-prev:#6b7787; --track:#1a2d52; --grid:#1f2a40; --base:#3a4762;
+    --cat-1:#0d47b0; --cat-2:#0b5ce0; --cat-3:#2f80ff; --cat-4:#79adff; --cat-5:#cfe1ff;
+    --cat-1-ink:#ffffff; --cat-2-ink:#ffffff; --cat-3-ink:#ffffff; --cat-4-ink:#0b1d3f; --cat-5-ink:#0b1d3f;
+    --ok-fg:#63d363; --ok-bg:#132a17; --warn-fg:#f5c451; --warn-bg:#2e2410; --bad-fg:#f08a8a; --bad-bg:#331a1a;
+    --band:#0a3fa3;
+    --scrim:rgba(0,0,0,.6);
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 6px 20px rgba(0,0,0,.3);
+    --shadow-up:0 -6px 20px rgba(0,0,0,.35);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0b1222; --surface:#131c2e; --surface-2:#1a2539;
+  --ink:#eaf0fa; --ink-2:#b2bdd0; --muted:#8793a8; --line:#26324a; --line-2:#34425e;
+  --accent:#4d94ff; --accent-hover:#70a9ff; --accent-ink:#04101f; --accent-soft:#14274a; --focus:#4d94ff;
+  --s-now:#4d94ff; --s-prev:#6b7787; --track:#1a2d52; --grid:#1f2a40; --base:#3a4762;
+  --cat-1:#0d47b0; --cat-2:#0b5ce0; --cat-3:#2f80ff; --cat-4:#79adff; --cat-5:#cfe1ff;
+  --cat-1-ink:#ffffff; --cat-2-ink:#ffffff; --cat-3-ink:#ffffff; --cat-4-ink:#0b1d3f; --cat-5-ink:#0b1d3f;
+  --ok-fg:#63d363; --ok-bg:#132a17; --warn-fg:#f5c451; --warn-bg:#2e2410; --bad-fg:#f08a8a; --bad-bg:#331a1a;
+  --band:#0a3fa3;
+  --scrim:rgba(0,0,0,.6);
+  --shadow:0 1px 2px rgba(0,0,0,.3), 0 6px 20px rgba(0,0,0,.3);
+  --shadow-up:0 -6px 20px rgba(0,0,0,.35);
+  color-scheme:dark;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:14.5px;line-height:1.55;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.2;color:var(--ink)}
+h1{font-size:clamp(1.5rem,1.1rem + 1.5vw,2.1rem);font-weight:700;letter-spacing:-.02em}
+h2{font-size:1.06rem;font-weight:600;letter-spacing:-.01em}
+h3{font-size:.95rem;font-weight:600}
+p{margin:0}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.muted{color:var(--muted)}
+.num{font-variant-numeric:tabular-nums}
+
+.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+
+/* Barra superior */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--surface);border-bottom:1px solid var(--line)}
+.top::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:3px;background:linear-gradient(90deg,var(--brand) 0 68%,var(--sky) 68% 92%,var(--sun) 92% 100%)}
+.top-in{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:64px;padding-block:8px}
+.brand{display:flex;align-items:center;gap:12px;min-width:0;background:none;border:0;padding:0;cursor:pointer;text-align:left}
+.brand img{height:36px;width:auto;flex:none}
+.brand-t{display:flex;flex-direction:column;line-height:1.25;min-width:0}
+.brand-t strong{font-family:var(--f-display);font-weight:700;font-size:.98rem;letter-spacing:-.01em}
+.brand-t span{font-size:.74rem;color:var(--muted)}
+.top-who{display:flex;align-items:center;gap:12px;font-size:.84rem;color:var(--ink-2);min-width:0}
+.top-who span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.top-who .short{display:none}
+@media (max-width:640px){
+  .brand-t span,#top-who{display:none}
+  .brand-t strong{white-space:nowrap}
+  .brand img{height:30px}
+  .top-who .long{display:none}
+  .top-who .short{display:inline}
+}
+.demo{background:var(--accent-soft);color:var(--ink-2);font-size:.78rem}
+.demo-in{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:2px 12px;padding-block:6px}
+.linkbtn{background:none;border:0;padding:4px 0;color:var(--accent);font-weight:600;cursor:pointer;font-size:inherit;text-decoration:underline;text-underline-offset:2px}
+
+/* Pie institucional */
+.foot{background:var(--band);color:var(--band-ink)}
+.foot-in{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 24px;padding-block:22px calc(22px + env(safe-area-inset-bottom,0px))}
+.foot-brand{display:flex;align-items:center;gap:12px}
+.foot-brand img{height:40px;width:auto}
+.foot-brand div{display:grid;line-height:1.3}
+.foot-brand strong{font-weight:600;font-size:.95rem}
+.foot-brand span,.foot-note{font-size:.78rem;color:var(--band-ink-2)}
+
+/* Migue */
+.migue{flex:none;border-radius:50%;background:#ffffff;overflow:hidden;box-shadow:0 0 0 4px var(--surface),0 0 0 5px var(--line)}
+.migue img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 18%}
+.done-card{display:flex;align-items:center;gap:18px;padding:18px 20px;margin-bottom:16px;border-color:var(--sky)}
+.done-card .migue{width:72px;height:72px}
+.done-card div{display:grid;gap:2px}
+
+main.wrap{padding-block:28px 72px}
+.eyebrow{font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
+.sub{color:var(--ink-2)}
+
+/* Controles */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:40px;padding:0 16px;border-radius:8px;border:1px solid var(--line-2);background:var(--surface);color:var(--ink);font-weight:600;font-size:.9rem;cursor:pointer;white-space:nowrap}
+.btn:hover{background:var(--surface-2)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.primary:hover{background:var(--accent-hover);border-color:var(--accent-hover)}
+.btn.sm{min-height:34px;padding:0 12px;font-size:.84rem}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn.ghost{border-color:transparent;background:transparent;color:var(--accent);padding-left:0}
+.btn.ghost:hover{text-decoration:underline}
+input[type=search],input[type=text],select,textarea{width:100%;min-height:42px;border:1px solid var(--line-2);border-radius:8px;background:var(--surface);padding:8px 12px}
+textarea{resize:vertical;min-height:88px;line-height:1.45}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.field label,.lbl{font-size:.84rem;font-weight:600;color:var(--ink-2)}
+.hint{font-size:.85rem;color:var(--ink-2);min-height:1.3em}
+
+/* Estados y categorías */
+.pill{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font-size:.78rem;font-weight:600;background:var(--surface-2);color:var(--ink-2);white-space:nowrap}
+.pill::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--muted);flex:none}
+.pill.ok{background:var(--ok-bg);color:var(--ok-fg)} .pill.ok::before{background:var(--ok)}
+.pill.warn{background:var(--warn-bg);color:var(--warn-fg)} .pill.warn::before{background:var(--warn)}
+.pill.bad{background:var(--bad-bg);color:var(--bad-fg)} .pill.bad::before{background:var(--bad)}
+.cat-1{--c:var(--cat-1);--ci:var(--cat-1-ink)} .cat-2{--c:var(--cat-2);--ci:var(--cat-2-ink)} .cat-3{--c:var(--cat-3);--ci:var(--cat-3-ink)}
+.cat-4{--c:var(--cat-4);--ci:var(--cat-4-ink)} .cat-5{--c:var(--cat-5);--ci:var(--cat-5-ink)}
+.k-now{--c:var(--s-now)} .k-prev{--c:var(--s-prev)}
+.chip-cat{display:inline-block;padding:2px 8px;border-radius:5px;font-size:.74rem;font-weight:700;background:var(--c);color:var(--ci);white-space:nowrap;letter-spacing:.01em}
+
+/* Regla de categorías */
+.ruler{position:relative;padding-top:24px;min-width:0}
+.ruler.bare{padding-top:0}
+.ruler-track{display:flex;gap:2px;height:10px}
+.ruler-track span{background:var(--c);min-width:6px}
+.ruler-track span:first-child{border-radius:4px 0 0 4px}
+.ruler-track span:last-child{border-radius:0 4px 4px 0}
+.ruler-ticks{position:relative;height:1.3em;margin-top:4px;font-size:.72rem;color:var(--muted)}
+.ruler-ticks span{position:absolute;transform:translateX(-50%);font-variant-numeric:tabular-nums}
+.ruler-ticks span:first-child{transform:none}
+.ruler-ticks span:last-child{transform:translateX(-100%)}
+.ruler-pin{position:absolute;top:0;transform:translateX(-50%);font-size:.75rem;font-weight:700;color:var(--ink);line-height:1;transition:left .25s ease}
+.ruler-pin::after{content:"";position:absolute;left:50%;top:15px;margin-left:-5px;border:5px solid transparent;border-top-color:var(--ink)}
+.ruler-legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:.82rem;color:var(--ink-2)}
+.ruler-legend span{display:inline-flex;align-items:center;gap:6px}
+.ruler-legend span::before{content:"";width:12px;height:10px;border-radius:2px;background:var(--c)}
+.ruler-legend b{color:var(--ink);font-weight:600}
+
+/* Inicio */
+.home{display:grid;gap:28px}
+.home-top{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px 40px;align-items:center}
+.home-migue{margin:0;display:grid;justify-items:center;gap:10px;max-width:220px}
+.home-migue .migue{width:180px;height:180px}
+.home-migue figcaption{font-size:.82rem;color:var(--ink-2);text-align:center}
+@media (max-width:720px){
+  .home-top{grid-template-columns:minmax(0,1fr)}
+  .home-migue{grid-row:1;grid-template-columns:auto minmax(0,1fr);max-width:none;justify-items:start;align-items:center;gap:14px}
+  .home-migue .migue{width:72px;height:72px}
+  .home-migue figcaption{text-align:left}
+}
+.eyebrow.sun::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--sun);margin-right:8px;vertical-align:1px}
+.home-intro{display:grid;gap:12px;max-width:46rem}
+.lead{font-size:1.05rem;color:var(--ink-2);max-width:40rem}
+.facts{display:flex;flex-wrap:wrap;gap:10px 28px;margin:6px 0 0;padding:0}
+.facts div{display:flex;flex-direction:column;min-width:0}
+dt{font-size:.72rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:600}
+dd{margin:0;font-weight:600}
+.roles{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:16px}
+.role{padding:22px;display:flex;flex-direction:column;gap:12px}
+.role p{color:var(--ink-2)}
+.role .btn{align-self:flex-start;margin-top:auto}
+.how{padding:22px;display:grid;gap:16px}
+.how-cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:12px 28px}
+.how-cols p{color:var(--ink-2);font-size:.92rem}
+
+/* Lista del director */
+.page-head{display:grid;gap:8px;margin-bottom:20px}
+.progress{display:flex;align-items:center;gap:8px 14px;flex-wrap:wrap;margin-top:6px}
+.meter{height:8px;border-radius:4px;background:var(--track);overflow:hidden;flex:1 1 160px;max-width:320px}
+.meter>span{display:block;height:100%;background:var(--s-now);border-radius:0 4px 4px 0}
+.list-card{overflow:hidden;margin-bottom:16px}
+.tools{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px 16px;padding:16px;border-bottom:1px solid var(--line)}
+.tools .field{flex:1 1 280px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{min-height:38px;padding:0 14px;border-radius:999px;border:1px solid var(--line-2);background:var(--surface);font-size:.85rem;font-weight:600;cursor:pointer;color:var(--ink-2)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.chip .n{font-variant-numeric:tabular-nums;opacity:.75;margin-left:4px}
+.row{display:grid;grid-template-columns:4.5rem minmax(0,1fr) 9.5rem 8.5rem 9rem;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:0}
+.row .leg{font-variant-numeric:tabular-nums;color:var(--ink-2);font-weight:600}
+.row .who strong{display:block;font-weight:600}
+.row .who span{font-size:.82rem;color:var(--muted)}
+.row .who .leg-m{display:none}
+.row .meta{display:contents}
+.row .score{display:flex;align-items:center;gap:8px;font-variant-numeric:tabular-nums;font-weight:700}
+.row .btn{justify-self:end}
+.row.flash{animation:flash 2.6s ease-out}
+@keyframes flash{from{background:var(--accent-soft)}to{background:transparent}}
+.list-head{display:grid;grid-template-columns:4.5rem minmax(0,1fr) 9.5rem 8.5rem 9rem;gap:12px;padding:8px 16px;border-bottom:1px solid var(--line);background:var(--surface-2);font-size:.72rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:600}
+.empty{padding:28px 16px;display:grid;gap:8px;justify-items:start;color:var(--ink-2)}
+@media (max-width:760px){
+  .list-head{display:none}
+  .row{grid-template-columns:minmax(0,1fr) auto;gap:6px 12px}
+  .row .leg{display:none}
+  .row .who .leg-m{display:inline}
+  .row .meta{display:flex;flex-wrap:wrap;align-items:center;gap:8px;grid-column:1}
+  .row .btn{grid-column:2;grid-row:1 / span 2;align-self:center}
+}
+.req{padding:20px;display:grid;gap:12px}
+.req-form{display:grid;grid-template-columns:minmax(0,10rem) minmax(0,16rem) auto;gap:12px;align-items:end}
+@media (max-width:640px){.req-form{grid-template-columns:minmax(0,1fr)} .req-form .btn{justify-self:start}}
+.req-list{display:grid;gap:8px;margin-top:4px;padding:0;list-style:none}
+.req-list li{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 12px;padding:10px 12px;border-radius:8px;background:var(--surface-2);font-size:.88rem}
+
+/* Formulario de evaluación */
+.agent{padding:20px;display:grid;gap:14px;margin-bottom:18px}
+.note{font-size:.88rem;color:var(--ink-2);padding:10px 12px;background:var(--surface-2);border-radius:8px}
+.instr{color:var(--ink-2);margin:0 0 18px;max-width:62ch}
+.group{display:grid;gap:12px;margin-bottom:26px}
+.group-h{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.group-h span{color:var(--muted);font-size:.85rem}
+fieldset.comp{margin:0;padding:18px 20px;min-width:0;display:grid;gap:10px;scroll-margin-top:96px}
+fieldset.comp legend{float:left;width:100%;padding:0;display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.comp-name{font-family:var(--f-display);font-weight:600;font-size:1.02rem;color:var(--ink)}
+.comp-st{font-size:.8rem;color:var(--muted);font-weight:600;white-space:nowrap}
+.comp.done .comp-st{color:var(--ok-fg)}
+.comp.missing{border-color:var(--bad);box-shadow:0 0 0 1px var(--bad)}
+.comp.missing .comp-st{color:var(--bad-fg)}
+.comp-desc{color:var(--ink-2);font-size:.92rem;max-width:68ch}
+.scale{position:relative;display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:6px;max-width:580px;margin-top:4px}
+.scale input{position:absolute;opacity:0;width:1px;height:1px;margin:0;pointer-events:none}
+.scale label{display:grid;place-items:center;height:42px;border:1px solid var(--line-2);border-radius:8px;font-size:.95rem;font-weight:600;color:var(--ink-2);cursor:pointer;font-variant-numeric:tabular-nums;background:var(--surface);transition:background .12s,border-color .12s}
+.scale label:hover{border-color:var(--accent);color:var(--accent)}
+.scale input:checked + label{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.scale input:focus-visible + label{outline:2px solid var(--focus);outline-offset:2px}
+.scale-ends{display:flex;justify-content:space-between;max-width:580px;font-size:.74rem;color:var(--muted)}
+@media (max-width:420px){.scale{gap:3px}.scale label{height:38px;font-size:.86rem;border-radius:6px}}
+.obs{padding:18px 20px;display:grid;gap:8px}
+.obs-n{font-size:.78rem;color:var(--muted);justify-self:end}
+.scorebar{position:sticky;bottom:0;z-index:5;margin-top:22px;background:var(--surface);border:1px solid var(--line);border-bottom:0;border-radius:var(--r) var(--r) 0 0;box-shadow:var(--shadow-up);padding:14px 18px calc(14px + env(safe-area-inset-bottom,0px));display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px 22px;align-items:center}
+.sb-score{display:flex;align-items:baseline;white-space:nowrap}
+.sb-num{font-family:var(--f-display);font-size:2.1rem;font-weight:700;line-height:1;font-variant-numeric:tabular-nums}
+.sb-num.partial{color:var(--muted)}
+.sb-max{color:var(--muted);font-weight:600;margin-left:3px}
+.sb-mid{display:grid;gap:4px;min-width:0}
+.sb-line{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center;font-size:.86rem;color:var(--ink-2)}
+.sb-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.sb-confirm{grid-column:1 / -1;border-top:1px solid var(--line);padding-top:12px;display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between}
+.sb-confirm p{max-width:60ch}
+.sb-confirm div{display:flex;gap:8px;flex-wrap:wrap}
+@media (max-width:680px){
+  .scorebar{grid-template-columns:auto minmax(0,1fr);padding-inline:14px}
+  .sb-actions{grid-column:1 / -1}
+  .sb-actions .btn{flex:1 1 0}
+  .sb-mid .ruler{display:none}
+}
+
+/* Panel de Capital Humano */
+.ch-head{display:grid;gap:6px;margin-bottom:18px}
+.tabs{display:flex;gap:2px;box-shadow:inset 0 -1px 0 var(--line);margin-bottom:20px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none}
+.tab{background:none;border:0;border-bottom:2px solid transparent;padding:10px 14px;font-weight:600;color:var(--ink-2);cursor:pointer;white-space:nowrap;font-size:.92rem}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.tab .n{display:inline-block;margin-left:6px;padding:0 7px;border-radius:999px;background:var(--warn-bg);color:var(--warn-fg);font-size:.75rem}
+.filters{display:flex;flex-wrap:wrap;gap:12px 16px;align-items:flex-end;margin-bottom:12px}
+.filters .field{flex:0 1 270px}
+.filters .count{font-size:.85rem;color:var(--muted);padding-bottom:10px}
+.banner{font-size:.86rem;color:var(--ink-2);margin-bottom:16px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:12px;margin-bottom:16px}
+.kpi{padding:16px 18px;display:grid;gap:6px;align-content:start}
+.kpi-label{font-size:.84rem;color:var(--ink-2);font-weight:600}
+.kpi-val{font-size:2rem;font-weight:700;line-height:1.1}
+.kpi-val small{font-size:.95rem;color:var(--muted);font-weight:600;margin-left:2px}
+.kpi-sub{font-size:.82rem;color:var(--muted)}
+.kpi .meter{max-width:none;flex:none}
+.delta{font-size:.84rem;font-weight:600}
+.delta.up{color:var(--ok-fg)} .delta.down{color:var(--bad-fg)} .delta.flat{color:var(--muted)}
+.delta span{color:var(--muted);font-weight:500}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.span2{grid-column:1 / -1}
+@media (max-width:900px){.grid2{grid-template-columns:minmax(0,1fr)}}
+.chart{padding:18px 20px;display:grid;gap:14px;min-width:0;align-content:start}
+.chart-h{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.chart-h > div{display:grid;gap:3px;min-width:0}
+.chart-h p{font-size:.85rem;color:var(--muted)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:.8rem;color:var(--ink-2)}
+.lg{display:inline-flex;align-items:center;gap:6px}
+.lg i{display:inline-block;width:14px;height:10px;border-radius:2px;background:var(--c)}
+.lg i.dot{width:10px;height:10px;border-radius:50%}
+.chart-empty{padding:24px 0;color:var(--muted);font-size:.9rem}
+
+/* Barras horizontales */
+.bars{display:grid;gap:2px}
+.bar-row,.bar-axis{display:grid;grid-template-columns:minmax(0,11.5rem) minmax(0,1fr) 2.75rem;gap:12px;align-items:center}
+.bar-row{padding:3px 0;border-radius:6px;cursor:default}
+.bar-row:hover{background:var(--surface-2)}
+.bar-label{font-size:.86rem;color:var(--ink-2);line-height:1.25}
+.bar-track{position:relative;height:22px}
+.gl{position:absolute;top:0;bottom:0;width:1px;background:var(--grid)}
+.gl.base{background:var(--base)}
+.bar-fill{position:absolute;left:0;top:50%;transform:translateY(-50%);height:14px;background:var(--s-now);border-radius:0 4px 4px 0}
+.bar-row:hover .bar-fill,.bar-row:focus-visible .bar-fill{filter:brightness(1.12)}
+.bar-prev{position:absolute;top:50%;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:var(--s-prev);box-shadow:0 0 0 2px var(--surface)}
+.bar-row:hover .bar-prev{box-shadow:0 0 0 2px var(--surface-2)}
+.bar-val{font-size:.86rem;font-weight:700;text-align:right;font-variant-numeric:tabular-nums}
+.axis-track{position:relative;height:1.3em;font-size:.72rem;color:var(--muted)}
+.axis-track span{position:absolute;transform:translateX(-50%);font-variant-numeric:tabular-nums}
+@media (max-width:560px){
+  .bar-row,.bar-axis{grid-template-columns:minmax(0,1fr) 2.5rem;row-gap:0}
+  .bar-label{grid-column:1 / -1}
+  .bar-axis > span:first-child{display:none}
+}
+
+/* Barra apilada de categorías */
+.stacks{display:grid;gap:12px}
+.stack-row{display:grid;grid-template-columns:8.5rem minmax(0,1fr);gap:12px;align-items:center}
+.stack-label{display:grid;font-weight:600;font-size:.9rem;line-height:1.25}
+.stack-label small{font-weight:500;color:var(--muted);font-size:.78rem}
+.stack{display:flex;gap:2px;height:24px;min-width:0}
+.seg{background:var(--c);color:var(--ci);display:flex;align-items:center;justify-content:center;font-size:.74rem;font-weight:700;min-width:3px;font-variant-numeric:tabular-nums;cursor:default}
+.seg:last-child{border-radius:0 4px 4px 0}
+.seg:hover,.seg:focus-visible{filter:brightness(1.12)}
+.stack.none{align-items:center;color:var(--muted);font-size:.85rem}
+@media (max-width:560px){.stack-row{grid-template-columns:minmax(0,1fr);gap:4px}.stack-label{display:flex;gap:8px;align-items:baseline}}
+
+/* Tablas */
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+.chart .table-wrap{border-radius:8px}
+table.data{width:100%;border-collapse:collapse;font-size:.88rem}
+.data th{text-align:left;font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600;padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap;background:var(--surface-2)}
+.data td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+.data tr:last-child td{border-bottom:0}
+.data .num,.data th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.data td.nowrap{white-space:nowrap}
+.data .sm{display:block;font-size:.8rem;color:var(--muted)}
+.data .meter{min-width:110px;max-width:180px}
+.cellmeter{display:flex;align-items:center;gap:10px;white-space:nowrap}
+.section{display:grid;gap:12px;margin-bottom:28px}
+.section-h{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:10px 16px}
+.section-h p{color:var(--muted);font-size:.88rem}
+
+/* Configuración */
+.cfg{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:16px;margin-bottom:16px}
+.cfg .card{padding:18px 20px;display:grid;gap:12px;align-content:start}
+.comp-list{display:grid;gap:0;padding:0;margin:0;list-style:none}
+.comp-list li{display:grid;grid-template-columns:minmax(0,15rem) minmax(0,1fr);gap:4px 20px;padding:12px 0;border-top:1px solid var(--line)}
+.comp-list li:first-child{border-top:0}
+.comp-list strong{font-weight:600}
+.comp-list p{color:var(--ink-2);font-size:.88rem}
+@media (max-width:640px){.comp-list li{grid-template-columns:minmax(0,1fr)}}
+
+/* Detalle (modal) */
+.modal-back{position:fixed;inset:0;z-index:20;background:var(--scrim);display:grid;place-items:center;padding:16px}
+.modal{width:min(680px,100%);max-height:calc(100% - 16px);overflow:auto;padding:22px;display:grid;gap:16px;box-shadow:var(--shadow)}
+.modal-h{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.d-tot{display:flex;flex-wrap:wrap;gap:12px 28px}
+.d-tot div{display:grid;gap:2px}
+.d-tot b{font-size:1.5rem;font-variant-numeric:tabular-nums}
+.d-rows{display:grid;gap:4px}
+.d-row{display:grid;grid-template-columns:minmax(0,12rem) minmax(0,1fr) 2.25rem 2.25rem;gap:10px;align-items:center;font-size:.86rem}
+.d-row.h{font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600}
+.d-row .num{text-align:right}
+@media (max-width:520px){.d-row{grid-template-columns:minmax(0,1fr) 2rem 2rem}.d-row .bar-track{display:none}}
+
+/* Tooltip y aviso */
+.tip{position:fixed;z-index:30;pointer-events:none;background:var(--surface);border:1px solid var(--line-2);box-shadow:var(--shadow);border-radius:8px;padding:8px 10px;font-size:.8rem;max-width:270px;display:grid;gap:4px}
+.tip-t{color:var(--ink-2);font-weight:600}
+.tip-r{display:flex;align-items:center;gap:8px}
+.tip-r i{width:12px;height:3px;border-radius:2px;background:var(--c);flex:none}
+.tip-r strong{color:var(--ink);font-variant-numeric:tabular-nums}
+.tip-r span{color:var(--muted)}
+.toast{position:fixed;left:50%;top:calc(76px + env(safe-area-inset-top,0px));transform:translateX(-50%);z-index:40;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:8px;font-weight:600;font-size:.9rem;box-shadow:var(--shadow);max-width:calc(100% - 32px);text-align:center}
+
+@media (prefers-reduced-motion: reduce){
+  *{transition:none!important}
+  .row.flash{animation:none;background:var(--accent-soft)}
+}
+
+/* Base del documento */
+body{margin:0;min-height:100vh;display:flex;flex-direction:column}
+main.wrap{flex:1 0 auto;width:100%}
+img{max-width:100%}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap top-in">
+    <button class="brand" data-act="home" aria-label="Ir al inicio">
+      <img src="../public/cimba.png" alt="" width="31" height="36">
+      <span class="brand-t"><strong>Evaluación de Desempeño</strong><span>Municipalidad de San Miguel de Tucumán · Capital Humano</span></span>
+    </button>
+    <div class="top-who"><span id="top-who"></span><button class="btn sm" id="btn-switch" data-act="switch" hidden><span class="long">Cambiar de usuario</span><span class="short">Salir</span></button></div>
+  </div>
+</header>
+<div class="demo">
+  <div class="wrap demo-in">
+    <span>Prototipo con datos ficticios. Lo que cargues queda guardado solo en este navegador.</span>
+    <button class="linkbtn" id="btn-reset" data-act="reset">Reiniciar datos de ejemplo</button>
+  </div>
+</div>
+<main class="wrap" id="main"></main>
+<footer class="foot">
+  <div class="wrap foot-in">
+    <div class="foot-brand">
+      <img src="../public/cimba-blanco.png" alt="" width="35" height="40">
+      <div><strong>Municipalidad de San Miguel de Tucumán</strong><span>Dirección de Capital Humano</span></div>
+    </div>
+    <p class="foot-note">Evaluación de Desempeño · Prototipo</p>
+  </div>
+</footer>
+<div class="tip" id="tip" hidden></div>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+<div class="modal-back" id="modal" hidden><div class="modal card" role="dialog" aria-modal="true" aria-labelledby="m-title" id="modal-body"></div></div>
+
+<script>
+(function(){
+'use strict';
+
+/* ---------- Configuración del período (en el sistema real la edita Capital Humano) ---------- */
+const PERIODO = { nombre:'2do semestre 2026', corto:'2do sem. 2026', inicio:'2026-10-15', cierre:'2026-11-15' };
+const ANTERIOR = { nombre:'2do semestre 2025', corto:'2do sem. 2025' };
+
+const COMP = [
+  {tipo:'G', nombre:'Resolución de problemas', desc:'Habilidad para identificar y analizar problemas de manera crítica, generar opciones de solución y tomar decisiones fundamentadas para resolverlos. Implica pensamiento analítico, creatividad y aplicación de estrategias efectivas.'},
+  {tipo:'G', nombre:'Comunicación efectiva', desc:'Habilidad para transmitir y recibir información de manera clara, precisa y adecuada al contexto, fomentando relaciones laborales positivas y entendimiento mutuo.'},
+  {tipo:'G', nombre:'Trabajo en equipo', desc:'Capacidad de colaborar de manera productiva con otros, aprovechando la diversidad de habilidades y conocimientos para alcanzar objetivos comunes. Implica comunicación efectiva, cooperación, apoyo mutuo y una disposición para compartir responsabilidades.'},
+  {tipo:'G', nombre:'Conocimiento técnico en función de las tareas', corto:'Conocimiento técnico', desc:'Capacidad para aplicar conocimientos y habilidades técnicas específicas para realizar tareas de manera efectiva. Implica comprender la teoría y los procedimientos relacionados con el trabajo y poder adaptarlos a diversas situaciones.'},
+  {tipo:'G', nombre:'Desempeño en trabajo bajo presión', corto:'Trabajo bajo presión', desc:'Capacidad para mantener un nivel de rendimiento elevado, manejar el estrés y tomar decisiones efectivas en situaciones de alta presión o urgencia. Implica la gestión del tiempo, la priorización de tareas y la capacidad de resolver problemas rápidamente.'},
+  {tipo:'G', nombre:'Responsabilidad ambiental', desc:'Conciencia y compromiso con la protección del entorno y la adopción de prácticas sostenibles en el trabajo diario. Incluye la identificación de impactos ambientales y la implementación de medidas para minimizarlos.'},
+  {tipo:'E', nombre:'Variabilidad', desc:'Capacidad para adaptarse y responder a cambios en el entorno o en las condiciones de trabajo. Implica flexibilidad, apertura a nuevas formas de hacer las cosas y capacidad de ajuste a nuevas circunstancias.'},
+  {tipo:'E', nombre:'Iniciativa y autonomía', desc:'Capacidad de actuar de manera independiente y proactiva para identificar oportunidades y tomar decisiones sin necesidad de una supervisión constante. Implica motivación interna, auto-gestión y la disposición de asumir la responsabilidad de sus acciones y resultados.'},
+  {tipo:'E', nombre:'Responsabilidad en el logro de las tareas', corto:'Responsabilidad en el logro', desc:'Capacidad de cumplir con las tareas y objetivos asignados en tiempo y forma, actuando con compromiso, dedicación y responsabilidad sobre los resultados obtenidos.'},
+  {tipo:'E', nombre:'Ordenamiento de las tareas', corto:'Ordenamiento de tareas', desc:'Compromiso con mantener un orden lógico y sistemático en la realización de tareas, asegurando que los procesos se sigan adecuadamente y cumplan con los estándares de calidad y eficiencia.'}
+];
+const corto = c => c.corto || c.nombre;
+
+const CATS = [
+  {id:1, nombre:'Básico', rango:'0 a 39'},
+  {id:2, nombre:'Intermedio', rango:'40 a 59'},
+  {id:3, nombre:'Avanzado', rango:'60 a 79'},
+  {id:4, nombre:'Experto', rango:'80 a 99'},
+  {id:5, nombre:'Líder', rango:'100'}
+];
+function categoria(t){ return CATS[t>=100?4:t>=80?3:t>=60?2:t>=40?1:0]; }
+
+const AGRUP = [
+  {id:'FG', nombre:'Funcionario de Gobierno'},
+  {id:'ADM', nombre:'Administrativo'},
+  {id:'PRO', nombre:'Profesional'},
+  {id:'TEC', nombre:'Técnico'},
+  {id:'MYP', nombre:'Mantenimiento y Producción'},
+  {id:'SG', nombre:'Servicios Generales'}
+];
+const agrupById = id => AGRUP.find(g => g.id === id);
+
+/* Nomenclador de ejemplo: se reemplaza por el real */
+const AREAS = [
+  {id:'a1', nombre:'Dirección de Atención al Vecino', sec:'Secretaría de Gobierno', mix:{FG:1,ADM:6,PRO:1,SG:2}, avance:1},
+  {id:'a2', nombre:'Dirección de Rentas', sec:'Secretaría de Hacienda', mix:{FG:1,ADM:8,PRO:4,TEC:1}, avance:.65},
+  {id:'a3', nombre:'Dirección de Espacios Verdes', sec:'Secretaría de Servicios Públicos', mix:{ADM:1,TEC:1,MYP:7,SG:3}, avance:.5},
+  {id:'a4', nombre:'Dirección de Alumbrado Público', sec:'Secretaría de Servicios Públicos', mix:{ADM:1,TEC:3,MYP:5}, avance:.25},
+  {id:'a5', nombre:'Dirección de Tránsito', sec:'Secretaría de Gobierno', mix:{FG:1,ADM:3,TEC:2,SG:5}, avance:.85},
+  {id:'a6', nombre:'Dirección de Obras Viales', sec:'Secretaría de Obras Públicas', mix:{PRO:2,TEC:2,MYP:4}, avance:0}
+];
+const DIRECTORES = [
+  {id:'d1', nombre:'Laura Ibáñez', areas:['a1'], mail:'libanez@municipio.ejemplo'},
+  {id:'d2', nombre:'Martín Sosa', areas:['a2'], mail:'msosa@municipio.ejemplo'},
+  {id:'d3', nombre:'Gustavo Herrera', areas:['a3'], mail:'gherrera@municipio.ejemplo'},
+  {id:'d4', nombre:'Silvia Juárez', areas:['a4'], mail:'sjuarez@municipio.ejemplo'},
+  {id:'d5', nombre:'Daniel Ríos', areas:['a5'], mail:'drios@municipio.ejemplo'},
+  {id:'d6', nombre:'Patricia Albornoz', areas:['a6'], mail:'palbornoz@municipio.ejemplo'}
+];
+const areaById = id => AREAS.find(a => a.id === id);
+const dirById = id => DIRECTORES.find(d => d.id === id);
+const dirOfArea = id => DIRECTORES.find(d => d.areas.includes(id));
+
+const NOMBRES = ['María José','Juan Pablo','Ana Laura','Carlos','Lucía','Diego','Silvina','Marcelo','Florencia','Jorge','Paula','Sergio','Verónica','Gabriel','Natalia','Raúl','Mariana','Hugo','Valeria','Ramón','Cecilia','Pablo','Romina','Héctor','Daniela','Luis','Gabriela','Oscar','Andrea','Walter','Soledad','Facundo','Mónica','Nicolás','Claudia','Esteban','Carolina','Miguel','Alejandra','Federico'];
+const APELLIDOS = ['Paz','Díaz','Gómez','Romano','Ledesma','Villagra','Aráoz','Soria','Toledo','Coronel','Medina','Ruiz','Correa','Acosta','Luna','Vega','Figueroa','Moreno','Rojas','Castro','Navarro','Quiroga','Carrizo','Gordillo','Brito','Nieva','Lobo','Robles','Salazar','Cabrera','Ponce','Molina','Chávez','Avellaneda','Jiménez','Costilla','Nuñez','Barrionuevo','Orellana','Frías'];
+
+/* ---------- Datos de ejemplo (generados siempre igual) ---------- */
+function rng(seed){ return function(){ seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function gauss(r){ let u = 0, v = 0; while(!u) u = r(); while(!v) v = r(); return Math.sqrt(-2*Math.log(u)) * Math.cos(2*Math.PI*v); }
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const SESGO_COMP = [0, .2, .3, .1, -.4, -.7, -.2, -.3, .35, .05];
+const SESGO_AGRUP = {FG:.4, ADM:0, PRO:.35, TEC:.2, MYP:-.2, SG:-.3};
+const TENDENCIA_AREA = {a1:.25, a2:-.35, a3:.3, a4:0, a5:.15, a6:-.15};
+
+function puntajes(hab, r){ return COMP.map((c, i) => clamp(Math.round(hab + SESGO_COMP[i] + gauss(r)*.75), 1, 10)); }
+
+function seed(){
+  const r = rng(2026);
+  const legs = new Set(), noms = new Set();
+  const agents = [], evals = {}, prev = {};
+  AREAS.forEach(area => {
+    const dir = dirOfArea(area.id);
+    Object.entries(area.mix).forEach(([g, k]) => {
+      for(let i = 0; i < k; i++){
+        let leg; do { leg = String(10000 + Math.floor(r()*39000)); } while(legs.has(leg)); legs.add(leg);
+        let nom; do { nom = APELLIDOS[Math.floor(r()*APELLIDOS.length)] + ', ' + NOMBRES[Math.floor(r()*NOMBRES.length)]; } while(noms.has(nom)); noms.add(nom);
+        const hab = clamp(6.7 + SESGO_AGRUP[g] + gauss(r)*1.5, 3, 9.6);
+        const nuevo = r() < .08;
+        agents.push({leg, nombre:nom, area:area.id, agrup:g});
+        if(!nuevo) prev[leg] = puntajes(hab - TENDENCIA_AREA[area.id] + gauss(r)*.5, r);
+        const fecha = '2026-10-' + String(16 + Math.floor(r()*14)).padStart(2, '0');
+        if(r() < area.avance){
+          evals[leg] = {scores:puntajes(hab, r), obs:'', estado:'enviada', fecha, evaluador:dir.id};
+        } else if(r() < .22){
+          const sc = puntajes(hab, r).map((v, j) => j < 6 ? v : null);
+          evals[leg] = {scores:sc, obs:'', estado:'borrador', fecha, evaluador:dir.id};
+        }
+      }
+    });
+  });
+  // Un caso con puntaje perfecto, para que aparezca la categoría Líder
+  const lider = agents.find(a => a.area === 'a5' && evals[a.leg] && evals[a.leg].estado === 'enviada');
+  if(lider) evals[lider.leg].scores = COMP.map(() => 10);
+  agents.sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'));
+  return {v:1, agents, evals, prev, requests:[], reminders:{}};
+}
+
+const STORE = 'evaluacion-desempeno-prototipo-v1';
+function load(){
+  try { const raw = localStorage.getItem(STORE); if(raw){ const o = JSON.parse(raw); if(o && o.v === 1) return o; } } catch(e){}
+  return seed();
+}
+function save(){ try { localStorage.setItem(STORE, JSON.stringify(S)); } catch(e){} }
+
+let S = load();
+const U = {role:null, dir:'d3', view:'list', q:'', filtro:'todos', tab:'tablero', dArea:'', dAgrup:'', eQ:'', eArea:'', eEstado:'', draft:null, flash:null};
+
+/* ---------- Utilidades ---------- */
+const $ = (s, root) => (root || document).querySelector(s);
+const $$ = (s, root) => Array.from((root || document).querySelectorAll(s));
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const norm = s => String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+const total = sc => sc.reduce((s, v) => s + (v || 0), 0);
+const respondidas = sc => sc.filter(v => v != null).length;
+const avg = arr => arr.length ? arr.reduce((s, x) => s + x, 0) / arr.length : null;
+const f1 = n => n.toLocaleString('es-AR', {minimumFractionDigits:1, maximumFractionDigits:1});
+const f0 = n => Math.round(n).toLocaleString('es-AR');
+const pct = n => Math.round(n*100) + '%';
+const fdate = iso => iso.split('-').reverse().join('/');
+const agentByLeg = leg => S.agents.find(a => a.leg === leg);
+const teamOf = dirId => S.agents.filter(a => dirById(dirId).areas.includes(a.area));
+const estadoOf = leg => (S.evals[leg] && S.evals[leg].estado) || 'pendiente';
+function hoyISO(){ const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); }
+function diasCierre(){
+  const [y, m, d] = PERIODO.cierre.split('-').map(Number); const t = new Date();
+  return Math.round((Date.UTC(y, m-1, d) - Date.UTC(t.getFullYear(), t.getMonth(), t.getDate())) / 864e5);
+}
+function cierreTxt(){
+  const d = diasCierre(), f = fdate(PERIODO.cierre);
+  if(d > 1) return 'cierra el ' + f + ' (faltan ' + d + ' días)';
+  if(d === 1) return 'cierra mañana, ' + f;
+  if(d === 0) return 'cierra hoy, ' + f;
+  return 'cerró el ' + f;
+}
+const catChip = t => { const c = categoria(t); return '<span class="chip-cat cat-' + c.id + '">' + c.nombre + '</span>'; };
+function pillEstado(leg){
+  const e = S.evals[leg];
+  if(!e) return '<span class="pill">Sin evaluar</span>';
+  if(e.estado === 'borrador') return '<span class="pill warn">Borrador · ' + respondidas(e.scores) + '/10</span>';
+  return '<span class="pill ok">Enviada ' + fdate(e.fecha).slice(0, 5) + '</span>';
+}
+
+let toastTimer;
+function toast(msg){
+  const t = $('#toast'); t.textContent = msg; t.hidden = false;
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.hidden = true; }, 3600);
+}
+
+/* Tooltips: los textos se insertan con textContent */
+let TIPS = {}, tipSeq = 0;
+function tip(spec){ const k = 't' + (tipSeq++); TIPS[k] = spec; return ' data-tip="' + k + '"'; }
+function showTip(el, x, y){
+  const spec = TIPS[el.dataset.tip]; if(!spec) return;
+  const box = $('#tip'); box.textContent = '';
+  const t = document.createElement('div'); t.className = 'tip-t'; t.textContent = spec.title; box.appendChild(t);
+  spec.rows.forEach(r => {
+    const row = document.createElement('div'); row.className = 'tip-r';
+    const i = document.createElement('i'); i.className = r.k; row.appendChild(i);
+    const v = document.createElement('strong'); v.textContent = r.v; row.appendChild(v);
+    const l = document.createElement('span'); l.textContent = r.l; row.appendChild(l);
+    box.appendChild(row);
+  });
+  box.hidden = false;
+  const w = box.offsetWidth, h = box.offsetHeight;
+  let left = x + 14, top = y + 14;
+  if(left + w > innerWidth - 8) left = x - w - 14;
+  if(top + h > innerHeight - 8) top = y - h - 14;
+  box.style.left = Math.max(8, left) + 'px'; box.style.top = Math.max(8, top) + 'px';
+}
+const hideTip = () => { $('#tip').hidden = true; };
+
+/* Regla de categorías (0 a 100) */
+function ruler(t, opts){
+  const o = opts || {};
+  const segs = [[1,40],[2,20],[3,20],[4,19],[5,1]].map(([c, w]) => '<span class="cat-' + c + '" style="flex:' + w + ' 1 0"></span>').join('');
+  const pin = t == null ? '' : '<span class="ruler-pin" id="' + (o.pinId || '') + '" style="left:' + t + '%">' + t + '</span>';
+  const ticks = o.ticks === false ? '' : '<div class="ruler-ticks"><span style="left:0">0</span><span style="left:40%">40</span><span style="left:60%">60</span><span style="left:80%">80</span><span style="left:100%">100</span></div>';
+  return '<div class="ruler' + (t == null && !o.pinId ? ' bare' : '') + '">' + pin + '<div class="ruler-track" aria-hidden="true">' + segs + '</div>' + ticks + '</div>';
+}
+function rulerLegend(){
+  return '<div class="ruler-legend">' + CATS.map(c => '<span class="cat-' + c.id + '"><b>' + c.nombre + '</b> ' + c.rango + '</span>').join('') + '</div>';
+}
+
+/* ---------- Vistas ---------- */
+function viewHome(){
+  const opts = DIRECTORES.map(d => '<option value="' + d.id + '"' + (d.id === U.dir ? ' selected' : '') + '>' + esc(d.nombre) + ' — ' + esc(areaById(d.areas[0]).nombre) + '</option>').join('');
+  return '<section class="home">' +
+    '<div class="home-top">' +
+    '<div class="home-intro">' +
+      '<p class="eyebrow sun">Dirección de Capital Humano</p>' +
+      '<h1>Evaluación de Desempeño, ' + PERIODO.nombre + '</h1>' +
+      '<p class="lead">Cada director evalúa a las personas que tiene a cargo. Capital Humano sigue el avance de la carga y analiza los resultados.</p>' +
+      '<dl class="facts">' +
+        '<div><dt>Apertura</dt><dd class="num">' + fdate(PERIODO.inicio) + '</dd></div>' +
+        '<div><dt>Cierre</dt><dd class="num">' + fdate(PERIODO.cierre) + '</dd></div>' +
+        '<div><dt>Padrón</dt><dd>' + S.agents.length + ' agentes</dd></div>' +
+        '<div><dt>Direcciones</dt><dd>' + AREAS.length + '</dd></div>' +
+      '</dl>' +
+    '</div>' +
+    '<figure class="home-migue"><div class="migue"><img src="../public/migue.jpeg" alt="Migue con una lapicera y un cuaderno"></div>' +
+      '<figcaption>Hola, soy Migue. Te acompaño en la evaluación de tu equipo.</figcaption></figure>' +
+    '</div>' +
+    '<div class="roles">' +
+      '<article class="card role">' +
+        '<h2>Entrar como director</h2>' +
+        '<p>En el sistema real cada director recibe por mail un enlace personal y solo ve a su personal. Acá elegís a quién simular.</p>' +
+        '<div class="field"><label for="sel-dir">Director o directora</label><select id="sel-dir">' + opts + '</select></div>' +
+        '<button class="btn primary" data-act="enter-dir">Ver mi equipo</button>' +
+      '</article>' +
+      '<article class="card role">' +
+        '<h2>Entrar como Capital Humano</h2>' +
+        '<p>Tablero de resultados con comparación contra el ' + ANTERIOR.nombre + ', seguimiento de directores, todas las evaluaciones y la configuración del período.</p>' +
+        '<button class="btn" data-act="enter-ch">Abrir el panel</button>' +
+      '</article>' +
+    '</div>' +
+    '<section class="card how">' +
+      '<h2>Cómo se califica</h2>' +
+      '<div class="how-cols">' +
+        '<p><strong>10 competencias</strong>, 6 genéricas y 4 específicas. Cada una se puntúa del 1 al 10.</p>' +
+        '<p>La suma da el <strong>puntaje final sobre 100</strong>, que define la categoría del agente.</p>' +
+      '</div>' +
+      ruler(null) + rulerLegend() +
+    '</section>' +
+  '</section>';
+}
+
+function viewList(){
+  const d = dirById(U.dir), area = areaById(d.areas[0]), team = teamOf(U.dir);
+  const env = team.filter(a => estadoOf(a.leg) === 'enviada').length;
+  const bor = team.filter(a => estadoOf(a.leg) === 'borrador').length;
+  const chips = [['todos', 'Todos', team.length], ['pendientes', 'Por evaluar', team.length - env], ['enviadas', 'Enviadas', env]]
+    .map(([k, l, n]) => '<button class="chip" data-act="filtro" data-f="' + k + '" aria-pressed="' + (U.filtro === k) + '">' + l + '<span class="n">' + n + '</span></button>').join('');
+  return '<section class="page-head">' +
+      '<p class="eyebrow">' + esc(area.sec) + '</p>' +
+      '<h1>' + esc(area.nombre) + '</h1>' +
+      '<p class="sub">Período ' + PERIODO.nombre + ', ' + cierreTxt() + '.</p>' +
+      '<div class="progress"><div class="meter" role="img" aria-label="' + env + ' de ' + team.length + ' enviadas"><span style="width:' + (team.length ? env/team.length*100 : 0) + '%"></span></div>' +
+      '<p><strong>' + env + ' de ' + team.length + '</strong> evaluaciones enviadas' + (bor ? ' · ' + bor + ' en borrador' : '') + '</p></div>' +
+    '</section>' +
+    (team.length && env === team.length
+      ? '<section class="card done-card"><div class="migue"><img src="../public/migue.jpeg" alt=""></div><div><h2>¡Listo! Evaluaste a todo tu equipo.</h2><p class="sub">Gracias. Podés revisar o corregir cualquier evaluación hasta el ' + fdate(PERIODO.cierre) + '.</p></div></section>'
+      : '') +
+    '<section class="card list-card">' +
+      '<div class="tools">' +
+        '<div class="field"><label for="q">Buscar por legajo o apellido y nombre</label><input id="q" type="search" autocomplete="off" placeholder="Ej.: ' + esc(team[0] ? team[0].leg : '24518') + ' o ' + esc(team[0] ? team[0].nombre.split(',')[0] : 'Paz') + '" value="' + esc(U.q) + '"></div>' +
+        '<div class="chips" role="group" aria-label="Filtrar por estado">' + chips + '</div>' +
+      '</div>' +
+      '<div class="list-head" aria-hidden="true"><span>Legajo</span><span>Apellido y nombre</span><span>Estado</span><span>Puntaje</span><span></span></div>' +
+      '<div id="team-list">' + teamRows() + '</div>' +
+    '</section>' +
+    viewRequest();
+}
+
+function teamRows(){
+  const q = norm(U.q.trim());
+  const orden = {pendiente:0, borrador:0, enviada:1};
+  const rows = teamOf(U.dir)
+    .filter(a => !q || a.leg.includes(q) || norm(a.nombre).includes(q))
+    .filter(a => U.filtro === 'todos' || (U.filtro === 'enviadas' ? estadoOf(a.leg) === 'enviada' : estadoOf(a.leg) !== 'enviada'))
+    .sort((a, b) => orden[estadoOf(a.leg)] - orden[estadoOf(b.leg)] || a.nombre.localeCompare(b.nombre, 'es'));
+  if(!rows.length){
+    return '<div class="empty">' + (q
+      ? '<p>No hay nadie con «' + esc(U.q.trim()) + '» en tu equipo.</p><p>Si la persona trabaja con vos pero no aparece, pedí que la sumen más abajo.</p>'
+      : '<p>No hay agentes en este filtro.</p>') + '</div>';
+  }
+  return rows.map(a => {
+    const e = S.evals[a.leg], st = estadoOf(a.leg);
+    const score = st === 'enviada' ? '<span>' + total(e.scores) + '</span>' + catChip(total(e.scores)) : '<span class="muted">—</span>';
+    const btn = st === 'enviada' ? '<button class="btn sm" data-act="open" data-leg="' + a.leg + '">Ver o editar</button>'
+      : '<button class="btn sm primary" data-act="open" data-leg="' + a.leg + '">' + (st === 'borrador' ? 'Continuar' : 'Evaluar') + '</button>';
+    return '<div class="row' + (U.flash === a.leg ? ' flash' : '') + '">' +
+      '<span class="leg">' + a.leg + '</span>' +
+      '<div class="who"><strong>' + esc(a.nombre) + '</strong><span><span class="leg-m">Legajo ' + a.leg + ' · </span>' + esc(agrupById(a.agrup).nombre) + '</span></div>' +
+      '<div class="meta"><div>' + pillEstado(a.leg) + '</div><div class="score">' + score + '</div></div>' +
+      btn + '</div>';
+  }).join('');
+}
+
+function viewRequest(){
+  const mine = dirById(U.dir).areas;
+  const ejemplo = S.agents.find(a => !mine.includes(a.area));
+  const reqs = S.requests.filter(r => r.dir === U.dir);
+  const lista = reqs.length ? '<ul class="req-list">' + reqs.map(r => {
+    const p = r.estado === 'aprobada' ? '<span class="pill ok">Aprobada</span>' : r.estado === 'rechazada' ? '<span class="pill bad">Rechazada</span>' : '<span class="pill warn">En revisión</span>';
+    return '<li><span><strong>' + esc(r.nombre) + '</strong> · legajo ' + r.leg + ' · ' + esc(r.motivo) + '</span>' + p + '</li>';
+  }).join('') + '</ul>' : '';
+  return '<section class="card req">' +
+    '<h2>¿Falta alguien de tu equipo?</h2>' +
+    '<p class="sub">Si una persona trabaja con vos pero no aparece en la lista, ingresá su legajo. Capital Humano revisa el pedido y la suma a tu equipo.' + (ejemplo ? ' Para probar, usá el legajo <strong class="num">' + ejemplo.leg + '</strong>.' : '') + '</p>' +
+    '<div class="req-form">' +
+      '<div class="field"><label for="req-leg">Legajo</label><input id="req-leg" type="text" inputmode="numeric" maxlength="6" autocomplete="off"></div>' +
+      '<div class="field"><label for="req-mot">Motivo</label><select id="req-mot"><option>Pasó a trabajar en mi área</option><option>Está en comisión en mi área</option><option>Otro motivo</option></select></div>' +
+      '<button class="btn" id="req-btn" data-act="req-send" disabled>Enviar a Capital Humano</button>' +
+    '</div>' +
+    '<p class="hint" id="req-hint" aria-live="polite"></p>' + lista +
+  '</section>';
+}
+
+function viewForm(){
+  const a = agentByLeg(U.draft.leg), area = areaById(a.area), D = U.draft, e = S.evals[a.leg];
+  const fs = (c, i) => {
+    const v = D.scores[i];
+    const radios = Array.from({length:10}, (_, k) => k + 1).map(n =>
+      '<input type="radio" name="c' + i + '" id="c' + i + '-' + n + '" value="' + n + '"' + (v === n ? ' checked' : '') + '><label for="c' + i + '-' + n + '">' + n + '</label>').join('');
+    return '<fieldset class="card comp' + (v != null ? ' done' : '') + '" id="comp-' + i + '">' +
+      '<legend><span class="comp-name">' + esc(c.nombre) + '</span><span class="comp-st" id="st-' + i + '">' + (v != null ? '✓ ' + v + ' de 10' : 'Sin puntuar') + '</span></legend>' +
+      '<p class="comp-desc">' + esc(c.desc) + '</p>' +
+      '<div class="scale">' + radios + '</div>' +
+      '<div class="scale-ends" aria-hidden="true"><span>1 · más bajo</span><span>10 · más alto</span></div>' +
+    '</fieldset>';
+  };
+  const grupo = (tipo, titulo) => {
+    const items = COMP.map((c, i) => [c, i]).filter(([c]) => c.tipo === tipo);
+    return '<section class="group"><div class="group-h"><h2>' + titulo + '</h2><span>' + items.length + ' competencias</span></div>' + items.map(([c, i]) => fs(c, i)).join('') + '</section>';
+  };
+  const nota = e && e.estado === 'enviada'
+    ? '<p class="note">Enviada el ' + fdate(e.fecha) + '. Podés modificarla hasta el cierre del período (' + fdate(PERIODO.cierre) + ').</p>'
+    : e && e.estado === 'borrador' ? '<p class="note">Tenés un borrador guardado el ' + fdate(e.fecha) + '. Seguí desde donde lo dejaste.</p>' : '';
+  return '<button class="btn ghost" data-act="back">← Volver a mi equipo</button>' +
+    '<section class="card agent">' +
+      '<div style="display:grid;gap:6px"><p class="eyebrow">Agente evaluado</p><h1>' + esc(a.nombre) + '</h1></div>' +
+      '<dl class="facts">' +
+        '<div><dt>Legajo</dt><dd class="num">' + a.leg + '</dd></div>' +
+        '<div><dt>Agrupamiento</dt><dd>' + esc(agrupById(a.agrup).nombre) + '</dd></div>' +
+        '<div><dt>Área</dt><dd>' + esc(area.nombre) + '</dd></div>' +
+        '<div><dt>Evalúa</dt><dd>' + esc(dirById(U.dir).nombre) + '</dd></div>' +
+      '</dl>' + nota +
+    '</section>' +
+    '<p class="instr">Puntuá cada competencia del 1 al 10. La suma de las 10 da el puntaje final sobre 100 y la categoría.</p>' +
+    '<form id="ev-form" novalidate>' +
+      grupo('G', 'Competencias genéricas') +
+      grupo('E', 'Competencias específicas') +
+      '<section class="card obs"><label class="lbl" for="obs">Observaciones (opcional)</label>' +
+        '<textarea id="obs" maxlength="600" rows="3" placeholder="Fortalezas, aspectos a mejorar o contexto que Capital Humano deba conocer">' + esc(D.obs) + '</textarea>' +
+        '<span class="obs-n" id="obs-n">' + D.obs.length + '/600</span></section>' +
+      '<div class="scorebar" id="scorebar">' +
+        '<div class="sb-score"><span class="sb-num" id="sb-num">0</span><span class="sb-max">/100</span></div>' +
+        '<div class="sb-mid"><div class="sb-line" id="sb-line"></div>' + ruler(0, {pinId:'sb-pin', ticks:false}) + '</div>' +
+        '<div class="sb-actions">' +
+          (D.wasSent ? '' : '<button type="button" class="btn" data-act="draft">Guardar borrador</button>') +
+          '<button type="button" class="btn primary" data-act="submit">' + (D.wasSent ? 'Guardar cambios' : 'Enviar evaluación') + '</button>' +
+        '</div>' +
+        '<div class="sb-confirm" id="sb-confirm" hidden></div>' +
+      '</div>' +
+    '</form>';
+}
+
+function updateScorebar(){
+  const D = U.draft; if(!D) return;
+  const n = respondidas(D.scores), t = total(D.scores), done = n === 10;
+  const num = $('#sb-num'); num.textContent = t; num.classList.toggle('partial', !done);
+  $('#sb-line').innerHTML = done
+    ? catChip(t) + '<span>Las 10 competencias están puntuadas.</span>'
+    : '<span>Puntaje parcial · faltan ' + (10 - n) + ' de 10 competencias</span>';
+  const pin = $('#sb-pin');
+  if(pin){ pin.style.left = t + '%'; pin.textContent = done ? t : ''; pin.hidden = !done; }
+}
+
+/* ---------- Panel de Capital Humano ---------- */
+function viewCH(){
+  const pend = S.requests.filter(r => r.estado === 'pendiente').length;
+  const tabs = [['tablero', 'Tablero'], ['seguimiento', 'Seguimiento'], ['evaluaciones', 'Evaluaciones'], ['config', 'Configuración']]
+    .map(([k, l]) => '<button class="tab" role="tab" data-act="tab" data-tab="' + k + '" aria-selected="' + (U.tab === k) + '">' + l + (k === 'seguimiento' && pend ? '<span class="n" aria-label="' + pend + ' solicitudes">' + pend + '</span>' : '') + '</button>').join('');
+  const body = U.tab === 'tablero' ? viewDash() : U.tab === 'seguimiento' ? viewSeg() : U.tab === 'evaluaciones' ? viewEvals() : viewConfig();
+  return '<section class="ch-head"><p class="eyebrow">Capital Humano</p><h1>Panel de evaluación</h1>' +
+    '<p class="sub">Período ' + PERIODO.nombre + ': abrió el ' + fdate(PERIODO.inicio) + ' y ' + cierreTxt() + '.</p></section>' +
+    '<div class="tabs" role="tablist">' + tabs + '</div>' + body;
+}
+
+function selArea(id, val, todas){
+  return '<select id="' + id + '"><option value="">' + todas + '</option>' + AREAS.map(a => '<option value="' + a.id + '"' + (val === a.id ? ' selected' : '') + '>' + esc(a.nombre) + '</option>').join('') + '</select>';
+}
+
+function datosDash(){
+  const ag = S.agents.filter(a => (!U.dArea || a.area === U.dArea) && (!U.dAgrup || a.agrup === U.dAgrup));
+  const now = ag.filter(a => estadoOf(a.leg) === 'enviada').map(a => ({a, sc:S.evals[a.leg].scores}));
+  const prev = ag.filter(a => S.prev[a.leg]).map(a => ({a, sc:S.prev[a.leg]}));
+  const tots = l => l.map(x => total(x.sc));
+  const dist = l => { const c = [0,0,0,0,0]; l.forEach(x => c[categoria(total(x.sc)).id - 1]++); return c; };
+  const altos = l => l.length ? l.filter(x => total(x.sc) >= 80).length / l.length : null;
+  return {
+    ag, now, prev,
+    prom:avg(tots(now)), promPrev:avg(tots(prev)),
+    altos:altos(now), altosPrev:altos(prev),
+    dist:dist(now), distPrev:dist(prev),
+    comp:COMP.map((c, i) => ({label:corto(c), now:avg(now.map(x => x.sc[i])), prev:avg(prev.map(x => x.sc[i])), nNow:now.length})),
+    agrup:AGRUP.map(g => {
+      const n = now.filter(x => x.a.agrup === g.id), p = prev.filter(x => x.a.agrup === g.id);
+      return {label:g.nombre, now:avg(tots(n)), prev:avg(tots(p)), nNow:n.length, nPrev:p.length};
+    }).filter(r => r.nNow || r.nPrev),
+    areas:AREAS.map(ar => {
+      const aa = ag.filter(a => a.area === ar.id);
+      const n = now.filter(x => x.a.area === ar.id), p = prev.filter(x => x.a.area === ar.id);
+      return {ar, total:aa.length, env:n.length, bor:aa.filter(a => estadoOf(a.leg) === 'borrador').length, prom:avg(tots(n)), promPrev:avg(tots(p))};
+    }).filter(r => r.total)
+  };
+}
+
+function delta(a, b, fmt, unidad){
+  if(a == null || b == null) return '<p class="delta flat">Sin dato para comparar</p>';
+  const d = a - b, r = Math.round(d*10)/10;
+  if(Math.abs(r) < .05) return '<p class="delta flat">= igual que el ' + ANTERIOR.corto + '</p>';
+  return '<p class="delta ' + (d > 0 ? 'up' : 'down') + '">' + (d > 0 ? '▲ +' : '▼ −') + fmt(Math.abs(d)) + unidad + ' <span>vs ' + ANTERIOR.corto + '</span></p>';
+}
+
+function barChart(rows, max, ticks, fmt){
+  const gl = ticks.map(t => '<span class="gl' + (t === 0 ? ' base' : '') + '" style="left:' + (t/max*100) + '%"></span>').join('');
+  return '<div class="bars">' + rows.map(r => {
+    const tp = tip({title:r.label, rows:[
+      {k:'k-now', v:r.now == null ? 'Sin datos' : fmt(r.now), l:PERIODO.corto + (r.nNow != null ? ' · ' + r.nNow + ' eval.' : '')},
+      {k:'k-prev', v:r.prev == null ? 'Sin datos' : fmt(r.prev), l:ANTERIOR.corto}
+    ]});
+    return '<div class="bar-row" tabindex="0"' + tp + '>' +
+      '<span class="bar-label">' + esc(r.label) + '</span>' +
+      '<span class="bar-track">' + gl +
+        (r.now != null ? '<span class="bar-fill" style="width:' + (r.now/max*100) + '%"></span>' : '') +
+        (r.prev != null ? '<span class="bar-prev" style="left:' + (r.prev/max*100) + '%"></span>' : '') +
+      '</span>' +
+      '<span class="bar-val">' + (r.now == null ? '—' : fmt(r.now)) + '</span></div>';
+  }).join('') +
+  '<div class="bar-axis" aria-hidden="true"><span></span><span class="axis-track">' + ticks.map(t => '<span style="left:' + (t/max*100) + '%">' + t + '</span>').join('') + '</span><span></span></div></div>';
+}
+
+function tablaComp(rows, fmt, col){
+  return '<div class="table-wrap"><table class="data"><thead><tr><th>' + col + '</th><th class="num">' + PERIODO.corto + '</th><th class="num">' + ANTERIOR.corto + '</th><th class="num">Diferencia</th></tr></thead><tbody>' +
+    rows.map(r => '<tr><td>' + esc(r.label) + '</td><td class="num">' + (r.now == null ? '—' : fmt(r.now)) + '</td><td class="num">' + (r.prev == null ? '—' : fmt(r.prev)) + '</td><td class="num">' + (r.now == null || r.prev == null ? '—' : (r.now - r.prev >= 0 ? '+' : '−') + fmt(Math.abs(r.now - r.prev))) + '</td></tr>').join('') +
+    '</tbody></table></div>';
+}
+
+function chartCard(id, title, sub, legend, chart, table, cls){
+  return '<section class="card chart' + (cls ? ' ' + cls : '') + '" id="' + id + '">' +
+    '<div class="chart-h"><div><h2>' + title + '</h2>' + (sub ? '<p>' + sub + '</p>' : '') + '</div>' +
+    (table ? '<button class="btn sm" data-act="toggle-table" data-card="' + id + '" aria-pressed="false">Ver tabla</button>' : '') + '</div>' +
+    (legend || '') + '<div class="cv">' + chart + '</div>' + (table ? '<div class="tv" hidden>' + table + '</div>' : '') +
+  '</section>';
+}
+const legendNowPrev = '<div class="legend"><span class="lg k-now"><i></i>' + PERIODO.corto + '</span><span class="lg k-prev"><i class="dot"></i>' + ANTERIOR.corto + '</span></div>';
+
+function distChart(D){
+  const row = (name, c) => {
+    const n = c.reduce((s, x) => s + x, 0);
+    if(!n) return '<div class="stack-row"><span class="stack-label">' + name + '<small>Sin evaluaciones</small></span><span class="stack none">Todavía no hay datos</span></div>';
+    const segs = c.map((k, i) => k ? '<span class="seg cat-' + (i+1) + '" tabindex="0" style="flex:' + k + ' 1 0"' +
+      tip({title:CATS[i].nombre + ' (' + CATS[i].rango + ' puntos)', rows:[{k:'cat-' + (i+1), v:k + (k === 1 ? ' agente' : ' agentes'), l:pct(k/n) + ' del ' + name}]}) + '>' +
+      (k/n >= .1 ? pct(k/n) : '') + '</span>' : '').join('');
+    return '<div class="stack-row"><span class="stack-label">' + name + '<small>' + n + ' evaluados</small></span><span class="stack">' + segs + '</span></div>';
+  };
+  return '<div class="stacks">' + row(PERIODO.corto, D.dist) + row(ANTERIOR.corto, D.distPrev) + '</div>';
+}
+function distTable(D){
+  const n1 = D.dist.reduce((s, x) => s + x, 0), n2 = D.distPrev.reduce((s, x) => s + x, 0);
+  return '<div class="table-wrap"><table class="data"><thead><tr><th>Categoría</th><th class="num">' + PERIODO.corto + '</th><th class="num">%</th><th class="num">' + ANTERIOR.corto + '</th><th class="num">%</th></tr></thead><tbody>' +
+    CATS.map((c, i) => '<tr><td>' + c.nombre + ' <span class="muted">(' + c.rango + ')</span></td><td class="num">' + D.dist[i] + '</td><td class="num">' + (n1 ? pct(D.dist[i]/n1) : '—') + '</td><td class="num">' + D.distPrev[i] + '</td><td class="num">' + (n2 ? pct(D.distPrev[i]/n2) : '—') + '</td></tr>').join('') +
+    '</tbody></table></div>';
+}
+
+function viewDash(){
+  TIPS = {}; tipSeq = 0;
+  const D = datosDash();
+  const filtros = '<div class="filters">' +
+    '<div class="field"><label for="d-area">Dirección</label>' + selArea('d-area', U.dArea, 'Todas las direcciones') + '</div>' +
+    '<div class="field"><label for="d-agrup">Agrupamiento</label><select id="d-agrup"><option value="">Todos los agrupamientos</option>' + AGRUP.map(g => '<option value="' + g.id + '"' + (U.dAgrup === g.id ? ' selected' : '') + '>' + g.nombre + '</option>').join('') + '</select></div>' +
+    '<p class="count">' + D.ag.length + ' agentes en la selección</p></div>';
+  const banner = '<p class="banner">Resultados parciales: ' + D.now.length + ' de ' + D.ag.length + ' evaluaciones enviadas. La comparación usa el ' + ANTERIOR.nombre + ' (datos de ejemplo hasta cargar el histórico real).</p>';
+  const dirsPend = DIRECTORES.filter(d => D.ag.some(a => d.areas.includes(a.area) && estadoOf(a.leg) !== 'enviada'));
+  const dirsEnSel = DIRECTORES.filter(d => D.ag.some(a => d.areas.includes(a.area)));
+  const av = D.ag.length ? D.now.length / D.ag.length : 0;
+  const kpis = '<div class="kpis">' +
+    '<div class="card kpi"><p class="kpi-label">Avance de la carga</p><p class="kpi-val">' + pct(av) + '</p><div class="meter"><span style="width:' + av*100 + '%"></span></div><p class="kpi-sub">' + D.now.length + ' de ' + D.ag.length + ' evaluaciones enviadas</p></div>' +
+    '<div class="card kpi"><p class="kpi-label">Puntaje promedio</p><p class="kpi-val">' + (D.prom == null ? '—' : f1(D.prom) + '<small>/100</small>') + '</p>' + delta(D.prom, D.promPrev, f1, ' pts') + '</div>' +
+    '<div class="card kpi"><p class="kpi-label">Experto o Líder (80 o más)</p><p class="kpi-val">' + (D.altos == null ? '—' : pct(D.altos)) + '</p>' + delta(D.altos == null ? null : D.altos*100, D.altosPrev == null ? null : D.altosPrev*100, f0, ' p.p.') + '</div>' +
+    '<div class="card kpi"><p class="kpi-label">Direcciones con pendientes</p><p class="kpi-val">' + dirsPend.length + '<small>de ' + dirsEnSel.length + '</small></p><p class="kpi-sub">El período ' + cierreTxt() + '</p></div>' +
+  '</div>';
+
+  const legCats = '<div class="legend">' + CATS.map(c => '<span class="lg cat-' + c.id + '"><i></i>' + c.nombre + '</span>').join('') + '</div>';
+  const dist = chartCard('ch-dist', 'Distribución por categoría', 'Porcentaje de agentes evaluados en cada categoría', legCats, distChart(D), distTable(D), 'span2');
+  const comp = chartCard('ch-comp', 'Promedio por competencia', 'Escala de 1 a 10', legendNowPrev,
+    D.now.length || D.prev.length ? barChart(D.comp, 10, [0,2,4,6,8,10], f1) : '<p class="chart-empty">Todavía no hay evaluaciones en esta selección.</p>',
+    tablaComp(D.comp, f1, 'Competencia'));
+  const agr = chartCard('ch-agrup', 'Promedio por agrupamiento', 'Puntaje final sobre 100', legendNowPrev,
+    D.agrup.length ? barChart(D.agrup, 100, [0,20,40,60,80,100], f1) : '<p class="chart-empty">Todavía no hay evaluaciones en esta selección.</p>',
+    tablaComp(D.agrup, f1, 'Agrupamiento'));
+  const areas = '<section class="card chart span2"><div class="chart-h"><div><h2>Avance y resultados por dirección</h2><p>Ordenado por avance, de menor a mayor</p></div></div>' +
+    '<div class="table-wrap"><table class="data"><thead><tr><th>Dirección</th><th>Avance</th><th class="num">Borradores</th><th class="num">Promedio</th><th class="num">vs ' + ANTERIOR.corto + '</th></tr></thead><tbody>' +
+    D.areas.slice().sort((a, b) => a.env/a.total - b.env/b.total).map(r => {
+      const p = r.env / r.total, dif = r.prom != null && r.promPrev != null ? r.prom - r.promPrev : null;
+      return '<tr><td><strong>' + esc(r.ar.nombre) + '</strong><span class="sm">' + esc(dirOfArea(r.ar.id).nombre) + '</span></td>' +
+        '<td><div class="cellmeter"><div class="meter"><span style="width:' + p*100 + '%"></span></div><span class="num">' + r.env + '/' + r.total + '</span>' + (p === 1 ? '<span class="pill ok">Completa</span>' : r.env === 0 ? '<span class="pill bad">Sin empezar</span>' : '') + '</div></td>' +
+        '<td class="num">' + (r.bor || '—') + '</td>' +
+        '<td class="num">' + (r.prom == null ? '—' : f1(r.prom)) + '</td>' +
+        '<td class="num">' + (dif == null ? '—' : '<span class="delta ' + (dif >= 0 ? 'up' : 'down') + '">' + (dif >= 0 ? '▲ +' : '▼ −') + f1(Math.abs(dif)) + '</span>') + '</td></tr>';
+    }).join('') + '</tbody></table></div></section>';
+  return filtros + banner + kpis + '<div class="grid2">' + dist + comp + agr + areas + '</div>';
+}
+
+function viewSeg(){
+  const filas = DIRECTORES.map(d => {
+    const t = teamOf(d.id), env = t.filter(a => estadoOf(a.leg) === 'enviada').length, bor = t.filter(a => estadoOf(a.leg) === 'borrador').length;
+    return {d, t:t.length, env, bor, p:t.length ? env/t.length : 1};
+  }).sort((a, b) => a.p - b.p);
+  const conPend = filas.filter(f => f.p < 1).length;
+  const tabla = '<div class="table-wrap"><table class="data"><thead><tr><th>Director/a</th><th>Avance</th><th class="num">Borradores</th><th>Estado</th><th>Último recordatorio</th><th></th></tr></thead><tbody>' +
+    filas.map(f => {
+      const st = f.p === 1 ? '<span class="pill ok">Completo</span>' : f.env === 0 ? '<span class="pill bad">Sin empezar</span>' : '<span class="pill warn">En curso</span>';
+      const rec = S.reminders[f.d.id];
+      return '<tr><td><strong>' + esc(f.d.nombre) + '</strong><span class="sm">' + esc(areaById(f.d.areas[0]).nombre) + ' · ' + esc(f.d.mail) + '</span></td>' +
+        '<td><div class="cellmeter"><div class="meter"><span style="width:' + f.p*100 + '%"></span></div><span class="num">' + f.env + '/' + f.t + '</span></div></td>' +
+        '<td class="num">' + (f.bor || '—') + '</td><td>' + st + '</td>' +
+        '<td class="nowrap">' + (rec ? fdate(rec) : '<span class="muted">Nunca</span>') + '</td>' +
+        '<td class="num">' + (f.p < 1 ? '<button class="btn sm" data-act="remind" data-dir="' + f.d.id + '">Enviar recordatorio</button>' : '') + '</td></tr>';
+    }).join('') + '</tbody></table></div>';
+  const reqs = S.requests.slice().reverse();
+  const solicitudes = reqs.length ? '<div class="table-wrap"><table class="data"><thead><tr><th>Agente</th><th>Hoy figura en</th><th>Lo pide</th><th>Motivo</th><th>Estado</th><th></th></tr></thead><tbody>' +
+    reqs.map(r => '<tr><td><strong>' + esc(r.nombre) + '</strong><span class="sm">Legajo ' + r.leg + '</span></td><td>' + esc(areaById(r.deArea).nombre) + '</td><td>' + esc(dirById(r.dir).nombre) + '<span class="sm">' + esc(areaById(dirById(r.dir).areas[0]).nombre) + '</span></td><td>' + esc(r.motivo) + '<span class="sm">' + fdate(r.fecha) + '</span></td>' +
+      '<td>' + (r.estado === 'pendiente' ? '<span class="pill warn">Pendiente</span>' : r.estado === 'aprobada' ? '<span class="pill ok">Aprobada</span>' : '<span class="pill bad">Rechazada</span>') + '</td>' +
+      '<td class="num">' + (r.estado === 'pendiente' ? '<div style="display:flex;gap:6px;justify-content:flex-end"><button class="btn sm primary" data-act="req-ok" data-id="' + r.id + '">Aprobar</button><button class="btn sm" data-act="req-no" data-id="' + r.id + '">Rechazar</button></div>' : '') + '</td></tr>').join('') +
+    '</tbody></table></div>'
+    : '<p class="card" style="padding:18px 20px;color:var(--ink-2)">No hay solicitudes. Cuando un director pida sumar a alguien que no figura en su equipo, el pedido aparece acá.</p>';
+  return '<section class="section"><div class="section-h"><div><h2>Directores</h2><p>' + conPend + ' de ' + DIRECTORES.length + ' tienen evaluaciones pendientes</p></div>' +
+      (conPend ? '<button class="btn" data-act="remind-all">Enviar recordatorio a todos los pendientes</button>' : '') + '</div>' + tabla + '</section>' +
+    '<section class="section"><div class="section-h"><div><h2>Solicitudes de cambio de equipo</h2><p>Al aprobar, el agente pasa al área del director que lo pidió</p></div></div>' + solicitudes + '</section>';
+}
+
+function viewEvals(){
+  const q = norm(U.eQ.trim());
+  const rows = S.agents.filter(a => (!U.eArea || a.area === U.eArea) && (!U.eEstado || estadoOf(a.leg) === U.eEstado) && (!q || a.leg.includes(q) || norm(a.nombre).includes(q)))
+    .sort((a, b) => a.area.localeCompare(b.area) || a.nombre.localeCompare(b.nombre, 'es'));
+  const filtros = '<div class="filters">' +
+    '<div class="field"><label for="e-q">Buscar por legajo o nombre</label><input id="e-q" type="search" autocomplete="off" value="' + esc(U.eQ) + '"></div>' +
+    '<div class="field"><label for="e-area">Dirección</label>' + selArea('e-area', U.eArea, 'Todas') + '</div>' +
+    '<div class="field"><label for="e-estado">Estado</label><select id="e-estado">' + [['', 'Todos'], ['enviada', 'Enviadas'], ['borrador', 'Borradores'], ['pendiente', 'Sin evaluar']].map(([v, l]) => '<option value="' + v + '"' + (U.eEstado === v ? ' selected' : '') + '>' + l + '</option>').join('') + '</select></div>' +
+    '<p class="count">' + rows.length + ' de ' + S.agents.length + ' agentes</p></div>';
+  const tabla = '<div class="table-wrap"><table class="data"><thead><tr><th>Legajo</th><th>Apellido y nombre</th><th>Dirección</th><th>Agrupamiento</th><th>Estado</th><th class="num">' + PERIODO.corto + '</th><th class="num">' + ANTERIOR.corto + '</th><th class="num">Variación</th><th></th></tr></thead><tbody>' +
+    rows.map(a => {
+      const e = S.evals[a.leg], sent = e && e.estado === 'enviada', t = sent ? total(e.scores) : null, p = S.prev[a.leg] ? total(S.prev[a.leg]) : null;
+      const v = t != null && p != null ? t - p : null;
+      return '<tr><td class="num">' + a.leg + '</td><td><strong>' + esc(a.nombre) + '</strong></td><td>' + esc(areaById(a.area).nombre) + '</td><td>' + esc(agrupById(a.agrup).nombre) + '</td>' +
+        '<td>' + pillEstado(a.leg) + '</td>' +
+        '<td class="num">' + (t == null ? '—' : t + ' ' + catChip(t)) + '</td>' +
+        '<td class="num">' + (p == null ? '<span class="muted">Sin datos</span>' : p) + '</td>' +
+        '<td class="num">' + (v == null ? '—' : '<span class="delta ' + (v > 0 ? 'up' : v < 0 ? 'down' : 'flat') + '">' + (v > 0 ? '▲ +' + v : v < 0 ? '▼ −' + Math.abs(v) : '=') + '</span>') + '</td>' +
+        '<td class="num"><button class="btn sm" data-act="detail" data-leg="' + a.leg + '">Ver</button></td></tr>';
+    }).join('') + '</tbody></table></div>';
+  return filtros + (rows.length ? tabla : '<p class="card" style="padding:18px 20px;color:var(--ink-2)">Ningún agente coincide con los filtros.</p>');
+}
+
+function viewConfig(){
+  const comps = tipo => '<ul class="comp-list">' + COMP.filter(c => c.tipo === tipo).map(c => '<li><strong>' + esc(c.nombre) + '</strong><p>' + esc(c.desc) + '</p></li>').join('') + '</ul>';
+  return '<p class="banner">En el sistema final Capital Humano edita estos datos al abrir cada período. Las competencias quedan guardadas con el período, así la comparación entre años sigue siendo válida aunque cambien.</p>' +
+    '<div class="cfg">' +
+      '<section class="card"><h2>Período</h2><dl class="facts" style="margin:0">' +
+        '<div><dt>Nombre</dt><dd>' + PERIODO.nombre + '</dd></div><div><dt>Apertura</dt><dd class="num">' + fdate(PERIODO.inicio) + '</dd></div><div><dt>Cierre</dt><dd class="num">' + fdate(PERIODO.cierre) + '</dd></div>' +
+        '<div><dt>Estado</dt><dd>' + (diasCierre() >= 0 ? '<span class="pill ok">Abierto</span>' : '<span class="pill">Cerrado</span>') + '</dd></div></dl></section>' +
+      '<section class="card"><h2>Padrón y nomenclador</h2><dl class="facts" style="margin:0">' +
+        '<div><dt>Agentes</dt><dd>' + S.agents.length + '</dd></div><div><dt>Direcciones</dt><dd>' + AREAS.length + '</dd></div><div><dt>Directores</dt><dd>' + DIRECTORES.length + '</dd></div></dl>' +
+        '<p class="sub" style="font-size:.88rem">Datos de ejemplo. Se reemplazan por el nomenclador real y, más adelante, por la base de datos de personal.</p></section>' +
+    '</div>' +
+    '<section class="card" style="padding:18px 20px;display:grid;gap:14px;margin-bottom:16px"><h2>Escala de calificación</h2><p class="sub">La suma de las 10 competencias (de 1 a 10 cada una) da un puntaje de 10 a 100.</p>' + ruler(null) + rulerLegend() + '</section>' +
+    '<div class="grid2"><section class="card chart"><h2>Competencias genéricas</h2>' + comps('G') + '</section><section class="card chart"><h2>Competencias específicas</h2>' + comps('E') + '</section></div>';
+}
+
+function openDetail(leg){
+  const a = agentByLeg(leg), e = S.evals[leg], p = S.prev[leg], area = areaById(a.area);
+  const sent = e && e.estado === 'enviada';
+  const tot = (sc, label, extra) => '<div><dt>' + label + '</dt><b>' + (sc ? total(sc) : '—') + '</b>' + (sc ? catChip(total(sc)) : '<span class="muted" style="font-size:.85rem">' + extra + '</span>') + '</div>';
+  const filas = COMP.map((c, i) => {
+    const v = e ? e.scores[i] : null, pv = p ? p[i] : null;
+    return '<div class="d-row"><span>' + esc(corto(c)) + '</span><span class="bar-track"><span class="gl base" style="left:0"></span>' +
+      (v != null ? '<span class="bar-fill" style="width:' + v*10 + '%"></span>' : '') +
+      (pv != null ? '<span class="bar-prev" style="left:' + pv*10 + '%"></span>' : '') + '</span>' +
+      '<span class="num">' + (v == null ? '—' : v) + '</span><span class="num muted">' + (pv == null ? '—' : pv) + '</span></div>';
+  }).join('');
+  $('#modal-body').innerHTML =
+    '<div class="modal-h"><div style="display:grid;gap:4px"><p class="eyebrow">Legajo ' + a.leg + ' · ' + esc(agrupById(a.agrup).nombre) + '</p><h2 id="m-title">' + esc(a.nombre) + '</h2><p class="sub" style="font-size:.88rem">' + esc(area.nombre) + ' · evalúa ' + esc(dirOfArea(a.area).nombre) + '</p></div>' +
+    '<button class="btn sm" data-act="close-modal" id="m-close">Cerrar</button></div>' +
+    '<dl class="d-tot" style="margin:0">' +
+      tot(sent ? e.scores : null, PERIODO.corto, e ? 'Borrador, ' + respondidas(e.scores) + ' de 10' : 'Sin evaluar') +
+      tot(p, ANTERIOR.corto, 'Sin evaluación anterior') +
+      (e ? '<div><dt>' + (sent ? 'Enviada' : 'Guardada') + '</dt><dd class="num">' + fdate(e.fecha) + '</dd></div>' : '') +
+    '</dl>' +
+    legendNowPrev +
+    '<div class="d-rows"><div class="d-row h"><span>Competencia</span><span></span><span class="num">2026</span><span class="num">2025</span></div>' + filas + '</div>' +
+    (e && e.obs ? '<div style="display:grid;gap:4px"><p class="lbl">Observaciones del director</p><p>' + esc(e.obs) + '</p></div>' : '');
+  $('#modal').hidden = false; $('#m-close').focus();
+}
+function closeModal(){ $('#modal').hidden = true; }
+
+/* ---------- Render y acciones ---------- */
+function render(scroll){
+  const active = document.activeElement && document.activeElement.id;
+  const caret = active && document.activeElement.selectionStart;
+  hideTip();
+  $('#top-who').textContent = U.role === 'dir' ? dirById(U.dir).nombre + ' · Director/a' : U.role === 'ch' ? 'Capital Humano' : '';
+  $('#btn-switch').hidden = !U.role;
+  const m = $('#main');
+  if(!U.role) m.innerHTML = viewHome();
+  else if(U.role === 'dir') m.innerHTML = U.view === 'form' ? viewForm() : viewList();
+  else m.innerHTML = viewCH();
+  if(U.role === 'dir' && U.view === 'form') updateScorebar();
+  if(scroll) window.scrollTo(0, 0);
+  else if(active){ const el = document.getElementById(active); if(el){ el.focus(); if(caret != null && el.setSelectionRange) try { el.setSelectionRange(caret, caret); } catch(e){} } }
+  U.flash = null;
+}
+
+function openForm(leg){
+  const e = S.evals[leg];
+  U.draft = {leg, scores:e ? e.scores.slice() : COMP.map(() => null), obs:e ? e.obs : '', dirty:false, wasSent:!!(e && e.estado === 'enviada')};
+  U.view = 'form'; render(true);
+}
+function leaveForm(){
+  const D = U.draft;
+  if(U.view === 'form' && D && D.dirty){
+    if(D.wasSent) toast('Descartamos los cambios sin guardar.');
+    else if(respondidas(D.scores) || D.obs){
+      S.evals[D.leg] = {scores:D.scores, obs:D.obs, estado:'borrador', fecha:hoyISO(), evaluador:U.dir}; save();
+      toast('Guardamos lo que cargaste como borrador.');
+    }
+  }
+  U.draft = null; U.view = 'list';
+}
+function guardarBorrador(){
+  const D = U.draft;
+  if(!respondidas(D.scores) && !D.obs){ toast('Puntuá al menos una competencia para guardar el borrador.'); return; }
+  S.evals[D.leg] = {scores:D.scores, obs:D.obs, estado:'borrador', fecha:hoyISO(), evaluador:U.dir}; save();
+  U.flash = D.leg; U.draft = null; U.view = 'list'; render(true);
+  toast('Borrador guardado. Podés seguir cuando quieras.');
+}
+function intentarEnviar(){
+  const D = U.draft, faltan = D.scores.map((v, i) => v == null ? i : -1).filter(i => i >= 0);
+  if(faltan.length){
+    faltan.forEach(i => { $('#comp-' + i).classList.add('missing'); $('#st-' + i).textContent = 'Falta puntuar'; });
+    const first = $('#comp-' + faltan[0]); first.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block:'start'});
+    const r = first.querySelector('input'); if(r) r.focus({preventScroll:true});
+    toast(faltan.length === 1 ? 'Falta puntuar 1 competencia.' : 'Faltan puntuar ' + faltan.length + ' competencias.');
+    return;
+  }
+  const t = total(D.scores), a = agentByLeg(D.leg), c = $('#sb-confirm');
+  c.innerHTML = '<p>' + (D.wasSent ? 'Vas a actualizar' : 'Vas a enviar') + ' la evaluación de <strong>' + esc(a.nombre) + '</strong> con <strong>' + t + ' puntos (' + categoria(t).nombre + ')</strong>. Podés modificarla hasta el ' + fdate(PERIODO.cierre) + '.</p>' +
+    '<div><button type="button" class="btn" data-act="cancel-send">Revisar</button><button type="button" class="btn primary" data-act="confirm-send" id="btn-confirm">' + (D.wasSent ? 'Confirmar cambios' : 'Confirmar envío') + '</button></div>';
+  c.hidden = false; $('#btn-confirm').focus();
+}
+function enviar(){
+  const D = U.draft, t = total(D.scores);
+  S.evals[D.leg] = {scores:D.scores, obs:D.obs, estado:'enviada', fecha:hoyISO(), evaluador:U.dir}; save();
+  U.flash = D.leg; U.draft = null; U.view = 'list'; render(true);
+  toast((D.wasSent ? 'Cambios guardados' : 'Evaluación enviada') + ': ' + t + ' puntos, ' + categoria(t).nombre + '.');
+}
+
+function reqLookup(){
+  const input = $('#req-leg'), hint = $('#req-hint'), btn = $('#req-btn');
+  const v = input.value.replace(/\D/g, ''); if(v !== input.value) input.value = v;
+  btn.disabled = true;
+  if(!v){ hint.textContent = ''; return; }
+  const a = agentByLeg(v), mine = dirById(U.dir).areas;
+  if(!a){ hint.textContent = v.length >= 5 ? 'No encontramos el legajo ' + v + ' en el padrón. Revisá el número.' : ''; return; }
+  if(mine.includes(a.area)){ hint.textContent = a.nombre + ' ya está en tu lista.'; return; }
+  if(S.requests.some(r => r.leg === v && r.dir === U.dir && r.estado === 'pendiente')){ hint.textContent = 'Ya pediste sumar a ' + a.nombre + '. Capital Humano lo está revisando.'; return; }
+  hint.textContent = a.nombre + ', hoy figura en ' + areaById(a.area).nombre + '.';
+  btn.disabled = false;
+}
+function enviarSolicitud(){
+  const v = $('#req-leg').value, a = agentByLeg(v);
+  if(!a) return;
+  S.requests.push({id:'r' + Date.now(), leg:v, nombre:a.nombre, deArea:a.area, dir:U.dir, motivo:$('#req-mot').value, fecha:hoyISO(), estado:'pendiente'}); save();
+  render(false); toast('Solicitud enviada a Capital Humano.');
+}
+
+let resetArmed = null;
+document.addEventListener('click', ev => {
+  const t = ev.target.closest('[data-act]');
+  if(!t){ if(ev.target.id === 'modal') closeModal(); return; }
+  const act = t.dataset.act;
+  if(act !== 'reset' && resetArmed){ clearTimeout(resetArmed); resetArmed = null; $('#btn-reset').textContent = 'Reiniciar datos de ejemplo'; }
+  switch(act){
+    case 'home': if(U.role === 'dir') leaveForm(); U.role = null; render(true); break;
+    case 'switch': if(U.role === 'dir') leaveForm(); U.role = null; render(true); break;
+    case 'enter-dir': U.role = 'dir'; U.dir = $('#sel-dir').value; U.view = 'list'; U.q = ''; U.filtro = 'todos'; render(true); break;
+    case 'enter-ch': U.role = 'ch'; render(true); break;
+    case 'filtro': U.filtro = t.dataset.f; $$('.chip').forEach(c => c.setAttribute('aria-pressed', c.dataset.f === U.filtro)); $('#team-list').innerHTML = teamRows(); break;
+    case 'open': openForm(t.dataset.leg); break;
+    case 'back': leaveForm(); render(true); break;
+    case 'draft': guardarBorrador(); break;
+    case 'submit': intentarEnviar(); break;
+    case 'cancel-send': $('#sb-confirm').hidden = true; break;
+    case 'confirm-send': enviar(); break;
+    case 'req-send': enviarSolicitud(); break;
+    case 'tab': U.tab = t.dataset.tab; render(false); break;
+    case 'toggle-table': {
+      const card = document.getElementById(t.dataset.card), on = t.getAttribute('aria-pressed') !== 'true';
+      $('.cv', card).hidden = on; $('.tv', card).hidden = !on;
+      t.setAttribute('aria-pressed', on); t.textContent = on ? 'Ver gráfico' : 'Ver tabla'; break;
+    }
+    case 'remind': { const d = dirById(t.dataset.dir); S.reminders[d.id] = hoyISO(); save(); render(false); toast('Recordatorio simulado para ' + d.mail + '.'); break; }
+    case 'remind-all': {
+      const ds = DIRECTORES.filter(d => teamOf(d.id).some(a => estadoOf(a.leg) !== 'enviada'));
+      ds.forEach(d => { S.reminders[d.id] = hoyISO(); }); save(); render(false);
+      toast('Recordatorio simulado para ' + ds.length + ' directores.'); break;
+    }
+    case 'req-ok': case 'req-no': {
+      const r = S.requests.find(x => x.id === t.dataset.id); if(!r) break;
+      if(act === 'req-ok'){ const a = agentByLeg(r.leg); a.area = dirById(r.dir).areas[0]; r.estado = 'aprobada'; toast(r.nombre + ' pasó al equipo de ' + dirById(r.dir).nombre + '.'); }
+      else { r.estado = 'rechazada'; toast('Solicitud rechazada.'); }
+      save(); render(false); break;
+    }
+    case 'detail': openDetail(t.dataset.leg); break;
+    case 'close-modal': closeModal(); break;
+    case 'reset':
+      if(!resetArmed){ t.textContent = '¿Seguro? Tocá de nuevo para reiniciar'; resetArmed = setTimeout(() => { resetArmed = null; t.textContent = 'Reiniciar datos de ejemplo'; }, 4000); }
+      else { clearTimeout(resetArmed); resetArmed = null; t.textContent = 'Reiniciar datos de ejemplo'; try { localStorage.removeItem(STORE); } catch(e){} S = seed(); U.draft = null; U.view = 'list'; render(true); toast('Datos de ejemplo reiniciados.'); }
+      break;
+  }
+});
+
+document.addEventListener('change', ev => {
+  const t = ev.target;
+  if(t.type === 'radio' && U.draft){
+    const i = +t.name.slice(1); U.draft.scores[i] = +t.value; U.draft.dirty = true;
+    const fs = $('#comp-' + i); fs.classList.add('done'); fs.classList.remove('missing');
+    $('#st-' + i).textContent = '✓ ' + t.value + ' de 10';
+    $('#sb-confirm').hidden = true; updateScorebar(); return;
+  }
+  if(t.id === 'd-area'){ U.dArea = t.value; render(false); }
+  else if(t.id === 'd-agrup'){ U.dAgrup = t.value; render(false); }
+  else if(t.id === 'e-area'){ U.eArea = t.value; render(false); }
+  else if(t.id === 'e-estado'){ U.eEstado = t.value; render(false); }
+});
+
+document.addEventListener('input', ev => {
+  const t = ev.target;
+  if(t.id === 'q'){ U.q = t.value; $('#team-list').innerHTML = teamRows(); }
+  else if(t.id === 'e-q'){ U.eQ = t.value; render(false); }
+  else if(t.id === 'req-leg') reqLookup();
+  else if(t.id === 'obs' && U.draft){ U.draft.obs = t.value; U.draft.dirty = true; $('#obs-n').textContent = t.value.length + '/600'; }
+});
+
+document.addEventListener('keydown', ev => {
+  if(ev.key === 'Escape' && !$('#modal').hidden) closeModal();
+  if(ev.key === 'Enter' && ev.target.id === 'req-leg' && !$('#req-btn').disabled) enviarSolicitud();
+});
+
+const main = $('#main');
+main.addEventListener('pointermove', ev => { const el = ev.target.closest('[data-tip]'); if(el) showTip(el, ev.clientX, ev.clientY); else hideTip(); });
+main.addEventListener('pointerleave', hideTip);
+main.addEventListener('focusin', ev => { const el = ev.target.closest('[data-tip]'); if(el){ const r = el.getBoundingClientRect(); showTip(el, r.left + r.width/2, r.bottom); } });
+main.addEventListener('focusout', hideTip);
+
+/* Enlaces directos: #director abre el portal del director, #capital-humano el panel */
+const h = location.hash.slice(1);
+if(h === 'director'){ U.role = 'dir'; }
+else if(h === 'capital-humano'){ U.role = 'ch'; }
+render(false);
+})();
+</script>
+</body>
+</html>

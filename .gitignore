@@ -1,0 +1,24 @@
+# Secretos
+.env
+.env.local
+.env.*.local
+
+# Padrón y organigrama traídos de CapitalIA: nombres y legajos de agentes municipales
+data/cache/
+*.padron.json
+*.padron.csv
+
+# Dependencias y builds
+node_modules/
+.next/
+out/
+dist/
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Configuración local de herramientas
+.claude/
+*.tsbuildinfo
+next-env.d.ts

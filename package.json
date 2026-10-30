@@ -1,0 +1,30 @@
+{
+  "name": "evaluacion-desempeno",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Evaluación de Desempeño - Dirección de Capital Humano, Municipalidad de San Miguel de Tucumán",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "padron:sync": "node --env-file=.env.local scripts/sync-padron.mjs",
+    "padron:planilla": "node scripts/planilla-evaluadores.mjs",
+    "usuario:crear": "node --env-file=.env.local scripts/crear-usuario.mjs",
+    "db:migrar": "node --env-file=.env.local scripts/migrar.mjs"
+  },
+  "dependencies": {
+    "@supabase/ssr": "^0.12.7",
+    "@supabase/supabase-js": "^2.118.0",
+    "next": "^16.4.3",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "pg": "^8.23.1",
+    "typescript": "^7.0.2"
+  }
+}
