@@ -1,8 +1,10 @@
 import type { Metadata } from 'next';
 import { Poppins } from 'next/font/google';
+import { cookies } from 'next/headers';
 import { Suspense } from 'react';
 import { Asistente } from '@/components/Asistente';
 import { Aviso } from '@/components/Aviso';
+import type { Tema } from '@/components/BotonTema';
 import { Encabezado, Pie } from '@/components/Encabezado';
 import { Tooltips } from '@/components/Tooltips';
 import { usuarioActual } from '@/lib/sesion';
@@ -24,10 +26,12 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const usuario = await usuarioActual();
+  // Modo día por defecto; noche solo si la persona lo eligió (cookie del botón del encabezado)
+  const tema: Tema = (await cookies()).get('tema')?.value === 'oscuro' ? 'oscuro' : 'claro';
   return (
-    <html lang="es" className={poppins.variable}>
+    <html lang="es" className={poppins.variable} data-theme={tema === 'oscuro' ? 'dark' : 'light'}>
       <body>
-        <Encabezado usuario={usuario} />
+        <Encabezado usuario={usuario} tema={tema} />
         <main className="wrap">{children}</main>
         <Pie />
         <Tooltips />

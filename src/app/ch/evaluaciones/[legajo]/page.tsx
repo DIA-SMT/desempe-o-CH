@@ -13,6 +13,13 @@ interface Historial {
   periodo_id: number; total: number; enviada_en: string; evaluador_nombre: string | null; funcion: string | null;
 }
 
+// Diferencia contra el período anterior, con flecha y signo (no solo color)
+function Cambio({ d }: { d: number | null }) {
+  if (d == null) return <span className="muted">—</span>;
+  if (d === 0) return <span className="delta flat">=</span>;
+  return <span className={`delta ${d > 0 ? 'up' : 'down'}`}>{d > 0 ? '▲ +' : '▼ −'}{Math.abs(d)}</span>;
+}
+
 // Detalle de una evaluación. Se lee con la sesión del usuario (RLS) y queda registrado en auditoría.
 export default async function Detalle({ params }: { params: Promise<{ legajo: string }> }) {
   const usuario = await requerirCH();
@@ -61,20 +68,25 @@ export default async function Detalle({ params }: { params: Promise<{ legajo: st
         </div>
         <dl className="d-tot" style={{ margin: 0 }}>
           <div>
-            <dt>{periodo.nombre}</dt>
+            <dt><i className="sw k-now" />{periodo.nombre}</dt>
             {enviada ? <><b>{ev!.total}</b><ChipCategoria total={ev!.total} /></> : <span className="muted">{ev ? `Borrador, ${respondidas(ev.puntajes)} de 10` : 'Sin evaluar'}</span>}
           </div>
           {anterior && (
             <div>
-              <dt>{anterior.nombre}</dt>
+              <dt><i className="sw dot k-prev" />{anterior.nombre}</dt>
               {prevRes.data?.estado === 'enviada' ? <><b>{prevRes.data.total}</b><ChipCategoria total={prevRes.data.total} /></> : <span className="muted">Sin evaluación anterior</span>}
             </div>
+          )}
+          {enviada && prevRes.data?.estado === 'enviada' && (
+            <div><dt>Cambio</dt><b><Cambio d={ev!.total - prevRes.data.total} /></b><span className="muted" style={{ fontSize: '.8rem' }}>puntos</span></div>
           )}
           {ev && <div><dt>{enviada ? 'Enviada' : 'Guardada'}</dt><dd className="num">{fecha(enviada ? ev.enviada_en! : ev.actualizada_en)}</dd></div>}
         </dl>
         <Leyenda actual={periodo.nombre} anterior={anterior && prev ? anterior.nombre : null} />
         <div className="d-rows">
-          <div className="d-row h"><span>Competencia</span><span className="bar-track" /><span className="num">Actual</span><span className="num">Anterior</span></div>
+          <div className="d-row h">
+            <span>Competencia</span><span className="bar-track" /><span className="num">Actual</span><span className="num">Anterior</span><span className="num">Cambio</span>
+          </div>
           {competencias.map((c, i) => {
             const v = (ev?.puntajes as (number | null)[] | undefined)?.[i] ?? null;
             const j = idxPrev.get(c.nombre);
@@ -84,11 +96,13 @@ export default async function Detalle({ params }: { params: Promise<{ legajo: st
                 <span>{nombreCorto(c.nombre)}</span>
                 <span className="bar-track">
                   <span className="gl base" style={{ left: 0 }} />
+                  {v != null && pv != null && <span className="bar-gap" style={{ left: `${Math.min(v, pv) * 10}%`, width: `${Math.abs(v - pv) * 10}%` }} />}
                   {v != null && <span className="bar-fill" style={{ width: `${v * 10}%` }} />}
                   {pv != null && <span className="bar-prev" style={{ left: `${pv * 10}%` }} />}
                 </span>
                 <span className="num">{v ?? '—'}</span>
-                <span className="num muted">{pv ?? '—'}</span>
+                <span className="num ant">{pv ?? '—'}</span>
+                <span className="num"><Cambio d={v != null && pv != null ? v - pv : null} /></span>
               </div>
             );
           })}

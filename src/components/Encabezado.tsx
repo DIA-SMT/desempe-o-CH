@@ -1,8 +1,9 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { ROLES, type Usuario } from '@/lib/sesion';
+import { BotonTema, type Tema } from './BotonTema';
 
-export function Encabezado({ usuario }: { usuario: Usuario | null }) {
+export function Encabezado({ usuario, tema }: { usuario: Usuario | null; tema: Tema }) {
   return (
     <header className="top">
       <div className="wrap top-in">
@@ -13,18 +14,21 @@ export function Encabezado({ usuario }: { usuario: Usuario | null }) {
             <span>Municipalidad de San Miguel de Tucumán · Capital Humano</span>
           </span>
         </Link>
-        {usuario && (
-          <div className="top-who">
+        <div className="top-who">
+          {usuario && (
             <span id="top-who">
               {usuario.nombre} · {ROLES[usuario.rol]}
             </span>
+          )}
+          <BotonTema inicial={tema} />
+          {usuario && (
             <form action="/salir" method="post">
               <button className="btn sm" type="submit">
                 Salir
               </button>
             </form>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </header>
   );

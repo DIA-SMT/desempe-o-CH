@@ -47,6 +47,9 @@ export function Barras({ filas, max, marcas, formato, actual, anterior }: {
           <span className="bar-label">{r.label}</span>
           <span className="bar-track">
             {lineas}
+            {anterior && r.now != null && r.prev != null && (
+              <span className="bar-gap" style={{ left: `${(Math.min(r.now, r.prev) / max) * 100}%`, width: `${(Math.abs(r.now - r.prev) / max) * 100}%` }} />
+            )}
             {r.now != null && <span className="bar-fill" style={{ width: `${(r.now / max) * 100}%` }} />}
             {anterior && r.prev != null && <span className="bar-prev" style={{ left: `${(r.prev / max) * 100}%` }} />}
           </span>
@@ -187,7 +190,7 @@ export function Ritmo({ puntos, dias, total, proyeccion }: {
             title: p.fecha,
             rows: [
               { k: 'k-now', v: f0(p.acumuladas), l: 'enviadas hasta ese día' },
-              { k: 'k-prev', v: f0(necesario(i)), l: 'ritmo necesario' },
+              { k: 'k-ref', v: f0(necesario(i)), l: 'ritmo necesario' },
             ],
           })} />
         ))}
@@ -224,7 +227,7 @@ export function LeyendaRitmo() {
   return (
     <div className="legend">
       <span className="lg k-now"><i className="line" />Enviadas</span>
-      <span className="lg k-prev"><i className="line" />Ritmo necesario para terminar a tiempo</span>
+      <span className="lg k-ref"><i className="line" />Ritmo necesario para terminar a tiempo</span>
       <span className="lg k-now"><i className="dash" />Proyección al ritmo actual</span>
     </div>
   );
