@@ -6,13 +6,14 @@ a las personas que tiene a cargo, y para que Capital Humano siga el avance y ana
 - **Directores**: ven solo a su equipo, buscan por legajo o nombre y completan las 10 competencias (1 a 10, total sobre 100).
 - **Capital Humano**: abre y cierra períodos, carga evaluadores, aprueba cambios de equipo y ve el tablero.
 - **Puntajes individuales**: solo la Dirección de Capital Humano, administradores y los usuarios marcados como encargados.
+  El resto de Capital Humano ve el avance y los promedios de grupos de 5 o más evaluaciones.
 
 Next.js 16 + Supabase (Postgres, ingreso por mail y seguridad por fila). El padrón y el organigrama se leen de CapitalIA.
 
 ## Puesta en marcha
 
-1. **Supabase**: crear un proyecto en supabase.com. En *SQL Editor*, correr en orden
-   `supabase/migrations/0001_esquema.sql` y `0002_seguridad.sql`.
+1. **Supabase**: crear un proyecto en supabase.com. En *SQL Editor*, pegar y correr `supabase/instalar.sql`
+   (todas las migraciones juntas).
 2. **Ingreso por mail** (*Authentication*):
    - *Sign In / Providers*: dejar Email activado y **desactivar "Allow new users to sign up"**. Las cuentas las crea el sistema.
    - *URL Configuration*: Site URL = la dirección del sistema; agregar `<dirección>/auth/confirm` en Redirect URLs.
@@ -39,6 +40,28 @@ Next.js 16 + Supabase (Postgres, ingreso por mail y seguridad por fila). El padr
    sola la primera vez que pide el enlace; no hace falta tocar *Authentication*.
 6. En el sistema (como admin): *Configuración* → **Sincronizar ahora** → **Crear período** → completar la planilla de
    evaluadores y **importarla** → **Abrir período**.
+
+## Evaluaciones de años anteriores
+
+La planilla del Google Forms (una hoja por semestre, con las mismas 10 competencias) se importa como períodos
+históricos cerrados. El Excel tiene datos personales: guardalo en `data/historico/`, que está fuera de git.
+
+```bash
+npm run historico:importar -- "data/historico/archivo.xlsx"            # revisa y muestra el resumen
+npm run historico:importar -- "data/historico/archivo.xlsx" --cargar   # lo escribe en la base
+```
+
+- Si una persona aparece más de una vez en un semestre, vale la última respuesta.
+- La repartición escrita en el formulario se cruza por nombre con CapitalIA o con
+  `data/equivalencias-reparticiones.csv` (nombres viejos o abreviados). Si no hay equivalencia, se usa la unidad actual del agente.
+- Volver a importar una hoja reemplaza ese semestre. El tablero compara contra el último período cerrado.
+
+## Migue, el asistente
+
+Botón flotante para quien inició sesión. Las preguntas rápidas se responden con los datos del sistema, sin IA. Las
+preguntas escritas van a un modelo por OpenRouter (`OPENROUTER_API_KEY`, `OPENROUTER_MODEL`) con un manual fijo
+(`src/lib/asistente.ts`) y la situación de quien pregunta: fechas del período y su avance. No recibe nombres ni puntajes.
+Cada persona puede hacer hasta 40 preguntas escritas por día; no se guarda el texto.
 
 ## Despliegue en Vercel
 

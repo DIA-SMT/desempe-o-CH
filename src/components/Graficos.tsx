@@ -1,6 +1,6 @@
 // Gráficos del tablero (componentes de servidor). Los tooltips los muestra <Tooltips />.
 import { CATEGORIAS } from '@/lib/escala';
-import { pct } from '@/lib/formato';
+import { f0, pct } from '@/lib/formato';
 import { tip } from '@/lib/tip';
 
 export interface FilaBarra { label: string; now: number | null; prev: number | null; nNow?: number }
@@ -147,6 +147,85 @@ export function TablaDistribucion({ series }: { series: { nombre: string; conteo
           ))}
         </tbody>
       </table>
+    </div>
+  );
+}
+
+// Envíos acumulados por día contra el ritmo necesario para terminar al cierre,
+// con la proyección al ritmo actual. Las líneas se dibujan en SVG y el texto en HTML.
+export interface PuntoRitmo { fecha: string; acumuladas: number }
+
+export function Ritmo({ puntos, dias, total, proyeccion }: {
+  puntos: PuntoRitmo[]; // desde el inicio hasta hoy (o el cierre)
+  dias: number;         // días del período, contando el primero y el último
+  total: number;        // evaluaciones a completar
+  proyeccion: number | null;
+}) {
+  const x = (i: number) => (dias > 1 ? (i / (dias - 1)) * 100 : 0);
+  const y = (n: number) => 100 - (total ? (n / total) * 100 : 0);
+  const necesario = (i: number) => Math.round(total * (dias > 1 ? i / (dias - 1) : 1));
+  const ultimo = puntos.length - 1;
+  const fin = puntos[ultimo];
+  return (
+    <div className="ritmo">
+      <div className="ritmo-y" aria-hidden="true"><span>{f0(total)}</span><span>{f0(total / 2)}</span><span>0</span></div>
+      <div className="ritmo-plot">
+        <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+          {[0, 50].map((g) => <line key={g} className="r-grid" x1="0" x2="100" y1={g} y2={g} vectorEffect="non-scaling-stroke" />)}
+          <line className="r-base" x1="0" x2="100" y1="100" y2="100" vectorEffect="non-scaling-stroke" />
+          <line className="r-meta" x1="0" y1="100" x2="100" y2="0" vectorEffect="non-scaling-stroke" />
+          {fin && proyeccion != null && ultimo < dias - 1 && (
+            <line className="r-proy" x1={x(ultimo)} y1={y(fin.acumuladas)} x2="100" y2={y(proyeccion)} vectorEffect="non-scaling-stroke" />
+          )}
+          {puntos.length > 1 && (
+            <polyline className="r-real" points={puntos.map((p, i) => `${x(i)},${y(p.acumuladas)}`).join(' ')} vectorEffect="non-scaling-stroke" />
+          )}
+        </svg>
+        {fin && <span className="r-dot" style={{ left: `${x(ultimo)}%`, top: `${y(fin.acumuladas)}%` }} />}
+        {puntos.map((p, i) => (
+          <span key={p.fecha} className="r-hit" tabIndex={0} style={{ left: `${x(i)}%`, width: `${Math.max(100 / dias, 2)}%` }} {...tip({
+            title: p.fecha,
+            rows: [
+              { k: 'k-now', v: f0(p.acumuladas), l: 'enviadas hasta ese día' },
+              { k: 'k-prev', v: f0(necesario(i)), l: 'ritmo necesario' },
+            ],
+          })} />
+        ))}
+      </div>
+      <div className="ritmo-x" aria-hidden="true">
+        <span style={{ left: 0 }}>{puntos[0]?.fecha}</span>
+        {ultimo > 0 && ultimo < dias - 1 && <span className="hoy" style={{ left: `${x(ultimo)}%` }}>Hoy</span>}
+        <span style={{ right: 0 }}>Cierre</span>
+      </div>
+    </div>
+  );
+}
+
+export function TablaRitmo({ puntos, dias, total }: { puntos: PuntoRitmo[]; dias: number; total: number }) {
+  return (
+    <div className="table-wrap">
+      <table className="data">
+        <thead><tr><th>Día</th><th className="num">Enviadas hasta ese día</th><th className="num">Ritmo necesario</th></tr></thead>
+        <tbody>
+          {puntos.map((p, i) => (
+            <tr key={p.fecha}>
+              <td>{p.fecha}</td>
+              <td className="num">{f0(p.acumuladas)}</td>
+              <td className="num">{f0(total * (dias > 1 ? i / (dias - 1) : 1))}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+export function LeyendaRitmo() {
+  return (
+    <div className="legend">
+      <span className="lg k-now"><i className="line" />Enviadas</span>
+      <span className="lg k-prev"><i className="line" />Ritmo necesario para terminar a tiempo</span>
+      <span className="lg k-now"><i className="dash" />Proyección al ritmo actual</span>
     </div>
   );
 }

@@ -11,7 +11,8 @@
     "padron:sync": "node --env-file=.env.local scripts/sync-padron.mjs",
     "padron:planilla": "node scripts/planilla-evaluadores.mjs",
     "usuario:crear": "node --env-file=.env.local scripts/crear-usuario.mjs",
-    "db:migrar": "node --env-file=.env.local scripts/migrar.mjs"
+    "db:migrar": "node --env-file=.env.local scripts/migrar.mjs",
+    "historico:importar": "node --env-file=.env.local --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/importar-historico.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",
@@ -25,6 +26,7 @@
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "pg": "^8.23.1",
+    "read-excel-file": "^9.3.14",
     "typescript": "^7.0.2"
   }
 }

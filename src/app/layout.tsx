@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Poppins } from 'next/font/google';
 import { Suspense } from 'react';
+import { Asistente } from '@/components/Asistente';
 import { Aviso } from '@/components/Aviso';
 import { Encabezado, Pie } from '@/components/Encabezado';
 import { Tooltips } from '@/components/Tooltips';
@@ -30,6 +31,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <main className="wrap">{children}</main>
         <Pie />
         <Tooltips />
+        {usuario && <Asistente />}
         <Suspense>
           <Aviso />
         </Suspense>

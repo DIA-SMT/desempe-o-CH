@@ -8,6 +8,11 @@ data/cache/
 *.padron.json
 *.padron.csv
 
+# Evaluaciones de años anteriores: puntajes individuales de agentes
+data/historico/
+*.xlsx
+*.xls
+
 # Dependencias y builds
 node_modules/
 .next/
