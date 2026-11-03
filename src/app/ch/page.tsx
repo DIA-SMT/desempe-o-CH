@@ -258,7 +258,7 @@ export default async function Tablero({ searchParams }: { searchParams: Promise<
         <TarjetaGrafico titulo="Evaluadores" subtitulo="Cuántos llegaron a cada paso"
           tabla={<TablaBarras filas={embudo} columna="Paso" formato={f0} actual="Evaluadores" />}>
           {evals.length
-            ? <Barras filas={embudo} max={maxEmbudo} marcas={[0, Math.round(maxEmbudo / 2), maxEmbudo]} formato={f0} actual="Evaluadores" />
+            ? <Barras filas={embudo} max={maxEmbudo} marcas={[...new Set([0, Math.round(maxEmbudo / 2), maxEmbudo])]} formato={f0} actual="Evaluadores" />
             : <p className="chart-empty">Todavía no hay evaluadores asignados en esta selección.</p>}
         </TarjetaGrafico>
         <section className="card chart">

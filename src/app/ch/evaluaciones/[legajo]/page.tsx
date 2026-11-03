@@ -11,7 +11,6 @@ import type { FilaCompetencia } from '@/lib/tipos';
 
 interface Historial {
   periodo_id: number; total: number; enviada_en: string; evaluador_nombre: string | null; funcion: string | null;
-  periodos: { nombre: string; cierre: string };
 }
 
 // Detalle de una evaluación. Se lee con la sesión del usuario (RLS) y queda registrado en auditoría.
@@ -24,14 +23,16 @@ export default async function Detalle({ params }: { params: Promise<{ legajo: st
   if (!periodo) notFound();
   const anterior = await periodoAnterior(supabase, periodo);
 
-  const [{ data: agente }, { data: ev }, { data: comps }, prevRes, compsPrevRes, { data: hist }] = await Promise.all([
+  const [{ data: agente }, { data: ev }, { data: comps }, prevRes, compsPrevRes, { data: hist }, { data: periodos }] = await Promise.all([
     supabase.from('padron_periodo').select('legajo, nombre, unidad_nombre, secretaria, evaluador_id').eq('periodo_id', periodo.id).eq('legajo', legajo).maybeSingle(),
     supabase.from('evaluaciones').select('puntajes, total, estado, agrupamiento, observaciones, enviada_en, actualizada_en, evaluador_id').eq('periodo_id', periodo.id).eq('legajo', legajo).maybeSingle(),
     supabase.from('competencias').select('orden, tipo, nombre, descripcion').eq('periodo_id', periodo.id).order('orden'),
     anterior ? supabase.from('evaluaciones').select('puntajes, total, estado').eq('periodo_id', anterior.id).eq('legajo', legajo).maybeSingle() : Promise.resolve({ data: null }),
     anterior ? supabase.from('competencias').select('orden, nombre').eq('periodo_id', anterior.id).order('orden') : Promise.resolve({ data: [] }),
-    supabase.from('evaluaciones').select('periodo_id, total, enviada_en, evaluador_nombre, funcion, periodos(nombre, cierre)')
+    // evaluaciones no tiene clave foránea directa a periodos: los nombres se cruzan aparte
+    supabase.from('evaluaciones').select('periodo_id, total, enviada_en, evaluador_nombre, funcion')
       .eq('legajo', legajo).eq('estado', 'enviada').overrideTypes<Historial[], { merge: false }>(),
+    supabase.from('periodos').select('id, nombre, cierre'),
   ]);
   if (!agente) notFound();
 
@@ -44,7 +45,10 @@ export default async function Detalle({ params }: { params: Promise<{ legajo: st
   const prev = prevRes.data?.estado === 'enviada' ? (prevRes.data.puntajes as number[]) : null;
   const idxPrev = new Map(((compsPrevRes.data ?? []) as { nombre: string }[]).map((c, i) => [c.nombre, i]));
   const enviada = ev?.estado === 'enviada';
-  const historial = (hist ?? []).sort((a, b) => b.periodos.cierre.localeCompare(a.periodos.cierre));
+  const periodoDe = new Map(((periodos ?? []) as { id: number; nombre: string; cierre: string }[]).map((p) => [p.id, p]));
+  const historial = (hist ?? [])
+    .map((h) => ({ ...h, periodo: periodoDe.get(h.periodo_id) ?? { nombre: '—', cierre: '' } }))
+    .sort((a, b) => b.periodo.cierre.localeCompare(a.periodo.cierre));
 
   return (
     <>
@@ -98,7 +102,7 @@ export default async function Detalle({ params }: { params: Promise<{ legajo: st
                 <tbody>
                   {historial.map((h) => (
                     <tr key={h.periodo_id}>
-                      <td><strong>{h.periodos.nombre}</strong></td>
+                      <td><strong>{h.periodo.nombre}</strong></td>
                       <td className="num">{h.total}</td>
                       <td><ChipCategoria total={h.total} /></td>
                       <td>

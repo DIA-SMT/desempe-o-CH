@@ -336,7 +336,9 @@ fieldset.comp legend{float:left;width:100%;padding:0;display:flex;justify-conten
 .lg i.line{height:2px;border-radius:1px}
 .lg i.dash{height:0;border-radius:0;background:none;border-top:2px dashed var(--c)}
 .ritmo{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 10px}
-.ritmo-y{height:200px;display:flex;flex-direction:column;justify-content:space-between;font-size:.72rem;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums;margin:-.5em 0}
+.ritmo-y{position:relative;height:200px;min-width:3.2em;font-size:.72rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.ritmo-y span{position:absolute;right:0;transform:translateY(-50%)}
+.ritmo-y span:nth-child(1){top:0} .ritmo-y span:nth-child(2){top:50%} .ritmo-y span:nth-child(3){top:100%}
 .ritmo-plot{position:relative;height:200px}
 .ritmo-plot svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
 .r-grid{stroke:var(--grid);stroke-width:1}
@@ -448,7 +450,11 @@ a.btn{text-decoration:none}
 .as-boton:hover img{box-shadow:0 0 0 3px var(--accent-hover),var(--shadow)}
 .as-boton:focus-visible{outline:none}
 .as-boton:focus-visible img{box-shadow:0 0 0 3px var(--surface),0 0 0 6px var(--focus)}
-.as-etiqueta{order:1;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-size:.84rem;font-weight:600;box-shadow:var(--shadow);white-space:nowrap}
+.as-etiqueta{order:1;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-size:.84rem;font-weight:600;box-shadow:var(--shadow);white-space:nowrap;animation:as-etiqueta 9s forwards}
+/* La etiqueta se muestra al entrar y se va, para no tapar el contenido; vuelve al pasar el mouse */
+@keyframes as-etiqueta{0%,85%{opacity:1;visibility:visible}100%{opacity:0;visibility:hidden}}
+.as-boton:hover .as-etiqueta,.as-boton:focus-visible .as-etiqueta{animation:none;opacity:1;visibility:visible}
+@media (prefers-reduced-motion:reduce){.as-etiqueta{animation:none;display:none}}
 body:has(.as-boton) main.wrap{padding-bottom:104px} /* que Migue no tape lo último de la página */
 body:has(.scorebar) .as-boton{bottom:calc(112px + env(safe-area-inset-bottom,0px))}
 body:has(.scorebar) .asistente{bottom:calc(184px + env(safe-area-inset-bottom,0px))}
