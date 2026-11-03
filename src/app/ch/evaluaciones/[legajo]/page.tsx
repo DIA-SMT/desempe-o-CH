@@ -74,7 +74,7 @@ export default async function Detalle({ params }: { params: Promise<{ legajo: st
         </dl>
         <Leyenda actual={periodo.nombre} anterior={anterior && prev ? anterior.nombre : null} />
         <div className="d-rows">
-          <div className="d-row h"><span>Competencia</span><span /><span className="num">Actual</span><span className="num">Anterior</span></div>
+          <div className="d-row h"><span>Competencia</span><span className="bar-track" /><span className="num">Actual</span><span className="num">Anterior</span></div>
           {competencias.map((c, i) => {
             const v = (ev?.puntajes as (number | null)[] | undefined)?.[i] ?? null;
             const j = idxPrev.get(c.nombre);

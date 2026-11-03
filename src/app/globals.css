@@ -395,10 +395,10 @@ table.data{width:100%;border-collapse:collapse;font-size:.88rem}
 .d-tot div{display:grid;gap:2px}
 .d-tot b{font-size:1.5rem;font-variant-numeric:tabular-nums}
 .d-rows{display:grid;gap:4px}
-.d-row{display:grid;grid-template-columns:minmax(0,12rem) minmax(0,1fr) 2.25rem 2.25rem;gap:10px;align-items:center;font-size:.86rem}
+.d-row{display:grid;grid-template-columns:minmax(0,12rem) minmax(0,1fr) 4.5rem 4.5rem;gap:10px;align-items:center;font-size:.86rem}
 .d-row.h{font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600}
 .d-row .num{text-align:right}
-@media (max-width:520px){.d-row{grid-template-columns:minmax(0,1fr) 2rem 2rem}.d-row .bar-track{display:none}}
+@media (max-width:520px){.d-row{grid-template-columns:minmax(0,1fr) 3.6rem 3.6rem}.d-row .bar-track{display:none}.d-row.h{letter-spacing:0}}
 
 /* Tooltip y aviso */
 .tip{position:fixed;z-index:30;pointer-events:none;background:var(--surface);border:1px solid var(--line-2);box-shadow:var(--shadow);border-radius:8px;padding:8px 10px;font-size:.8rem;max-width:270px;display:grid;gap:4px}
