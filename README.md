@@ -78,7 +78,7 @@ pública) y un `CRON_SECRET` cualquiera. `vercel.json` programa la sincronizaci�
 - Criterio de Capital Humano: en cada Dirección evalúa su director; en las Secretarías, el Secretario, que evalúa a su
   personal directo y a los directores. Las subsecretarías se dejan sin evaluador para que suban al Secretario.
   `npm run padron:planilla` deja esa indicación en la columna Observaciones.
-- El formulario es el mismo del Google Forms: agrupamiento y las 10 competencias.
+- El formulario es el mismo del Google Forms (agrupamiento y las 10 competencias), más un campo opcional de observaciones.
 - Al abrir el período se congela una foto del padrón. Los pases durante el período van por solicitudes que aprueba CH.
 - Una evaluación enviada se puede corregir hasta el cierre, pero no vuelve a borrador. Capital Humano no edita evaluaciones.
 - Cada vez que alguien abre el detalle de una evaluación queda registrado en `auditoria`.
