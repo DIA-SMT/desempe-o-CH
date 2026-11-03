@@ -112,8 +112,9 @@ export default async function Configuracion() {
         </div>
         <p className="sub" style={{ fontSize: '.88rem', maxWidth: '70ch' }}>
           Completá la planilla <code>data/evaluadores-por-unidad.csv</code> (generada desde el organigrama) con el legajo y el mail
-          institucional del evaluador de cada unidad, y subila acá. Si una unidad no tiene evaluador, a su personal lo evalúa el
-          responsable del nivel de arriba. Nadie se evalúa a sí mismo.
+          institucional del evaluador de cada unidad, y subila acá. En cada Dirección evalúa su director; en cada Secretaría, el
+          Secretario, que evalúa a su personal directo y a los directores. Si una unidad no tiene evaluador (por ejemplo, una
+          subsecretaría), a su personal lo evalúa el responsable del nivel de arriba. Nadie se evalúa a sí mismo.
         </p>
         {periodo && <ImportarEvaluadores />}
         {asignaciones.length > 0 && (

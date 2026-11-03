@@ -38,7 +38,13 @@ const celda = v => {
   const s = String(v ?? '');
   return /[;"\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
 };
-const lineas = [encabezado, ...filas.map(f => [f.secretaria, f.subsecretaria ?? '', f.u.nombre, TIPO[f.u.tipo], f.u.codigo, f.u.idGrh ?? '', f.n, '', '', '', ''])]
+// Criterio de Capital Humano: en las Secretarías evalúa el Secretario, a su personal directo y a los directores.
+// Una subsecretaría sin evaluador pasa al Secretario (el sistema sube al nivel de arriba).
+const guia = u =>
+  u.tipo === 'secretaria'
+    ? `Cargar ${u.nombre.startsWith('Secretaría') ? 'al Secretario' : 'a quien está a cargo'}: evalúa a su personal directo y a los directores del área`
+    : u.tipo === 'subsecretaria' ? 'Si queda vacío, a este personal y a sus directores los evalúa el Secretario' : '';
+const lineas = [encabezado, ...filas.map(f => [f.secretaria, f.subsecretaria ?? '', f.u.nombre, TIPO[f.u.tipo], f.u.codigo, f.u.idGrh ?? '', f.n, '', '', '', guia(f.u)])]
   .map(l => l.map(celda).join(';'));
 
 // BOM + punto y coma: Excel en español lo abre con acentos y columnas correctas

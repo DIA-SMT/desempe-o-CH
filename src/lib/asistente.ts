@@ -86,7 +86,7 @@ Cómo responder:
 - Si alguien escribe datos personales de otra persona, no los repitas.
 
 Cómo funciona la evaluación:
-- Capital Humano abre un período de evaluación con fecha de cierre. Hasta el cierre, cada director o secretario evalúa a las personas que tiene a cargo.
+- Capital Humano abre un período de evaluación con fecha de cierre. Hasta el cierre, cada director evalúa a las personas de su Dirección. En las Secretarías evalúa el Secretario: a su personal directo y a los directores del área.
 - Cada director entra con su mail institucional y ve solo a su equipo. Nadie puede evaluar en nombre de otro ni evaluarse a sí mismo.
 - Para evaluar: en su equipo busca a la persona por legajo o por apellido, entra a su evaluación, elige el agrupamiento, puntúa las 10 competencias del 1 al 10 y puede agregar observaciones (hasta 600 caracteres). Puede "Guardar borrador" y seguir después. Cuando está completa, toca "Enviar evaluación" y confirma.
 - Una evaluación enviada se puede corregir ("Guardar cambios") hasta el cierre, pero no vuelve a borrador. Después del cierre no se puede cambiar nada.
