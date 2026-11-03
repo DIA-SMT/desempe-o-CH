@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, useTransition } from 'react';
+import { MAIL_CH } from '@/lib/contacto';
 import { consultarLegajo, pedirAgente, type AgenteEncontrado } from './actions';
 
 export interface SolicitudPropia {
@@ -45,7 +46,8 @@ export function SolicitudAgente({ solicitudes }: { solicitudes: SolicitudPropia[
       <h2>¿Falta alguien de tu equipo?</h2>
       <p className="sub">
         Si una persona trabaja con vos pero no aparece en la lista, ingresá su legajo. Capital Humano revisa el pedido y la
-        suma a tu equipo.
+        suma a tu equipo. Si no encontrás el legajo o necesitás otro cambio, escribí a{' '}
+        <a href={`mailto:${MAIL_CH}`}>{MAIL_CH}</a>.
       </p>
       <div className="req-form">
         <div className="field">

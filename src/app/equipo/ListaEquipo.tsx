@@ -13,6 +13,7 @@ export interface FilaEquipo {
   total: number;
   respondidas: number;
   fecha: string | null;
+  anterior: { periodo: string; total: number } | null; // llega recién con la de este período enviada
 }
 
 type Filtro = 'todos' | 'pendientes' | 'enviadas';
@@ -87,6 +88,9 @@ export function ListaEquipo({ filas, marcado }: { filas: FilaEquipo[]; marcado?:
                   <span className="leg-m">Legajo {f.legajo}{variasUnidades ? ' · ' : ''}</span>
                   {variasUnidades ? f.unidad : null}
                 </span>
+                {f.anterior && (
+                  <span className="ant">En {f.anterior.periodo}: {f.anterior.total} ({categoria(f.anterior.total).nombre})</span>
+                )}
               </div>
               <div className="meta">
                 <div>

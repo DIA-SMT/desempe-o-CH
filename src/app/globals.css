@@ -198,6 +198,7 @@ dd{margin:0;font-weight:600}
 .row .who strong{display:block;font-weight:600}
 .row .who span{font-size:.82rem;color:var(--muted)}
 .row .who .leg-m{display:none}
+.row .who .ant{display:block;margin-top:2px}
 .row .meta{display:contents}
 .row .score{display:flex;align-items:center;gap:8px;font-variant-numeric:tabular-nums;font-weight:700}
 .row .btn{justify-self:end}

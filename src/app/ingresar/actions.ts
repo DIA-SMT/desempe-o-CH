@@ -2,6 +2,7 @@
 
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { MAIL_CH } from '@/lib/contacto';
 import { clienteAdmin } from '@/lib/supabase/admin';
 import { clienteServidor } from '@/lib/supabase/servidor';
 
@@ -11,7 +12,7 @@ export interface EstadoIngreso {
 }
 
 const MAIL = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
-const NO_HABILITADO = 'Ese mail no está habilitado para evaluar. Pedile a la Dirección de Capital Humano que te dé de alta.';
+const NO_HABILITADO = `Ese mail no está habilitado para evaluar. Pedile a la Dirección de Capital Humano (${MAIL_CH}) que te dé de alta.`;
 
 async function estaHabilitado(email: string) {
   const { data, error } = await clienteAdmin().from('usuarios').select('id').eq('email', email).eq('activo', true).maybeSingle();

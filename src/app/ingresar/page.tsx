@@ -1,11 +1,12 @@
 import { redirect } from 'next/navigation';
 import { Migue } from '@/components/Migue';
+import { MAIL_CH } from '@/lib/contacto';
 import { usuarioActual } from '@/lib/sesion';
 import { FormIngreso } from './FormIngreso';
 
 const ERRORES: Record<string, string> = {
   enlace: 'El enlace venció o ya se usó. Pedí uno nuevo.',
-  'no-habilitado': 'Tu mail no está habilitado. Pedile a la Dirección de Capital Humano que te dé de alta.',
+  'no-habilitado': `Tu mail no está habilitado. Pedile a la Dirección de Capital Humano (${MAIL_CH}) que te dé de alta.`,
 };
 
 export default async function Ingresar({ searchParams }: { searchParams: Promise<{ error?: string }> }) {

@@ -7,6 +7,9 @@ a las personas que tiene a cargo, y para que Capital Humano siga el avance y ana
 - **Capital Humano**: abre y cierra períodos, carga evaluadores, aprueba cambios de equipo y ve el tablero.
 - **Puntajes individuales**: solo la Dirección de Capital Humano, administradores y los usuarios marcados como encargados.
   El resto de Capital Humano ve el avance y los promedios de grupos de 5 o más evaluaciones.
+- **Semestres anteriores para el director**: el promedio de su equipo actual en cada semestre (con 3 o más evaluadas) y el
+  puntaje anterior de cada persona, que aparece recién cuando envía la evaluación de este período.
+- **Contacto**: capitalhumano@smt.gob.ar (`src/lib/contacto.ts`), en los pedidos de cambio de equipo y en Migue.
 
 Next.js 16 + Supabase (Postgres, ingreso por mail y seguridad por fila). El padrón y el organigrama se leen de CapitalIA.
 

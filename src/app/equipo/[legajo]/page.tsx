@@ -12,12 +12,14 @@ export default async function Evaluar({ params }: { params: Promise<{ legajo: st
   const periodo = await periodoActual(supabase);
   if (!periodo || periodo.estado !== 'abierto') redirect('/equipo');
 
-  const [{ data: agente }, { data: competencias }, { data: evaluacion }] = await Promise.all([
+  const [{ data: agente }, { data: competencias }, { data: evaluacion }, { data: historial }] = await Promise.all([
     supabase.from('padron_periodo').select('legajo, nombre, unidad_nombre, secretaria')
       .eq('periodo_id', periodo.id).eq('legajo', legajo).eq('evaluador_id', usuario.id).maybeSingle(),
     supabase.from('competencias').select('orden, tipo, nombre, descripcion').eq('periodo_id', periodo.id).order('orden'),
     supabase.from('evaluaciones').select('puntajes, agrupamiento, observaciones, estado, enviada_en, actualizada_en')
       .eq('periodo_id', periodo.id).eq('legajo', legajo).maybeSingle(),
+    // Solo trae algo cuando la evaluación de este período ya está enviada
+    supabase.rpc('historial_equipo', { p_periodo: periodo.id }).eq('legajo', legajo),
   ]);
   if (!agente) notFound();
 
@@ -39,6 +41,8 @@ export default async function Evaluar({ params }: { params: Promise<{ legajo: st
       }}
       nota={nota}
       cierre={fecha(periodo.cierre)}
+      historial={((historial ?? []) as { periodo: string; cierre: string; total: number }[])
+        .sort((a, b) => b.cierre.localeCompare(a.cierre)).map((h) => ({ periodo: h.periodo, total: h.total }))}
     />
   );
 }

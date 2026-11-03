@@ -14,9 +14,10 @@ interface Props {
   inicial: { puntajes: (number | null)[]; agrupamiento: string | null; observaciones: string; enviada: boolean };
   nota: string | null;
   cierre: string;
+  historial: { periodo: string; total: number }[]; // vacío hasta que se envía la de este período
 }
 
-export function FormEvaluacion({ agente, evaluador, competencias, inicial, nota, cierre }: Props) {
+export function FormEvaluacion({ agente, evaluador, competencias, inicial, nota, cierre, historial }: Props) {
   const router = useRouter();
   const [puntajes, setPuntajes] = useState(inicial.puntajes);
   const [agrupamiento, setAgrupamiento] = useState(inicial.agrupamiento ?? '');
@@ -117,6 +118,12 @@ export function FormEvaluacion({ agente, evaluador, competencias, inicial, nota,
           <div><dt>Legajo</dt><dd className="num">{agente.legajo}</dd></div>
           <div><dt>Unidad</dt><dd>{agente.unidad}</dd></div>
           <div><dt>Evalúa</dt><dd>{evaluador}</dd></div>
+          {historial.length > 0 && (
+            <div>
+              <dt>Semestres anteriores</dt>
+              <dd>{historial.map((h) => `${h.periodo}: ${h.total} (${categoria(h.total).nombre})`).join(' · ')}</dd>
+            </div>
+          )}
         </dl>
         {nota && <p className="note">{nota}</p>}
       </section>

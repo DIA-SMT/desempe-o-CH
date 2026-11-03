@@ -3,10 +3,10 @@
 // de quien pregunta: fechas del período y su avance. Migue no recibe nombres ni puntajes de nadie.
 
 import { COMPETENCIAS_BASE } from './competencias';
+import { MAIL_CH } from './contacto';
 import { CATEGORIAS } from './escala';
 
-// Completar con el mail y el interno de Capital Humano cuando estén definidos
-export const CONTACTO_CH = 'la Dirección de Capital Humano';
+export const CONTACTO_CH = `la Dirección de Capital Humano (${MAIL_CH})`;
 
 export interface ContextoAsistente {
   ch: boolean;
@@ -59,14 +59,14 @@ export function respuestaRapida(id: string, ctx: ContextoAsistente): string {
     case 'escala':
       return `${ESCALA} En el formulario, cada competencia tiene su descripción, por si tenés dudas de qué mide.`;
     case 'falta':
-      return 'Abajo de tu lista, en "¿Falta alguien de tu equipo?", escribí su legajo y el motivo. Capital Humano revisa el pedido y, si lo aprueba, la persona aparece en tu equipo.';
+      return `Abajo de tu lista, en "¿Falta alguien de tu equipo?", escribí su legajo y el motivo. Capital Humano revisa el pedido y, si lo aprueba, la persona aparece en tu equipo. Si no encontrás el legajo o es otro tipo de cambio, escribí a ${MAIL_CH}.`;
     case 'corregir':
       return `Sí. Una evaluación enviada se puede corregir mientras el período esté abierto${p ? `: ${p.texto}` : ''}. Lo que no se puede es volverla a borrador.`;
     case 'avance':
       if (!p || !a) return sinPeriodo;
       return `Van ${a.enviadas} de ${a.total} evaluaciones enviadas (${a.total ? Math.round((a.enviadas / a.total) * 100) : 0}%) y ${a.borradores} en borrador. En el Tablero ves el ritmo de carga y en Seguimiento, quién tiene pendientes.`;
     case 'quien':
-      return 'Los puntajes de cada persona los ven solo la Directora de Capital Humano, los administradores y los encargados que ella habilite. El resto de Capital Humano ve el avance y los promedios de grupos de 5 o más evaluaciones. Cada director ve solo a su equipo.';
+      return 'Todos los puntajes los ven solo la Directora de Capital Humano, los administradores y los encargados que ella habilite. El resto de Capital Humano ve el avance y los promedios de grupos de 5 o más evaluaciones. Cada director ve solo a su equipo: el promedio de cada semestre y el puntaje anterior de cada persona, este último recién cuando envía su evaluación del período.';
     case 'evaluadores':
       return 'En Configuración: completá la planilla de unidades con el legajo y el mail del responsable de cada una e importala. Después, con "Actualizar foto del padrón", cada agente queda asignado a su evaluador.';
     default:
@@ -90,11 +90,12 @@ Cómo funciona la evaluación:
 - Cada director entra con su mail institucional y ve solo a su equipo. Nadie puede evaluar en nombre de otro ni evaluarse a sí mismo.
 - Para evaluar: en su equipo busca a la persona por legajo o por apellido, entra a su evaluación, elige el agrupamiento, puntúa las 10 competencias del 1 al 10 y puede agregar observaciones (hasta 600 caracteres). Puede "Guardar borrador" y seguir después. Cuando está completa, toca "Enviar evaluación" y confirma.
 - Una evaluación enviada se puede corregir ("Guardar cambios") hasta el cierre, pero no vuelve a borrador. Después del cierre no se puede cambiar nada.
-- Si falta alguien en su equipo, abajo de la lista, en "¿Falta alguien de tu equipo?", escribe el legajo y el motivo. Capital Humano revisa el pedido y, si lo aprueba, la persona aparece en su equipo.
+- Si falta alguien en su equipo, abajo de la lista, en "¿Falta alguien de tu equipo?", escribe el legajo y el motivo. Capital Humano revisa el pedido y, si lo aprueba, la persona aparece en su equipo. Para otros cambios o si no encuentra el legajo, escribe a ${MAIL_CH}.
+- Cada director ve, en su equipo, el promedio de las personas que hoy tiene a cargo en cada semestre anterior (cuando hay 3 o más evaluadas). El puntaje anterior de cada persona aparece recién cuando envía la evaluación de este período, para que no condicione la nueva.
 - Si no ve a nadie o ve gente que no tiene a cargo, tiene que avisar a ${CONTACTO_CH}.
 - Agrupamientos: Funcionario de Gobierno, Administrativo, Profesional, Técnico, Mantenimiento y Producción, y Servicios Generales.
 - ${ESCALA}
-- Los puntajes de cada persona los ven solo la Directora de Capital Humano, los administradores y los encargados que ella habilite. El resto de Capital Humano ve el avance y los promedios de grupos de 5 o más evaluaciones.
+- Todos los puntajes los ven solo la Directora de Capital Humano, los administradores y los encargados que ella habilite. El resto de Capital Humano ve el avance y los promedios de grupos de 5 o más evaluaciones.
 - Capital Humano usa el Tablero (avance, ritmo de carga y resultados comparados con semestres anteriores), Seguimiento (quién tiene pendientes y los pedidos de cambio de equipo), Evaluaciones y Configuración (períodos, evaluadores y usuarios).
 
 Las 10 competencias (las 6 primeras son generales y las 4 últimas, específicas):
