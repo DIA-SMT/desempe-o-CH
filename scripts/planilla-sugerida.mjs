@@ -35,7 +35,7 @@ const padron = new Map(agentes.map((a) => [a.legajo, a]));
 
 const db = new pg.Client({ connectionString: url, ssl: { rejectUnauthorized: false } });
 await db.connect();
-const { rows: noEvaluables } = await db.query('select legajo, nombre, motivo, funcion, unidad_codigo from no_evaluables');
+const { rows: noEvaluables } = await db.query('select legajo, nombre, motivo, funcion, dni, unidad_codigo from no_evaluables');
 const { rows: historico } = await db.query(`
   select p.nombre as periodo, e.legajo, e.evaluador_legajo, e.evaluador_nombre
   from evaluaciones e join periodos p on p.id = e.periodo_id
@@ -75,7 +75,8 @@ const nombreDe = (legajo, otro) => padron.get(legajo)?.nombre ?? otro;
 const texto = (await readFile('data/evaluadores-por-unidad.csv', 'utf8')).replace(/^﻿/, '');
 const [encabezado, ...filas] = texto.split(/\r?\n/).filter(Boolean).map((l) => l.split(';'));
 const col = (nombre) => encabezado.indexOf(nombre);
-const [cTipo, cCodigo, cAgentes, cLegajo, cNombre] = ['Tipo', 'Código', 'Agentes', 'Legajo del evaluador', 'Apellido y nombre del evaluador'].map(col);
+const [cTipo, cCodigo, cAgentes, cLegajo, cNombre, cDni] =
+  ['Tipo', 'Código', 'Agentes', 'Legajo del evaluador', 'Apellido y nombre del evaluador', 'DNI o CUIL del evaluador'].map(col);
 
 let conTitular = 0, revisar = 0;
 const salida = filas.map((f) => {
@@ -90,6 +91,7 @@ const salida = filas.map((f) => {
     const [t] = titulares;
     f[cLegajo] = t.legajo;
     f[cNombre] = nombreDe(t.legajo, t.nombre);
+    if (cDni >= 0 && t.dni) f[cDni] = t.dni; // de la nómina: con DNI entra con CiDiTuc directo
     conTitular++;
     if (titulares.length > 1) notas.push(`La nómina tiene ${titulares.length} titulares: ${titulares.map((n) => `${nombreDe(n.legajo, n.nombre)} (${n.funcion})`).join(', ')}`);
     if (antes && antes.legajo !== t.legajo) notas.push(`En ${antes.semestre} evaluó ${nombreDe(antes.legajo, antes.nombre)}`);
