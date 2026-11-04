@@ -97,9 +97,14 @@ pública) y un `CRON_SECRET` cualquiera. `vercel.json` programa la sincronizaci�
 
 - Cada agente lo evalúa el evaluador asignado a su unidad; si la unidad no tiene, el del nivel superior.
   Nadie se evalúa a sí mismo.
-- Criterio de Capital Humano: en cada Dirección evalúa su director; en las Secretarías, el Secretario, que evalúa a su
-  personal directo y a los directores. Las subsecretarías se dejan sin evaluador para que suban al Secretario.
+- Criterio de Capital Humano (04/11/2026): en cada Dirección evalúa su director; si no hay, el superior inmediato
+  (Subsecretario o Secretario). En las Secretarías y Subsecretarías, su titular evalúa al personal directo.
   `npm run padron:planilla` deja esa indicación en la columna Observaciones.
+- Se evalúa al personal de planta y contratado con legajo de 5 dígitos. No se evalúa a los funcionarios (nómina de
+  Capital Humano) ni al personal de convenio 5: se cargan en `no_evaluables` con
+  `npm run padron:no-evaluables -- "data/historico/<archivo>.xlsx" [--motivo convenio]` y quedan fuera de la foto del
+  padrón. De la nómina sale también el titular de cada unidad: `npm run padron:planilla-sugerida` arma la planilla
+  precompletada en `data/historico/` (fuera de git).
 - El formulario es el mismo del Google Forms (agrupamiento y las 10 competencias), más un campo opcional de observaciones.
 - Al abrir el período se congela una foto del padrón. Los pases durante el período van por solicitudes que aprueba CH.
 - Una evaluación enviada se puede corregir hasta el cierre, pero no vuelve a borrador. Capital Humano no edita evaluaciones.

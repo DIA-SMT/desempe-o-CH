@@ -86,6 +86,8 @@ export async function pedirAgente(legajo: string, motivo: string): Promise<{ err
   const { data } = await supabase.rpc('buscar_agente', { p_legajo: limpio });
   const a = (data as { nombre: string }[] | null)?.[0];
   if (!a) return { error: 'No encontramos ese legajo en el padrón.' };
+  const { data: porQue } = await supabase.rpc('motivo_no_evaluable', { p_legajo: limpio });
+  if (porQue) return { error: `${a.nombre} no se evalúa en este sistema (${porQue === 'funcionario' ? 'es funcionario' : porQue === 'convenio' ? 'es de convenio 5' : 'su legajo no es de 5 dígitos'}).` };
 
   const { data: repetida } = await supabase
     .from('solicitudes')

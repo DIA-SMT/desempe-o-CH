@@ -38,12 +38,14 @@ const celda = v => {
   const s = String(v ?? '');
   return /[;"\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
 };
-// Criterio de Capital Humano: en las Secretarías evalúa el Secretario, a su personal directo y a los directores.
-// Una subsecretaría sin evaluador pasa al Secretario (el sistema sube al nivel de arriba).
+// Criterio de Capital Humano (04/11/2026): en cada Dirección evalúa su director; si no hay, el superior
+// inmediato (Subsecretario o Secretario). En las Secretarías y Subsecretarías, su titular evalúa al personal
+// directo. Los funcionarios no se evalúan. Una unidad sin evaluador sube al nivel de arriba.
 const guia = u =>
   u.tipo === 'secretaria'
-    ? `Cargar ${u.nombre.startsWith('Secretaría') ? 'al Secretario' : 'a quien está a cargo'}: evalúa a su personal directo y a los directores del área`
-    : u.tipo === 'subsecretaria' ? 'Si queda vacío, a este personal y a sus directores los evalúa el Secretario' : '';
+    ? `Cargar ${u.nombre.startsWith('Secretaría') ? 'al Secretario' : 'a quien está a cargo'}: evalúa a su personal directo y a las unidades sin titular`
+    : u.tipo === 'subsecretaria' ? 'Cargar al Subsecretario: evalúa a su personal directo y a las Direcciones sin director. Si no hay, sube al Secretario'
+    : 'Cargar al director. Si no hay, dejar vacío: la evalúa el superior inmediato';
 const lineas = [encabezado, ...filas.map(f => [f.secretaria, f.subsecretaria ?? '', f.u.nombre, TIPO[f.u.tipo], f.u.codigo, f.u.idGrh ?? '', f.n, '', '', '', '', guia(f.u)])]
   .map(l => l.map(celda).join(';'));
 

@@ -27,11 +27,17 @@ export default async function Configuracion() {
             .overrideTypes<Asignacion[], { merge: false }>())
       : Promise.resolve([]),
     db.from('usuarios').select('id, email, nombre, rol, ve_respuestas, activo, dni').neq('rol', 'evaluador').order('nombre'),
-    traerTodo<{ unidad_codigo: string }>((d, h) => db.from('agentes').select('unidad_codigo').eq('activo', true).range(d, h)),
+    traerTodo<{ legajo: string; unidad_codigo: string }>((d, h) => db.from('agentes').select('legajo, unidad_codigo').eq('activo', true).range(d, h)),
   ]);
+  const noEvaluables = new Map((await traerTodo<{ legajo: string; motivo: string }>((d, h) =>
+    db.from('no_evaluables').select('legajo, motivo').range(d, h))).map((n) => [n.legajo, n.motivo]));
 
+  // Se evalúa al personal con legajo de 5 dígitos que no es funcionario ni de convenio 5
+  const evaluables = conAgentes.filter((a) => /^\d{5}$/.test(a.legajo) && !noEvaluables.has(a.legajo));
+  const fuera = (motivo: string) => conAgentes.filter((a) => /^\d{5}$/.test(a.legajo) && noEvaluables.get(a.legajo) === motivo).length;
+  const seisDigitos = conAgentes.filter((a) => !/^\d{5}$/.test(a.legajo)).length;
   const nombreUnidad = new Map((unidades ?? []).map((u) => [u.codigo as string, u.nombre as string]));
-  const unidadesConAgentes = new Set(conAgentes.map((a) => a.unidad_codigo));
+  const unidadesConAgentes = new Set(evaluables.map((a) => a.unidad_codigo));
   const asignadas = asignaciones.filter((a) => unidadesConAgentes.has(a.unidad_codigo)).length;
   const competencias = (comps.data ?? []) as { orden: number; tipo: string; nombre: string; descripcion: string }[];
   const gestiona = puedeGestionarUsuarios(yo);
@@ -93,9 +99,15 @@ export default async function Configuracion() {
           <h2>Padrón de CapitalIA</h2>
           <dl className="facts" style={{ margin: 0 }}>
             <div><dt>Agentes activos</dt><dd>{f0(agentes ?? 0)}</dd></div>
+            <div><dt>A evaluar</dt><dd>{f0(evaluables.length)}</dd></div>
             <div><dt>Unidades</dt><dd>{f0(unidades?.length ?? 0)}</dd></div>
             <div><dt>Última sincronización</dt><dd className="num">{ultima?.[0] ? fecha(ultima[0].sincronizado_en) : 'Nunca'}</dd></div>
           </dl>
+          <p className="sub" style={{ fontSize: '.86rem' }}>
+            No se evalúan: {f0(fuera('funcionario'))} funcionarios de la nómina, {f0(seisDigitos)} con legajo de 6 dígitos y{' '}
+            {fuera('convenio') ? `${f0(fuera('convenio'))} de convenio 5` : 'el personal de convenio 5 (falta cargar la lista)'}.
+            Las listas se cargan con <code>npm run padron:no-evaluables</code>.
+          </p>
           <p className="sub" style={{ fontSize: '.86rem' }}>Se sincroniza solo todos los días a las 6. La repartición indica dónde presta servicios cada agente.</p>
           <form action={sincronizarAhora}><button className="btn">Sincronizar ahora</button></form>
         </section>
@@ -114,9 +126,9 @@ export default async function Configuracion() {
         <p className="sub" style={{ fontSize: '.88rem', maxWidth: '70ch' }}>
           Completá la planilla <code>data/evaluadores-por-unidad.csv</code> (generada desde el organigrama) con el legajo del
           evaluador de cada unidad (el mail y el DNI son opcionales: con CiDiTuc alcanza con el legajo) y subila acá. En cada
-          Dirección evalúa su director; en cada Secretaría, el
-          Secretario, que evalúa a su personal directo y a los directores. Si una unidad no tiene evaluador (por ejemplo, una
-          subsecretaría), a su personal lo evalúa el responsable del nivel de arriba. Nadie se evalúa a sí mismo.
+          Dirección evalúa su director; si no hay, el superior inmediato (Subsecretario o Secretario). En las Secretarías y
+          Subsecretarías, su titular evalúa al personal directo. Una unidad sin evaluador sube al nivel de arriba. Los
+          funcionarios no se evalúan.
         </p>
         {periodo && <ImportarEvaluadores />}
         {asignaciones.length > 0 && (
