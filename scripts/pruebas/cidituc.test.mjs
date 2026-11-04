@@ -77,14 +77,16 @@ describe('cookies firmadas', () => {
 });
 
 describe('nombre de CiDiTuc contra el padrón', () => {
-  test('coincide con todos los apellidos y algún nombre, sin importar tildes ni orden', () => {
+  test('coincide con un apellido y un nombre, sin importar tildes, orden ni los que falten en el padrón', () => {
     assert.ok(nombresCoinciden({ nombre: 'Matías Ignacio', apellido: 'Luján Weisheim' }, 'LUJAN WEISHEIM MATIAS IGNACIO'));
     assert.ok(nombresCoinciden({ nombre: 'Luciano Martín', apellido: 'Bonilla' }, 'BONILLA LUCIANO'));
     assert.ok(nombresCoinciden({ nombre: 'María', apellido: 'de la Fuente' }, 'FUENTE MARIA JOSE'));
+    assert.ok(nombresCoinciden({ nombre: 'Marco', apellido: 'Rossi Gómez' }, 'ROSSI MARCO'));
   });
-  test('no coincide si falta un apellido, si no hay ningún nombre o si viene vacío', () => {
-    assert.equal(nombresCoinciden({ nombre: 'Matías', apellido: 'Luján Pérez' }, 'LUJAN WEISHEIM MATIAS'), false);
+  test('no coincide si no hay ningún apellido o ningún nombre en común, o si viene vacío', () => {
+    assert.equal(nombresCoinciden({ nombre: 'Matías', apellido: 'Pérez' }, 'LUJAN WEISHEIM MATIAS'), false);
     assert.equal(nombresCoinciden({ nombre: 'Juan', apellido: 'Bonilla' }, 'BONILLA LUCIANO'), false);
+    assert.equal(nombresCoinciden({ nombre: 'Luciano', apellido: 'Luciano' }, 'BONILLA LUCIANO'), false);
     assert.equal(nombresCoinciden({ nombre: '', apellido: 'Bonilla' }, 'BONILLA LUCIANO'), false);
   });
 });

@@ -126,8 +126,9 @@ export function validarToken(config: ConfigCidituc, token: string): Promise<Vali
   });
 }
 
-// ¿El nombre verificado por CiDiTuc es el del legajo? El padrón escribe "APELLIDO NOMBRE" y puede
-// tener menos nombres que CiDiTuc: tienen que estar todos los apellidos y al menos un nombre.
+// ¿El nombre verificado por CiDiTuc es el del legajo? El padrón escribe "APELLIDO NOMBRE" y suele
+// tener menos apellidos y nombres que CiDiTuc: alcanza con que coincidan un apellido y un nombre
+// (además, la persona tiene que saber el legajo y tener su propia cuenta CiDiTuc verificada).
 const PARTICULAS = new Set(['DE', 'DEL', 'LA', 'LAS', 'LOS', 'Y']);
 const palabras = (s: string) =>
   s.normalize('NFD').replace(/[̀-ͯ]/g, '').toUpperCase().replace(/[^A-Z]+/g, ' ').trim().split(' ')
@@ -137,5 +138,7 @@ export function nombresCoinciden(persona: { nombre: string; apellido: string }, 
   const padron = new Set(palabras(nombrePadron));
   const apellidos = palabras(persona.apellido), nombres = palabras(persona.nombre);
   if (!apellidos.length || !nombres.length) return false;
-  return apellidos.every((p) => padron.has(p)) && nombres.some((p) => padron.has(p));
+  const ap = apellidos.filter((p) => padron.has(p)), no = nombres.filter((p) => padron.has(p));
+  // Dos palabras distintas del padrón: la misma no cuenta como apellido y como nombre a la vez
+  return ap.length > 0 && no.length > 0 && new Set([...ap, ...no]).size >= 2;
 }
