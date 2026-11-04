@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit",
     "padron:sync": "node --env-file=.env.local scripts/sync-padron.mjs",
     "padron:planilla": "node scripts/planilla-evaluadores.mjs",
+    "padron:planilla-sugerida": "node --env-file=.env.local scripts/planilla-sugerida.mjs",
     "usuario:crear": "node --env-file=.env.local scripts/crear-usuario.mjs",
     "db:migrar": "node --env-file=.env.local scripts/migrar.mjs",
     "historico:importar": "node --env-file=.env.local --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/importar-historico.mjs"
