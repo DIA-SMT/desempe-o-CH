@@ -33,7 +33,7 @@ const filas = unidades
   .sort((a, b) => a.secretaria.localeCompare(b.secretaria, 'es') || (a.subsecretaria ?? '').localeCompare(b.subsecretaria ?? '', 'es') || a.u.nombre.localeCompare(b.u.nombre, 'es'));
 
 const encabezado = ['Secretaría', 'Subsecretaría', 'Unidad', 'Tipo', 'Código', 'Id GRH', 'Agentes',
-  'Legajo del evaluador', 'Apellido y nombre del evaluador', 'Mail institucional del evaluador', 'Observaciones'];
+  'Legajo del evaluador', 'Apellido y nombre del evaluador', 'Mail institucional del evaluador', 'DNI o CUIL del evaluador', 'Observaciones'];
 const celda = v => {
   const s = String(v ?? '');
   return /[;"\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
@@ -44,7 +44,7 @@ const guia = u =>
   u.tipo === 'secretaria'
     ? `Cargar ${u.nombre.startsWith('Secretaría') ? 'al Secretario' : 'a quien está a cargo'}: evalúa a su personal directo y a los directores del área`
     : u.tipo === 'subsecretaria' ? 'Si queda vacío, a este personal y a sus directores los evalúa el Secretario' : '';
-const lineas = [encabezado, ...filas.map(f => [f.secretaria, f.subsecretaria ?? '', f.u.nombre, TIPO[f.u.tipo], f.u.codigo, f.u.idGrh ?? '', f.n, '', '', '', guia(f.u)])]
+const lineas = [encabezado, ...filas.map(f => [f.secretaria, f.subsecretaria ?? '', f.u.nombre, TIPO[f.u.tipo], f.u.codigo, f.u.idGrh ?? '', f.n, '', '', '', '', guia(f.u)])]
   .map(l => l.map(celda).join(';'));
 
 // BOM + punto y coma: Excel en español lo abre con acentos y columnas correctas

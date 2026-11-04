@@ -422,6 +422,10 @@ img{max-width:100%}
 .ingreso{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:32px 48px;align-items:center;max-width:920px;margin:24px auto 0}
 .ingreso .card{padding:26px;display:grid;gap:14px}
 .ingreso form{display:grid;gap:12px}
+.btn-cidituc{min-height:48px;font-size:1rem;justify-self:start;padding:0 24px;text-decoration:none}
+.otro-ingreso{border-top:1px solid var(--line);padding-top:12px}
+.otro-ingreso summary{cursor:pointer;font-size:.86rem;font-weight:600;color:var(--ink-2)}
+.otro-ingreso[open] summary{margin-bottom:12px}
 .ingreso .migue{width:200px;height:200px}
 @media (max-width:720px){.ingreso{grid-template-columns:minmax(0,1fr)}.ingreso .migue{width:96px;height:96px;grid-row:1}}
 input[type=email],input[type=password],input[type=date],input[type=file]{width:100%;min-height:42px;border:1px solid var(--line-2);border-radius:8px;background:var(--surface);padding:8px 12px}

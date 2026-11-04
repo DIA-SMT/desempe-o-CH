@@ -3,9 +3,9 @@
 import { useActionState, useState } from 'react';
 import { ingresarConClave, pedirEnlace, type EstadoIngreso } from './actions';
 
-export function FormIngreso({ errorInicial }: { errorInicial?: string }) {
+export function FormIngreso() {
   const [modo, setModo] = useState<'clave' | 'enlace'>('clave');
-  const [conClave, accionClave, entrando] = useActionState<EstadoIngreso, FormData>(ingresarConClave, { error: errorInicial });
+  const [conClave, accionClave, entrando] = useActionState<EstadoIngreso, FormData>(ingresarConClave, {});
   const [conEnlace, accionEnlace, enviando] = useActionState<EstadoIngreso, FormData>(pedirEnlace, {});
 
   if (modo === 'enlace' && conEnlace.enviado) {

@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+import { dniDeDocumento, mailSinMail } from '@/lib/cidituc';
 import { COMPETENCIAS_BASE } from '@/lib/competencias';
 import { sincronizarPadron } from '@/lib/padron';
 import { periodoActual } from '@/lib/periodos';
@@ -126,7 +127,10 @@ export async function importarEvaluadores(_: ResultadoImportacion | null, form: 
   const enc = filas[0].map((h) => h.trim().toLowerCase());
   const col = (re: RegExp) => enc.findIndex((h) => re.test(h));
   const cCodigo = col(/^c[oó]digo$/), cLegajo = col(/legajo del evaluador/), cNombre = col(/nombre del evaluador/), cMail = col(/mail/), cUnidad = col(/^unidad$/);
-  if (cCodigo < 0 || cMail < 0) return { asignadas: 0, usuariosNuevos: 0, errores: ['La planilla no tiene las columnas «Código» y «Mail institucional del evaluador». Usá la planilla generada por el sistema.'] };
+  const cDni = col(/\b(dni|cuil)\b/);
+  if (cCodigo < 0 || (cMail < 0 && cLegajo < 0)) {
+    return { asignadas: 0, usuariosNuevos: 0, errores: ['La planilla no tiene las columnas «Código» y «Legajo del evaluador». Usá la planilla generada por el sistema.'] };
+  }
 
   const { data: unidades } = await db.from('unidades').select('codigo');
   const codigos = new Set((unidades ?? []).map((u) => u.codigo));
@@ -135,11 +139,17 @@ export async function importarEvaluadores(_: ResultadoImportacion | null, form: 
 
   for (const [i, f] of filas.slice(1).entries()) {
     const n = i + 2;
-    const codigo = f[cCodigo]?.trim(), mail = f[cMail]?.trim().toLowerCase(), legajo = cLegajo >= 0 ? f[cLegajo]?.replace(/\D/g, '') : '';
+    const codigo = f[cCodigo]?.trim(), legajo = cLegajo >= 0 ? f[cLegajo]?.replace(/\D/g, '') : '';
+    const mailEscrito = cMail >= 0 ? f[cMail]?.trim().toLowerCase() : '';
+    const documento = cDni >= 0 ? f[cDni]?.trim() : '';
     const unidad = cUnidad >= 0 ? f[cUnidad]?.trim() : codigo;
-    if (!mail && !legajo) continue; // fila sin completar
+    if (!mailEscrito && !legajo) continue; // fila sin completar
     if (!codigo || !codigos.has(codigo)) { errores.push(`Fila ${n}: la unidad «${codigo}» no existe en el organigrama.`); continue; }
-    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(mail ?? '')) { errores.push(`Fila ${n} (${unidad}): falta el mail o no es válido.`); continue; }
+    if (mailEscrito && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(mailEscrito)) { errores.push(`Fila ${n} (${unidad}): el mail no es válido.`); continue; }
+    // Con CiDiTuc el mail es opcional: alcanza con el legajo (y el DNI, si se tiene)
+    const mail = mailEscrito || mailSinMail(legajo!);
+    const dni = documento ? dniDeDocumento(documento) : null;
+    if (documento && !dni) { errores.push(`Fila ${n} (${unidad}): el DNI o CUIL no es válido.`); continue; }
 
     let nombre = cNombre >= 0 ? f[cNombre]?.trim() : '';
     if (legajo) {
@@ -149,14 +159,22 @@ export async function importarEvaluadores(_: ResultadoImportacion | null, form: 
     }
     if (!nombre) { errores.push(`Fila ${n} (${unidad}): falta el legajo o el nombre del evaluador.`); continue; }
 
-    const { data: existente } = await db.from('usuarios').select('id').eq('email', mail).maybeSingle();
+    // La misma persona: por mail o, si la fila no lo trae, por legajo
+    const buscar = mailEscrito || !legajo
+      ? db.from('usuarios').select('id').eq('email', mail)
+      : db.from('usuarios').select('id').eq('legajo', legajo).order('creado_en').limit(1);
+    const { data: existente } = await buscar.maybeSingle();
     let id = existente?.id as string | undefined;
     if (!id) {
-      const { data: u, error } = await db.from('usuarios').insert({ email: mail, nombre, legajo: legajo || null, rol: 'evaluador' }).select('id').single();
-      if (error || !u) { errores.push(`Fila ${n} (${unidad}): no se pudo dar de alta a ${mail}.`); continue; }
+      const { data: u, error } = await db.from('usuarios').insert({ email: mail, nombre, legajo: legajo || null, rol: 'evaluador', ...(dni && { dni }) }).select('id').single();
+      if (error || !u) {
+        errores.push(`Fila ${n} (${unidad}): ${error && /dni/.test(error.message) ? `el DNI ${dni} ya está cargado en otra cuenta` : `no se pudo dar de alta a ${nombre}`}.`);
+        continue;
+      }
       id = u.id; nuevos++;
-    } else if (legajo) {
-      await db.from('usuarios').update({ legajo, activo: true }).eq('id', id);
+    } else if (legajo || dni) {
+      const { error } = await db.from('usuarios').update({ ...(legajo && { legajo }), ...(dni && { dni }), activo: true }).eq('id', id);
+      if (error) errores.push(`Fila ${n} (${unidad}): ${/dni/.test(error.message) ? `el DNI ${dni} ya está cargado en otra cuenta` : error.message}.`);
     }
     const { error } = await db.from('asignaciones').upsert({ periodo_id: periodo.id, unidad_codigo: codigo, evaluador_id: id }, { onConflict: 'periodo_id,unidad_codigo' });
     if (error) errores.push(`Fila ${n} (${unidad}): ${error.message}`); else asignadas++;
@@ -184,10 +202,18 @@ export async function guardarUsuarioCH(form: FormData) {
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) || !nombre) volver('/ch/configuracion', 'Completá un mail válido y el nombre.');
   if (!['capital_humano', 'directora_ch', 'admin'].includes(rol)) volver('/ch/configuracion', 'Rol no válido.');
   if (rol === 'admin' && yo.rol !== 'admin') volver('/ch/configuracion', 'Solo un administrador puede crear otro administrador.');
+  // DNI opcional, para entrar con CiDiTuc (acepta también el CUIL)
+  const documento = String(form.get('dni') ?? '').trim();
+  const dni = documento ? dniDeDocumento(documento) : null;
+  if (documento && !dni) volver('/ch/configuracion', 'El DNI o CUIL no es válido.');
 
-  const { error } = await clienteAdmin().from('usuarios').upsert({ email, nombre, rol, ve_respuestas: rol === 'capital_humano' ? ve : false, activo: true }, { onConflict: 'email' });
+  const { error } = await clienteAdmin().from('usuarios').upsert({
+    email, nombre, rol, ve_respuestas: rol === 'capital_humano' ? ve : false, activo: true, ...(dni && { dni }),
+  }, { onConflict: 'email' });
   revalidatePath('/ch/configuracion');
-  volver('/ch/configuracion', error ? `No se pudo guardar: ${error.message}` : `${nombre} ya puede ingresar con ${email}.`);
+  volver('/ch/configuracion', error
+    ? (/dni/.test(error.message) ? 'Ese DNI ya está cargado en otra cuenta.' : `No se pudo guardar: ${error.message}`)
+    : `${nombre} ya puede ingresar con ${email}${dni ? ' o con CiDiTuc' : ''}.`);
 }
 
 export async function cambiarUsuario(form: FormData) {

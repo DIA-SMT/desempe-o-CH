@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server';
+import { esSinMail } from '@/lib/cidituc';
 import { datosPeriodo, evaluadores } from '@/lib/datos-ch';
 import { categoria, nombreAgrupamiento } from '@/lib/escala';
 import { fecha, periodoActual, periodoAnterior } from '@/lib/periodos';
@@ -39,7 +40,7 @@ export async function GET(request: NextRequest) {
     const u = a.evaluador_id ? usuarios.get(a.evaluador_id) : null;
     const enviada = e?.estado === 'enviada';
     const fila: (string | number | null | undefined)[] = [
-      a.legajo, a.nombre, a.secretaria, a.unidad_nombre, u?.nombre ?? 'Sin evaluador', u?.email,
+      a.legajo, a.nombre, a.secretaria, a.unidad_nombre, u?.nombre ?? 'Sin evaluador', esSinMail(u?.email) ? '' : u?.email,
       enviada ? 'Enviada' : e ? 'Borrador' : 'Sin evaluar', enviada && e.enviada_en ? fecha(e.enviada_en) : '',
     ];
     if (tipo === 'resultados') {

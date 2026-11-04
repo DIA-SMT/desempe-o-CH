@@ -59,6 +59,28 @@ npm run historico:importar -- "data/historico/archivo.xlsx" --cargar   # lo escr
   `data/equivalencias-reparticiones.csv` (nombres viejos o abreviados). Si no hay equivalencia, se usa la unidad actual del agente.
 - Volver a importar una hoja reemplaza ese semestre. El tablero compara contra el último período cerrado.
 
+## Ingreso con CiDiTuc
+
+Los evaluadores entran con su cuenta CiDiTuc (CUIL y clave) por Ciudad Digital (repo `ditec-desarrollo/cidituc`). La
+lógica está en `src/lib/cidituc.ts`, y las rutas en `src/app/auth/cidituc/` y `src/app/ingresar/cidituc/`.
+
+1. "Ingresar con CiDiTuc" (`/auth/cidituc/login`) guarda un `state` de un solo uso y manda a
+   `ciudaddigital.smt.gob.ar/#/login?next=evaluacion-desempeno&state=…`.
+2. Ciudad Digital vuelve a `/auth/cidituc/callback?auth=<JWT>&state=…`. El servidor compara el `state`, valida el token
+   contra `authStatus` del backend municipal, pasa el CUIL a DNI y busca al usuario por DNI. El token no llega al navegador.
+3. Si el DNI todavía no está cargado, la persona escribe su legajo una sola vez: se vincula solo si ese legajo está
+   habilitado (está en la planilla de evaluadores) y el nombre que verificó CiDiTuc coincide con el del padrón.
+4. Se abre una sesión normal de Supabase (`generateLink` + `verifyOtp`, sin mandar mails). Quien no está habilitado
+   ve "No tenés evaluaciones para completar". La cuenta de administración entra solo con contraseña.
+
+- El DNI también se puede cargar en la planilla (columna "DNI o CUIL del evaluador") o en Configuración.
+- Con CiDiTuc el mail es opcional: a quien no tiene se le guarda uno de relleno (`legajo-<n>@sin-mail.invalid`) que no se
+  muestra ni se exporta.
+- Variables: `CIDITUC_LOGIN_URL`, `CIDITUC_BACKEND_URL`, `CIDITUC_NEXT_KEY`, `CIDITUC_SESSION_SECRET` (ver `.env.example`).
+  Sin ellas, la pantalla de ingreso queda con mail y contraseña.
+- Pruebas: `npm run pruebas`. Para probar de punta a punta en local, correr Ciudad Digital en la computadora con
+  `VITE_APP_EVALUACION_DESEMPENO_CALLBACK_URL=http://localhost:3000/auth/cidituc/callback` y apuntar `CIDITUC_LOGIN_URL` a ella.
+
 ## Migue, el asistente
 
 Botón flotante para quien inició sesión. Las preguntas rápidas se responden con los datos del sistema, sin IA. Las

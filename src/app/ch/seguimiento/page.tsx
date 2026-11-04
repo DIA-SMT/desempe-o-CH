@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { esSinMail } from '@/lib/cidituc';
 import { datosPeriodo, evaluadores } from '@/lib/datos-ch';
 import { f0 } from '@/lib/formato';
 import { fecha, periodoActual } from '@/lib/periodos';
@@ -46,7 +47,7 @@ export default async function Seguimiento() {
       <section className="section">
         <div className="section-h">
           <div><h2>Evaluadores</h2><p>{pendientes.length} de {filas.length} tienen evaluaciones pendientes</p></div>
-          {pendientes.length > 0 && <CopiarMails mails={pendientes.map((f) => f.u?.email).filter((m): m is string => !!m)} />}
+          {pendientes.length > 0 && <CopiarMails mails={pendientes.map((f) => f.u?.email).filter((m): m is string => !!m && !esSinMail(m))} />}
         </div>
         <div className="table-wrap">
           <table className="data">
@@ -54,7 +55,7 @@ export default async function Seguimiento() {
             <tbody>
               {filas.map((f) => (
                 <tr key={f.id}>
-                  <td><strong>{f.u?.nombre ?? 'Usuario dado de baja'}</strong><span className="sm">{f.u?.email}</span></td>
+                  <td><strong>{f.u?.nombre ?? 'Usuario dado de baja'}</strong><span className="sm">{esSinMail(f.u?.email) ? 'Sin mail (entra con CiDiTuc)' : f.u?.email}</span></td>
                   <td><div className="cellmeter"><div className="meter"><span style={{ width: `${f.p * 100}%` }} /></div><span className="num">{f.env}/{f.total}</span></div></td>
                   <td className="num">{f.bor || '—'}</td>
                   <td>{f.p === 1 ? <span className="pill ok">Completo</span> : f.env === 0 ? <span className="pill bad">Sin empezar</span> : <span className="pill warn">En curso</span>}</td>

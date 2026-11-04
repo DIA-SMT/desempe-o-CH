@@ -1,4 +1,5 @@
 import { LeyendaCategorias, Regla } from '@/components/Escala';
+import { esSinMail } from '@/lib/cidituc';
 import { f0 } from '@/lib/formato';
 import { fecha, periodoActual } from '@/lib/periodos';
 import { puedeGestionarUsuarios, requerirCH, ROLES, type Rol } from '@/lib/sesion';
@@ -7,7 +8,7 @@ import { abrirPeriodo, actualizarFoto, cambiarUsuario, cerrarPeriodo, crearPerio
 import { ImportarEvaluadores } from './ImportarEvaluadores';
 
 interface Asignacion { unidad_codigo: string; usuarios: { nombre: string; email: string } | null }
-interface UsuarioFila { id: string; email: string; nombre: string; rol: Rol; ve_respuestas: boolean; activo: boolean }
+interface UsuarioFila { id: string; email: string; nombre: string; rol: Rol; ve_respuestas: boolean; activo: boolean; dni: string | null }
 
 export default async function Configuracion() {
   const yo = await requerirCH();
@@ -25,7 +26,7 @@ export default async function Configuracion() {
           db.from('asignaciones').select('unidad_codigo, usuarios(nombre, email)').eq('periodo_id', periodo.id).range(d, h)
             .overrideTypes<Asignacion[], { merge: false }>())
       : Promise.resolve([]),
-    db.from('usuarios').select('id, email, nombre, rol, ve_respuestas, activo').neq('rol', 'evaluador').order('nombre'),
+    db.from('usuarios').select('id, email, nombre, rol, ve_respuestas, activo, dni').neq('rol', 'evaluador').order('nombre'),
     traerTodo<{ unidad_codigo: string }>((d, h) => db.from('agentes').select('unidad_codigo').eq('activo', true).range(d, h)),
   ]);
 
@@ -111,8 +112,9 @@ export default async function Configuracion() {
           </div>
         </div>
         <p className="sub" style={{ fontSize: '.88rem', maxWidth: '70ch' }}>
-          Completá la planilla <code>data/evaluadores-por-unidad.csv</code> (generada desde el organigrama) con el legajo y el mail
-          institucional del evaluador de cada unidad, y subila acá. En cada Dirección evalúa su director; en cada Secretaría, el
+          Completá la planilla <code>data/evaluadores-por-unidad.csv</code> (generada desde el organigrama) con el legajo del
+          evaluador de cada unidad (el mail y el DNI son opcionales: con CiDiTuc alcanza con el legajo) y subila acá. En cada
+          Dirección evalúa su director; en cada Secretaría, el
           Secretario, que evalúa a su personal directo y a los directores. Si una unidad no tiene evaluador (por ejemplo, una
           subsecretaría), a su personal lo evalúa el responsable del nivel de arriba. Nadie se evalúa a sí mismo.
         </p>
@@ -125,7 +127,7 @@ export default async function Configuracion() {
                 <thead><tr><th>Unidad</th><th>Evaluador/a</th><th>Mail</th></tr></thead>
                 <tbody>
                   {asignaciones.map((a) => (
-                    <tr key={a.unidad_codigo}><td>{nombreUnidad.get(a.unidad_codigo) ?? a.unidad_codigo}</td><td>{a.usuarios?.nombre}</td><td>{a.usuarios?.email}</td></tr>
+                    <tr key={a.unidad_codigo}><td>{nombreUnidad.get(a.unidad_codigo) ?? a.unidad_codigo}</td><td>{a.usuarios?.nombre}</td><td>{esSinMail(a.usuarios?.email) ? <span className="muted">Sin mail (entra con CiDiTuc)</span> : a.usuarios?.email}</td></tr>
                   ))}
                 </tbody>
               </table>
@@ -144,7 +146,7 @@ export default async function Configuracion() {
         </div>
         <div className="table-wrap">
           <table className="data">
-            <thead><tr><th>Nombre</th><th>Rol</th><th>Ve puntajes</th><th>Estado</th>{gestiona && <th />}</tr></thead>
+            <thead><tr><th>Nombre</th><th>Rol</th><th>Ve puntajes</th><th>CiDiTuc</th><th>Estado</th>{gestiona && <th />}</tr></thead>
             <tbody>
               {((usuariosCH ?? []) as UsuarioFila[]).map((u) => {
                 const ve = u.rol !== 'capital_humano' || u.ve_respuestas;
@@ -153,6 +155,7 @@ export default async function Configuracion() {
                     <td><strong>{u.nombre}</strong><span className="sm">{u.email}</span></td>
                     <td><span className="chip-rol">{ROLES[u.rol]}</span></td>
                     <td>{ve ? 'Sí' : 'No'}</td>
+                    <td>{u.rol === 'admin' ? <span className="muted">Solo contraseña</span> : u.dni ? 'DNI cargado' : <span className="muted">Sin DNI</span>}</td>
                     <td>{u.activo ? <span className="pill ok">Activo</span> : <span className="pill">Sin acceso</span>}</td>
                     {gestiona && (
                       <td className="num">
@@ -184,6 +187,7 @@ export default async function Configuracion() {
           <form action={guardarUsuarioCH} className="form-grid">
             <div className="field"><label htmlFor="u-nombre">Apellido y nombre</label><input id="u-nombre" name="nombre" type="text" required /></div>
             <div className="field"><label htmlFor="u-email">Mail institucional</label><input id="u-email" name="email" type="email" required /></div>
+            <div className="field"><label htmlFor="u-dni">DNI o CUIL (para entrar con CiDiTuc)</label><input id="u-dni" name="dni" type="text" inputMode="numeric" autoComplete="off" /></div>
             <div className="field">
               <label htmlFor="u-rol">Rol</label>
               <select id="u-rol" name="rol" defaultValue="capital_humano">

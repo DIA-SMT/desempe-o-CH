@@ -13,7 +13,8 @@
     "padron:planilla-sugerida": "node --env-file=.env.local scripts/planilla-sugerida.mjs",
     "usuario:crear": "node --env-file=.env.local scripts/crear-usuario.mjs",
     "db:migrar": "node --env-file=.env.local scripts/migrar.mjs",
-    "historico:importar": "node --env-file=.env.local --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/importar-historico.mjs"
+    "historico:importar": "node --env-file=.env.local --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/importar-historico.mjs",
+    "pruebas": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test \"scripts/pruebas/*.test.mjs\""
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",

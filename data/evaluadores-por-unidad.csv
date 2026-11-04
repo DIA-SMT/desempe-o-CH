@@ -1,83 +1,83 @@
-﻿Secretaría;Subsecretaría;Unidad;Tipo;Código;Id GRH;Agentes;Legajo del evaluador;Apellido y nombre del evaluador;Mail institucional del evaluador;Observaciones
-Fiscalía Municipal;;Fiscalía Municipal;Secretaría;GRH-8400;8400;47;;;;Cargar a quien está a cargo: evalúa a su personal directo y a los directores del área
-Fiscalía Municipal;Fiscalía Adjunta;Dirección de Control de Asesoramiento;Dirección;GRH-9000;9000;3;;;;
-Fiscalía Municipal;Fiscalía Adjunta;Dirección de Control Judicial;Dirección;GRH-8800;8800;11;;;;
-Intendencia;;Dirección de Ceremonial y Protocolo;Dirección;DIR27;300;8;;;;
-Intendencia;;Dirección de Inteligencia Artificial;Dirección;DIR36;350;3;;;;
-Intendencia;;Dirección General de Intendencia;Dirección;GRH-200;200;202;;;;
-Secretaría de Ambiente y Desarrollo Sustentable;;Secretaría de Ambiente y Desarrollo Sustentable;Secretaría;SEC07;12000;37;;;;Cargar al Secretario: evalúa a su personal directo y a los directores del área
-Secretaría de Ambiente y Desarrollo Sustentable;Subsecretaría de Gestión Integral de Residuos;Dirección de Ambiente;Dirección;DIR44;12600;56;;;;
-Secretaría de Ambiente y Desarrollo Sustentable;Subsecretaría de Gestión Integral de Residuos;Dirección de Bromatología;Dirección;DIR46;12800;58;;;;
-Secretaría de Ambiente y Desarrollo Sustentable;Subsecretaría de Gestión Integral de Residuos;Dirección de Salud Ambiental;Dirección;DIR45;12400;37;;;;
-Secretaría de Atención Ciudadana;;Secretaría de Atención Ciudadana;Secretaría;SEC06;13000;39;;;;Cargar al Secretario: evalúa a su personal directo y a los directores del área
-Secretaría de Atención Ciudadana;Subsecretaría de Desarrollo Social y Programas Social;Dirección de Familia;Dirección;DIR43;14100;46;;;;
-Secretaría de Atención Ciudadana;Subsecretaría de Desarrollo Social y Programas Social;Dirección de Programas Sociales;Dirección;DIR42;13700;27;;;;
-Secretaría de Economía y Hacienda;;Secretaría de Economía y Hacienda;Secretaría;GRH-5700;5700;39;;;;Cargar al Secretario: evalúa a su personal directo y a los directores del área
-Secretaría de Economía y Hacienda;Subsecretaría de Economía y Hacienda;Contaduría General;Dirección;SEC05;6100;121;;;;
-Secretaría de Economía y Hacienda;Subsecretaría de Economía y Hacienda;Dirección de Planeamiento y Presupuesto;Dirección;GRH-6500;6500;14;;;;
-Secretaría de Economía y Hacienda;Subsecretaría de Economía y Hacienda;Dirección General de Compras y Contrataciones;Dirección;GRH-6700;6700;17;;;;
-Secretaría de Economía y Hacienda;Subsecretaría de Economía y Hacienda;Tesorería General;Dirección;GRH-6300;6300;19;;;;
-Secretaría de Gobierno;;Dirección de Empleo;Dirección;DIR34;5500;43;;;;
-Secretaría de Gobierno;;Dirección de Relaciones Institucionales e Internacionales;Dirección;DIR33;5300;20;;;;
-Secretaría de Gobierno;;Secretaría de Gobierno;Secretaría;SEC02;3800;73;;;;Cargar al Secretario: evalúa a su personal directo y a los directores del área
-Secretaría de Gobierno;Subsecretaría de Gobierno;Dirección de Capital Humano;Dirección;DIR32;5000;75;;;;
-Secretaría de Gobierno;Subsecretaría de Gobierno;Dirección de Deportes;Dirección;DIR35;5260;105;;;;
-Secretaría de Gobierno;Subsecretaría de Gobierno;Dirección Operativa de Móviles;Dirección;GRH-5200;5200;12;;;;
-Secretaría de Gobierno;Subsecretaría de Seguridad Ciudadana;Centro de Operaciones y Monitoreo Municipal (COMM);Dirección;DIR29;4200;52;;;;
-Secretaría de Gobierno;Subsecretaría de Seguridad Ciudadana;Dirección de Defensa Civil;Dirección;DIR30;4400;91;;;;
-Secretaría de Gobierno;Subsecretaría de Seguridad Ciudadana;Patrulla de Protección Ciudadana (PPC);Dirección;DIR31;4600;119;;;;
-Secretaría de Gobierno;Subsecretaría de Seguridad Ciudadana;Subsecretaría de Seguridad Ciudadana;Subsecretaría;SUB05;4100;1;;;;Si queda vacío, a este personal y a sus directores los evalúa el Secretario
-Secretaría de Gobierno;Tribunal Municipal de Faltas;Tribunal Municipal de Faltas;Subsecretaría;GRH-5640;5640;92;;;;Si queda vacío, a este personal y a sus directores los evalúa el Secretario
-Secretaría de Ingresos Municipales;;Secretaría de Ingresos Municipales;Secretaría;SEC04;10400;15;;;;Cargar al Secretario: evalúa a su personal directo y a los directores del área
-Secretaría de Ingresos Municipales;Subsecretaría de Ingresos Municipales;Dirección de Ingresos Municipales;Dirección;DIR38;11000;189;;;;
-Secretaría de Innovación Tecnológica;;Dirección de Innovación Tecnológica;Dirección;DIR37;11800;17;;;;
-Secretaría de Innovación Tecnológica;;Secretaría de Innovación Tecnológica;Secretaría;SEC03;11500;12;;;;Cargar al Secretario: evalúa a su personal directo y a los directores del área
-Secretaría de Movilidad Urbana;;Dirección de Transporte;Dirección;GRH-14700;14700;51;;;;
-Secretaría de Movilidad Urbana;;Secretaría de Movilidad Urbana;Secretaría;GRH-14300;14300;40;;;;Cargar al Secretario: evalúa a su personal directo y a los directores del área
-Secretaría de Movilidad Urbana;Subsecretaría de Movilidad Urbana;Dirección Administrativa de Tránsito;Dirección;GRH-14900;14900;47;;;;
-Secretaría de Movilidad Urbana;Subsecretaría de Movilidad Urbana;Dirección de SUTRAPA;Dirección;GRH-15100;15100;45;;;;
-Secretaría de Movilidad Urbana;Subsecretaría de Movilidad Urbana;Dirección Operativa de Tránsito;Dirección;GRH-15000;15000;170;;;;
-Secretaría de Movilidad Urbana;Subsecretaría de Seguridad Vial y Licencias de Conducir;Dirección Licencias de Conducir;Dirección;GRH-15300;15300;63;;;;
-Secretaría de Obras Públicas;;Secretaría de Obras Públicas;Secretaría;GRH-6900;6900;25;;;;Cargar al Secretario: evalúa a su personal directo y a los directores del área
-Secretaría de Obras Públicas;Subsecretaría de Obras Públicas;Dirección de Alumbrado y Semáforos;Dirección;GRH-7500;7500;51;;;;
-Secretaría de Obras Públicas;Subsecretaría de Obras Públicas;Dirección de Obras Viales;Dirección;GRH-7300;7300;201;;;;
-Secretaría de Obras Públicas;Subsecretaría de Obras Públicas;Dirección de Proyectos;Dirección;GRH-7700;7700;47;;;;
-Secretaría de Obras Públicas;Subsecretaría de Planificación Urbana;Dirección de Catastro y Edificación;Dirección;GRH-8200;8200;73;;;;
-Secretaría de Obras Públicas;Subsecretaría de Planificación Urbana;Dirección de Planificación Urbanística;Dirección;GRH-8000;8000;33;;;;
-Secretaría de Ordenamiento y Convivencia;;Secretaría de Ordenamiento y Convivencia;Secretaría;SEC09;16000;6;;;;Cargar al Secretario: evalúa a su personal directo y a los directores del área
-Secretaría de Ordenamiento y Convivencia;SUBSECRETARIA DE ORDANAMIENTO Y CONV;Dirección de Señalización y Cartelería;Dirección;DIR53;16500;1;;;;
-Secretaría de Ordenamiento y Convivencia;SUBSECRETARIA DE ORDANAMIENTO Y CONV;Dirección de Vía Pública;Dirección;DIR52;16400;36;;;;
-Secretaría de Servicios Públicos;;Secretaría de Servicios Públicos;Secretaría;SEC08;9200;31;;;;Cargar al Secretario: evalúa a su personal directo y a los directores del área
-Secretaría de Servicios Públicos;Subsecretaría de Servicios Públicos;Dirección de Arbolado Urbano;Dirección;DIR50;10200;42;;;;
-Secretaría de Servicios Públicos;Subsecretaría de Servicios Públicos;Dirección de Cementerios;Dirección;DIR47;10000;113;;;;
-Secretaría de Servicios Públicos;Subsecretaría de Servicios Públicos;Dirección de Espacios Verdes;Dirección;DIR49;9600;226;;;;
-Secretaría de Servicios Públicos;Subsecretaría de Servicios Públicos;Dirección de Limpieza Urbana;Dirección;DIR51;9800;166;;;;
-Secretaría de Servicios Públicos;Subsecretaría de Servicios Públicos;Dirección de Parque 9 de Julio;Dirección;DIR48;10350;19;;;;
-Secretaría General;;Secretaría General;Secretaría;SEC01;400;65;;;;Cargar al Secretario: evalúa a su personal directo y a los directores del área
-Secretaría General;Subsecretaría de Cultura;Dirección de Gestión Cultural;Dirección;DIR16;3760;68;;;;
-Secretaría General;Subsecretaría de Cultura;Dirección de Museos;Dirección;DIR17;3770;68;;;;
-Secretaría General;Subsecretaría de Cultura;Dirección de Turismo;Dirección;DIR22;3780;9;;;;
-Secretaría General;Subsecretaría de Cultura;Subsecretaría de Cultura;Subsecretaría;SUB03;3750;21;;;;Si queda vacío, a este personal y a sus directores los evalúa el Secretario
-Secretaría General;Subsecretaría de Desarrollo Humano;Centro Integral Municipal de Tartamudez;Dirección;DIR09;3710;3;;;;
-Secretaría General;Subsecretaría de Desarrollo Humano;Dirección de Abordaje Integral TEA;Dirección;GRH-3730;3730;1;;;;
-Secretaría General;Subsecretaría de Desarrollo Humano;Dirección de Adulto Mayor;Dirección;DIR04;3000;25;;;;
-Secretaría General;Subsecretaría de Desarrollo Humano;Dirección de Asistencia Pública;Dirección;DIR06;3600;254;;;;
-Secretaría General;Subsecretaría de Desarrollo Humano;Dirección de Educación;Dirección;DIR02;2600;515;;;;
-Secretaría General;Subsecretaría de Desarrollo Humano;Dirección de Género y Diversidad;Dirección;DIR07;3200;17;;;;
-Secretaría General;Subsecretaría de Desarrollo Humano;Dirección de Niñez y Juventud;Dirección;DIR03;2800;39;;;;
-Secretaría General;Subsecretaría de Desarrollo Humano;Dirección de Población Animal;Dirección;DIR05;3400;39;;;;
-Secretaría General;Subsecretaría de Desarrollo Humano;Dirección de Salud;Dirección;DIR01;2400;195;;;;
-Secretaría General;Subsecretaría de Desarrollo Humano;Subsecretaría de Desarrollo Humano;Subsecretaría;SUB01;2300;8;;;;Si queda vacío, a este personal y a sus directores los evalúa el Secretario
-Secretaría General;Subsecretaría de Gestión Estratégica y Documentación;Dirección de Centros Vecinales;Dirección;DIR14;2250;23;;;;
-Secretaría General;Subsecretaría de Gestión Estratégica y Documentación;Dirección de Documentación Estratégica;Dirección;DIR12;2100;4;;;;
-Secretaría General;Subsecretaría de Gestión Estratégica y Documentación;Dirección de Gerencia de Datos;Dirección;DIR11;2290;7;;;;
-Secretaría General;Subsecretaría de Gestión Estratégica y Documentación;Dirección de Información Estratégica;Dirección;DIR13;1900;1;;;;
-Secretaría General;Subsecretaría de Gestión Estratégica y Documentación;Dirección de Planificación Estratégica;Dirección;DIR10;1700;3;;;;
-Secretaría General;Subsecretaría de Gestión Estratégica y Documentación;Dirección de Respuestas Rápidas;Dirección;DIR15;2270;41;;;;
-Secretaría General;Subsecretaría de Gestión Estratégica y Documentación;Subsecretaría de Gestión Estratégica y Documentación;Subsecretaría;SUB02;1600;7;;;;Si queda vacío, a este personal y a sus directores los evalúa el Secretario
-Secretaría General;Subsecretaría de Prensa y Comunicación Institucional;Dirección de Comunicación;Dirección;DIR23;800;15;;;;
-Secretaría General;Subsecretaría de Prensa y Comunicación Institucional;Dirección de Comunicación Digital;Dirección;DIR24;1000;10;;;;
-Secretaría General;Subsecretaría de Prensa y Comunicación Institucional;Dirección de Comunicación No Tradicional;Dirección;DIR25;1200;5;;;;
-Secretaría General;Subsecretaría de Prensa y Comunicación Institucional;Dirección de Promoción de Eventos;Dirección;DIR28;650;49;;;;
-Secretaría General;Subsecretaría de Prensa y Comunicación Institucional;Dirección de Radio Municipal;Dirección;DIR26;1400;15;;;;
-Secretaría General;Subsecretaría de Prensa y Comunicación Institucional;Subsecretaría de Prensa y Comunicación Institucional;Subsecretaría;SUB04;700;13;;;;Si queda vacío, a este personal y a sus directores los evalúa el Secretario
+﻿Secretaría;Subsecretaría;Unidad;Tipo;Código;Id GRH;Agentes;Legajo del evaluador;Apellido y nombre del evaluador;Mail institucional del evaluador;DNI o CUIL del evaluador;Observaciones
+Fiscalía Municipal;;Fiscalía Municipal;Secretaría;GRH-8400;8400;47;;;;;Cargar a quien está a cargo: evalúa a su personal directo y a los directores del área
+Fiscalía Municipal;Fiscalía Adjunta;Dirección de Control de Asesoramiento;Dirección;GRH-9000;9000;3;;;;;
+Fiscalía Municipal;Fiscalía Adjunta;Dirección de Control Judicial;Dirección;GRH-8800;8800;11;;;;;
+Intendencia;;Dirección de Ceremonial y Protocolo;Dirección;DIR27;300;8;;;;;
+Intendencia;;Dirección de Inteligencia Artificial;Dirección;DIR36;350;3;;;;;
+Intendencia;;Dirección General de Intendencia;Dirección;GRH-200;200;202;;;;;
+Secretaría de Ambiente y Desarrollo Sustentable;;Secretaría de Ambiente y Desarrollo Sustentable;Secretaría;SEC07;12000;37;;;;;Cargar al Secretario: evalúa a su personal directo y a los directores del área
+Secretaría de Ambiente y Desarrollo Sustentable;Subsecretaría de Gestión Integral de Residuos;Dirección de Ambiente;Dirección;DIR44;12600;56;;;;;
+Secretaría de Ambiente y Desarrollo Sustentable;Subsecretaría de Gestión Integral de Residuos;Dirección de Bromatología;Dirección;DIR46;12800;58;;;;;
+Secretaría de Ambiente y Desarrollo Sustentable;Subsecretaría de Gestión Integral de Residuos;Dirección de Salud Ambiental;Dirección;DIR45;12400;37;;;;;
+Secretaría de Atención Ciudadana;;Secretaría de Atención Ciudadana;Secretaría;SEC06;13000;39;;;;;Cargar al Secretario: evalúa a su personal directo y a los directores del área
+Secretaría de Atención Ciudadana;Subsecretaría de Desarrollo Social y Programas Social;Dirección de Familia;Dirección;DIR43;14100;46;;;;;
+Secretaría de Atención Ciudadana;Subsecretaría de Desarrollo Social y Programas Social;Dirección de Programas Sociales;Dirección;DIR42;13700;27;;;;;
+Secretaría de Economía y Hacienda;;Secretaría de Economía y Hacienda;Secretaría;GRH-5700;5700;39;;;;;Cargar al Secretario: evalúa a su personal directo y a los directores del área
+Secretaría de Economía y Hacienda;Subsecretaría de Economía y Hacienda;Contaduría General;Dirección;SEC05;6100;121;;;;;
+Secretaría de Economía y Hacienda;Subsecretaría de Economía y Hacienda;Dirección de Planeamiento y Presupuesto;Dirección;GRH-6500;6500;14;;;;;
+Secretaría de Economía y Hacienda;Subsecretaría de Economía y Hacienda;Dirección General de Compras y Contrataciones;Dirección;GRH-6700;6700;17;;;;;
+Secretaría de Economía y Hacienda;Subsecretaría de Economía y Hacienda;Tesorería General;Dirección;GRH-6300;6300;19;;;;;
+Secretaría de Gobierno;;Dirección de Empleo;Dirección;DIR34;5500;43;;;;;
+Secretaría de Gobierno;;Dirección de Relaciones Institucionales e Internacionales;Dirección;DIR33;5300;20;;;;;
+Secretaría de Gobierno;;Secretaría de Gobierno;Secretaría;SEC02;3800;73;;;;;Cargar al Secretario: evalúa a su personal directo y a los directores del área
+Secretaría de Gobierno;Subsecretaría de Gobierno;Dirección de Capital Humano;Dirección;DIR32;5000;75;;;;;
+Secretaría de Gobierno;Subsecretaría de Gobierno;Dirección de Deportes;Dirección;DIR35;5260;105;;;;;
+Secretaría de Gobierno;Subsecretaría de Gobierno;Dirección Operativa de Móviles;Dirección;GRH-5200;5200;12;;;;;
+Secretaría de Gobierno;Subsecretaría de Seguridad Ciudadana;Centro de Operaciones y Monitoreo Municipal (COMM);Dirección;DIR29;4200;52;;;;;
+Secretaría de Gobierno;Subsecretaría de Seguridad Ciudadana;Dirección de Defensa Civil;Dirección;DIR30;4400;91;;;;;
+Secretaría de Gobierno;Subsecretaría de Seguridad Ciudadana;Patrulla de Protección Ciudadana (PPC);Dirección;DIR31;4600;119;;;;;
+Secretaría de Gobierno;Subsecretaría de Seguridad Ciudadana;Subsecretaría de Seguridad Ciudadana;Subsecretaría;SUB05;4100;1;;;;;Si queda vacío, a este personal y a sus directores los evalúa el Secretario
+Secretaría de Gobierno;Tribunal Municipal de Faltas;Tribunal Municipal de Faltas;Subsecretaría;GRH-5640;5640;92;;;;;Si queda vacío, a este personal y a sus directores los evalúa el Secretario
+Secretaría de Ingresos Municipales;;Secretaría de Ingresos Municipales;Secretaría;SEC04;10400;15;;;;;Cargar al Secretario: evalúa a su personal directo y a los directores del área
+Secretaría de Ingresos Municipales;Subsecretaría de Ingresos Municipales;Dirección de Ingresos Municipales;Dirección;DIR38;11000;189;;;;;
+Secretaría de Innovación Tecnológica;;Dirección de Innovación Tecnológica;Dirección;DIR37;11800;17;;;;;
+Secretaría de Innovación Tecnológica;;Secretaría de Innovación Tecnológica;Secretaría;SEC03;11500;12;;;;;Cargar al Secretario: evalúa a su personal directo y a los directores del área
+Secretaría de Movilidad Urbana;;Dirección de Transporte;Dirección;GRH-14700;14700;51;;;;;
+Secretaría de Movilidad Urbana;;Secretaría de Movilidad Urbana;Secretaría;GRH-14300;14300;40;;;;;Cargar al Secretario: evalúa a su personal directo y a los directores del área
+Secretaría de Movilidad Urbana;Subsecretaría de Movilidad Urbana;Dirección Administrativa de Tránsito;Dirección;GRH-14900;14900;47;;;;;
+Secretaría de Movilidad Urbana;Subsecretaría de Movilidad Urbana;Dirección de SUTRAPA;Dirección;GRH-15100;15100;45;;;;;
+Secretaría de Movilidad Urbana;Subsecretaría de Movilidad Urbana;Dirección Operativa de Tránsito;Dirección;GRH-15000;15000;170;;;;;
+Secretaría de Movilidad Urbana;Subsecretaría de Seguridad Vial y Licencias de Conducir;Dirección Licencias de Conducir;Dirección;GRH-15300;15300;63;;;;;
+Secretaría de Obras Públicas;;Secretaría de Obras Públicas;Secretaría;GRH-6900;6900;25;;;;;Cargar al Secretario: evalúa a su personal directo y a los directores del área
+Secretaría de Obras Públicas;Subsecretaría de Obras Públicas;Dirección de Alumbrado y Semáforos;Dirección;GRH-7500;7500;51;;;;;
+Secretaría de Obras Públicas;Subsecretaría de Obras Públicas;Dirección de Obras Viales;Dirección;GRH-7300;7300;201;;;;;
+Secretaría de Obras Públicas;Subsecretaría de Obras Públicas;Dirección de Proyectos;Dirección;GRH-7700;7700;47;;;;;
+Secretaría de Obras Públicas;Subsecretaría de Planificación Urbana;Dirección de Catastro y Edificación;Dirección;GRH-8200;8200;73;;;;;
+Secretaría de Obras Públicas;Subsecretaría de Planificación Urbana;Dirección de Planificación Urbanística;Dirección;GRH-8000;8000;33;;;;;
+Secretaría de Ordenamiento y Convivencia;;Secretaría de Ordenamiento y Convivencia;Secretaría;SEC09;16000;6;;;;;Cargar al Secretario: evalúa a su personal directo y a los directores del área
+Secretaría de Ordenamiento y Convivencia;SUBSECRETARIA DE ORDANAMIENTO Y CONV;Dirección de Señalización y Cartelería;Dirección;DIR53;16500;1;;;;;
+Secretaría de Ordenamiento y Convivencia;SUBSECRETARIA DE ORDANAMIENTO Y CONV;Dirección de Vía Pública;Dirección;DIR52;16400;36;;;;;
+Secretaría de Servicios Públicos;;Secretaría de Servicios Públicos;Secretaría;SEC08;9200;31;;;;;Cargar al Secretario: evalúa a su personal directo y a los directores del área
+Secretaría de Servicios Públicos;Subsecretaría de Servicios Públicos;Dirección de Arbolado Urbano;Dirección;DIR50;10200;42;;;;;
+Secretaría de Servicios Públicos;Subsecretaría de Servicios Públicos;Dirección de Cementerios;Dirección;DIR47;10000;113;;;;;
+Secretaría de Servicios Públicos;Subsecretaría de Servicios Públicos;Dirección de Espacios Verdes;Dirección;DIR49;9600;226;;;;;
+Secretaría de Servicios Públicos;Subsecretaría de Servicios Públicos;Dirección de Limpieza Urbana;Dirección;DIR51;9800;166;;;;;
+Secretaría de Servicios Públicos;Subsecretaría de Servicios Públicos;Dirección de Parque 9 de Julio;Dirección;DIR48;10350;19;;;;;
+Secretaría General;;Secretaría General;Secretaría;SEC01;400;65;;;;;Cargar al Secretario: evalúa a su personal directo y a los directores del área
+Secretaría General;Subsecretaría de Cultura;Dirección de Gestión Cultural;Dirección;DIR16;3760;68;;;;;
+Secretaría General;Subsecretaría de Cultura;Dirección de Museos;Dirección;DIR17;3770;68;;;;;
+Secretaría General;Subsecretaría de Cultura;Dirección de Turismo;Dirección;DIR22;3780;9;;;;;
+Secretaría General;Subsecretaría de Cultura;Subsecretaría de Cultura;Subsecretaría;SUB03;3750;21;;;;;Si queda vacío, a este personal y a sus directores los evalúa el Secretario
+Secretaría General;Subsecretaría de Desarrollo Humano;Centro Integral Municipal de Tartamudez;Dirección;DIR09;3710;3;;;;;
+Secretaría General;Subsecretaría de Desarrollo Humano;Dirección de Abordaje Integral TEA;Dirección;GRH-3730;3730;1;;;;;
+Secretaría General;Subsecretaría de Desarrollo Humano;Dirección de Adulto Mayor;Dirección;DIR04;3000;25;;;;;
+Secretaría General;Subsecretaría de Desarrollo Humano;Dirección de Asistencia Pública;Dirección;DIR06;3600;254;;;;;
+Secretaría General;Subsecretaría de Desarrollo Humano;Dirección de Educación;Dirección;DIR02;2600;515;;;;;
+Secretaría General;Subsecretaría de Desarrollo Humano;Dirección de Género y Diversidad;Dirección;DIR07;3200;17;;;;;
+Secretaría General;Subsecretaría de Desarrollo Humano;Dirección de Niñez y Juventud;Dirección;DIR03;2800;39;;;;;
+Secretaría General;Subsecretaría de Desarrollo Humano;Dirección de Población Animal;Dirección;DIR05;3400;39;;;;;
+Secretaría General;Subsecretaría de Desarrollo Humano;Dirección de Salud;Dirección;DIR01;2400;195;;;;;
+Secretaría General;Subsecretaría de Desarrollo Humano;Subsecretaría de Desarrollo Humano;Subsecretaría;SUB01;2300;8;;;;;Si queda vacío, a este personal y a sus directores los evalúa el Secretario
+Secretaría General;Subsecretaría de Gestión Estratégica y Documentación;Dirección de Centros Vecinales;Dirección;DIR14;2250;23;;;;;
+Secretaría General;Subsecretaría de Gestión Estratégica y Documentación;Dirección de Documentación Estratégica;Dirección;DIR12;2100;4;;;;;
+Secretaría General;Subsecretaría de Gestión Estratégica y Documentación;Dirección de Gerencia de Datos;Dirección;DIR11;2290;7;;;;;
+Secretaría General;Subsecretaría de Gestión Estratégica y Documentación;Dirección de Información Estratégica;Dirección;DIR13;1900;1;;;;;
+Secretaría General;Subsecretaría de Gestión Estratégica y Documentación;Dirección de Planificación Estratégica;Dirección;DIR10;1700;3;;;;;
+Secretaría General;Subsecretaría de Gestión Estratégica y Documentación;Dirección de Respuestas Rápidas;Dirección;DIR15;2270;41;;;;;
+Secretaría General;Subsecretaría de Gestión Estratégica y Documentación;Subsecretaría de Gestión Estratégica y Documentación;Subsecretaría;SUB02;1600;7;;;;;Si queda vacío, a este personal y a sus directores los evalúa el Secretario
+Secretaría General;Subsecretaría de Prensa y Comunicación Institucional;Dirección de Comunicación;Dirección;DIR23;800;15;;;;;
+Secretaría General;Subsecretaría de Prensa y Comunicación Institucional;Dirección de Comunicación Digital;Dirección;DIR24;1000;10;;;;;
+Secretaría General;Subsecretaría de Prensa y Comunicación Institucional;Dirección de Comunicación No Tradicional;Dirección;DIR25;1200;5;;;;;
+Secretaría General;Subsecretaría de Prensa y Comunicación Institucional;Dirección de Promoción de Eventos;Dirección;DIR28;650;49;;;;;
+Secretaría General;Subsecretaría de Prensa y Comunicación Institucional;Dirección de Radio Municipal;Dirección;DIR26;1400;15;;;;;
+Secretaría General;Subsecretaría de Prensa y Comunicación Institucional;Subsecretaría de Prensa y Comunicación Institucional;Subsecretaría;SUB04;700;13;;;;;Si queda vacío, a este personal y a sus directores los evalúa el Secretario
