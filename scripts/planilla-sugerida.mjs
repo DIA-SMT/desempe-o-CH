@@ -107,6 +107,9 @@ const salida = filas.map((f) => {
     if (segun) notas.push('Sugerido por el nombre de la repartición: los legajos de los evaluados no coinciden con el padrón actual');
     if (!actual) notas.push(`El legajo ${sugerido.legajo} no figura en el padrón actual`);
     else if (!relacionadas(actual.reparticionCodigo, codigo)) notas.push(`Hoy figura en ${actual.reparticion}`);
+    else if (f[cTipo] === 'Dirección' && actual.reparticionCodigo !== codigo && linea(codigo).includes(actual.reparticionCodigo)) {
+      notas.push(`Lo evaluó un superior (${actual.reparticion}): en una Dirección debería evaluar su director`);
+    }
     if (otros.length) notas.push(`También evaluaron: ${otros.map((o) => `${o.nombre} (${o.n})`).join(', ')}`);
   }
   const esSubsecretaria = f[cTipo] === 'Subsecretaría';
