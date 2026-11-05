@@ -82,7 +82,7 @@ let conTitular = 0, revisar = 0;
 const salida = filas.map((f) => {
   const codigo = f[cCodigo], tipo = f[cTipo];
   const gente = evaluables.get(codigo) ?? [];
-  f[cAgentes] = String(gente.length); // sin funcionarios ni legajos de 6 dígitos
+  f[cAgentes] = String(gente.length); // sin funcionarios, convenio 5 ni legajos de 6 dígitos
   const titulares = (titularesDe.get(codigo) ?? []).filter((n) => (TITULARES[tipo] ?? []).includes(n.funcion));
   const antes = ultimoEvaluador(gente);
   const notas = [];
@@ -98,7 +98,7 @@ const salida = filas.map((f) => {
   } else {
     notas.push(`Sin ${tipo === 'Dirección' ? 'director' : 'titular'} en la nómina: la evalúa el superior inmediato${antes ? `. En ${antes.semestre} evaluó ${nombreDe(antes.legajo, antes.nombre)}` : ''}`);
   }
-  if (!gente.length) notas.push('No tiene personal para evaluar (solo funcionarios o legajos de 6 dígitos)');
+  if (!gente.length) notas.push('No tiene personal para evaluar (solo funcionarios, convenio 5 o legajos de 6 dígitos)');
   if (notas.length) revisar++;
   return [...f, titulares.length ? 'Nómina de funcionarios' : '', antes ? `${nombreDe(antes.legajo, antes.nombre)} (${antes.semestre})` : '', notas.join('. ')];
 });
@@ -108,5 +108,5 @@ const lineas = [[...encabezado, 'Sugerido según', 'Evaluó en el último semest
 await writeFile('data/historico/evaluadores-sugeridos.csv', '﻿' + lineas.join('\r\n') + '\r\n', 'utf8');
 const total = [...evaluables.values()].reduce((s, l) => s + l.length, 0);
 console.log(`Planilla sugerida: ${conTitular} de ${filas.length} unidades con titular según la nómina, ${revisar} con algo para revisar.`);
-console.log(`${total} agentes para evaluar (sin funcionarios ni legajos de 6 dígitos).`);
+console.log(`${total} agentes para evaluar (sin funcionarios, convenio 5 ni legajos de 6 dígitos).`);
 console.log('Guardada en data/historico/evaluadores-sugeridos.csv (fuera de git).');
