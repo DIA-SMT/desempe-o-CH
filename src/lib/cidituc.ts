@@ -2,8 +2,11 @@
 //
 // El contrato (repo ditec-desarrollo/cidituc, src/routes/PrivateRoute.jsx):
 //   1. /auth/cidituc/login guarda un `state` al azar en una cookie corta y manda a la persona a
-//      <CIDITUC_LOGIN_URL>/#/login?next=<clave>&state=… (el # es obligatorio: Ciudad Digital usa
-//      rutas con #, y sin él su pantalla de ingreso no ve el next).
+//      <CIDITUC_LOGIN_URL>/?ingreso=<al azar>#/login?next=<clave>&state=… (el # es obligatorio:
+//      Ciudad Digital usa rutas con #, y sin él su pantalla de ingreso no ve el next).
+//      El ?ingreso= cambia en cada ingreso para que el navegador pida siempre la página actualizada:
+//      Ciudad Digital la sirve sin Cache-Control y el navegador seguía usando una versión vieja
+//      (que no conoce esta app y manda al derivador) días después de cada publicación.
 //   2. Ciudad Digital pide CUIL y clave y vuelve a /auth/cidituc/callback?auth=<JWT>&state=…
 //      Para esta app pide la clave en cada ingreso y no deja la sesión guardada en el navegador.
 //   3. El callback compara el state, valida el JWT contra <CIDITUC_BACKEND_URL>/usuarios/authStatus
@@ -48,8 +51,9 @@ export const DURACION_S = 10 * 60;
 
 export const nuevoState = () => randomBytes(32).toString('base64url');
 
-export const urlDeIngreso = (config: ConfigCidituc, state: string) =>
-  `${config.loginUrl}/#/login?next=${encodeURIComponent(config.nextKey)}&state=${encodeURIComponent(state)}`;
+export const urlDeIngreso = (config: ConfigCidituc, state: string, ingreso = randomBytes(6).toString('base64url')) =>
+  `${config.loginUrl}/?ingreso=${encodeURIComponent(ingreso)}` +
+  `#/login?next=${encodeURIComponent(config.nextKey)}&state=${encodeURIComponent(state)}`;
 
 // Comparación en tiempo constante: que el tiempo de respuesta no delate el valor guardado
 export function mismoValor(a: string | undefined, b: string | undefined): boolean {

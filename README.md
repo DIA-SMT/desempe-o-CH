@@ -65,7 +65,8 @@ Los evaluadores entran con su cuenta CiDiTuc (CUIL y clave) por Ciudad Digital (
 lógica está en `src/lib/cidituc.ts`, y las rutas en `src/app/auth/cidituc/` y `src/app/ingresar/cidituc/`.
 
 1. "Ingresar con CiDiTuc" (`/auth/cidituc/login`) guarda un `state` de un solo uso y manda a
-   `ciudaddigital.smt.gob.ar/#/login?next=evaluacion-desempeno&state=…`.
+   `ciudaddigital.smt.gob.ar/?ingreso=…#/login?next=evaluacion-desempeno&state=…`. El `?ingreso=` cambia cada vez
+   para que el navegador no use una versión vieja de Ciudad Digital (la sirven sin `Cache-Control`).
 2. Ciudad Digital vuelve a `/auth/cidituc/callback?auth=<JWT>&state=…`. El servidor compara el `state`, valida el token
    contra `authStatus` del backend municipal, pasa el CUIL a DNI y busca al usuario por DNI. El token no llega al navegador.
 3. Si el DNI todavía no está cargado, la persona escribe su legajo una sola vez: se vincula solo si ese legajo está

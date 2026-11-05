@@ -25,8 +25,14 @@ describe('configuración', () => {
     assert.equal(leerConfig({ ...ENV, CIDITUC_SESSION_SECRET: 'corto' }), null);
   });
   test('la dirección de ingreso lleva el # de Ciudad Digital, la clave y el state', () => {
-    const url = urlDeIngreso(leerConfig(ENV), 'abc_123');
-    assert.equal(url, 'https://ciudaddigital.smt.gob.ar/#/login?next=evaluacion-desempeno&state=abc_123');
+    const url = urlDeIngreso(leerConfig(ENV), 'abc_123', 'k9');
+    assert.equal(url, 'https://ciudaddigital.smt.gob.ar/?ingreso=k9#/login?next=evaluacion-desempeno&state=abc_123');
+  });
+  test('cada ingreso pide la página de Ciudad Digital con una dirección nueva (sin lo guardado en el navegador)', () => {
+    const [a, b] = [urlDeIngreso(leerConfig(ENV), 's'), urlDeIngreso(leerConfig(ENV), 's')].map((u) => new URL(u));
+    assert.notEqual(a.search, b.search);
+    assert.match(a.search, /^\?ingreso=[A-Za-z0-9_-]{8}$/);
+    assert.equal(a.hash, '#/login?next=evaluacion-desempeno&state=s');
   });
 });
 
