@@ -444,7 +444,9 @@ a.btn{text-decoration:none}
 .ch-head a{color:var(--accent);font-weight:600}
 
 /* Migue, asistente flotante */
-.as-boton{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:30;display:flex;align-items:center;gap:10px;padding:0;border:0;background:none;cursor:pointer;font:inherit}
+/* --as-abajo: lo que ocupa abajo la barra del puntaje (la mide FormEvaluacion) o, si no hay, el borde seguro del celular */
+:root{--as-abajo:max(var(--alto-barra,0px),env(safe-area-inset-bottom,0px))}
+.as-boton{position:fixed;right:16px;bottom:calc(16px + var(--as-abajo));z-index:30;display:flex;align-items:center;gap:10px;padding:0;border:0;background:none;cursor:pointer;font:inherit}
 .as-boton img{width:60px;height:60px;border-radius:50%;background:#ffffff;box-shadow:0 0 0 3px var(--accent),var(--shadow);order:2}
 .as-boton:hover img{box-shadow:0 0 0 3px var(--accent-hover),var(--shadow)}
 .as-boton:focus-visible{outline:none}
@@ -455,9 +457,8 @@ a.btn{text-decoration:none}
 .as-boton:hover .as-etiqueta,.as-boton:focus-visible .as-etiqueta{animation:none;opacity:1;visibility:visible}
 @media (prefers-reduced-motion:reduce){.as-etiqueta{animation:none;display:none}}
 body:has(.as-boton) main.wrap{padding-bottom:104px} /* que Migue no tape lo último de la página */
-body:has(.scorebar) .as-boton{bottom:calc(112px + env(safe-area-inset-bottom,0px))}
-body:has(.scorebar) .asistente{bottom:calc(184px + env(safe-area-inset-bottom,0px))}
-.asistente{position:fixed;right:16px;bottom:calc(88px + env(safe-area-inset-bottom,0px));z-index:31;width:min(400px,calc(100vw - 32px));height:min(600px,calc(100dvh - 120px));display:grid;grid-template-rows:auto minmax(0,1fr) auto auto auto;box-shadow:var(--shadow);overflow:hidden}
+/* El panel va encima de Migue (16 + 60 del botón + 12) y nunca más alto que lo que queda de pantalla */
+.asistente{position:fixed;right:16px;bottom:calc(88px + var(--as-abajo));z-index:31;width:min(400px,calc(100vw - 32px));height:max(240px,min(600px,calc(100dvh - 104px - var(--as-abajo))));display:grid;grid-template-rows:auto minmax(0,1fr) auto auto auto;box-shadow:var(--shadow);overflow:hidden}
 .as-h{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line)}
 .as-h div{display:grid;flex:1;line-height:1.25}
 .as-h span:not(.as-cara){font-size:.78rem;color:var(--muted)}

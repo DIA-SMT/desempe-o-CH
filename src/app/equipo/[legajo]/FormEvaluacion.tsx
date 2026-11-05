@@ -27,6 +27,17 @@ export function FormEvaluacion({ agente, evaluador, competencias, inicial, nota,
   const [error, setError] = useState('');
   const [guardando, iniciar] = useTransition();
   const sucio = useRef(false);
+  const barra = useRef<HTMLDivElement>(null);
+
+  // La barra del puntaje publica su alto para que Migue se ubique justo encima (y su panel no se salga de la pantalla)
+  useEffect(() => {
+    const el = barra.current;
+    if (!el) return;
+    const raiz = document.documentElement.style;
+    const medir = new ResizeObserver(() => raiz.setProperty('--alto-barra', `${Math.ceil(el.getBoundingClientRect().height)}px`));
+    medir.observe(el);
+    return () => { medir.disconnect(); raiz.removeProperty('--alto-barra'); };
+  }, []);
 
   const n = respondidas(puntajes);
   const total = sumar(puntajes);
@@ -152,7 +163,7 @@ export function FormEvaluacion({ agente, evaluador, competencias, inicial, nota,
           <span className="obs-n">{obs.length}/600</span>
         </section>
 
-        <div className="scorebar">
+        <div className="scorebar" ref={barra}>
           <div className="sb-score">
             <span className={`sb-num${completa ? '' : ' partial'}`}>{total}</span>
             <span className="sb-max">/100</span>
