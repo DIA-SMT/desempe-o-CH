@@ -14,8 +14,8 @@ export default async function VincularCidituc() {
         <p className="eyebrow sun">Primer ingreso con CiDiTuc</p>
         <h1>Hola, {datos.nombre.split(' ')[0] || 'bienvenido/a'}</h1>
         <p className="sub">
-          Para encontrar tu cuenta, ingresá tu número de legajo. Lo pedimos una sola vez: la próxima vez entrás directo con
-          CiDiTuc.
+          Ingresá tu número de legajo para encontrar tu cuenta. Si evaluás a tu personal, lo pedimos una sola vez y la
+          próxima vez entrás directo con CiDiTuc. Si no tenés a nadie a cargo, te contamos quién te evalúa.
         </p>
         <FormVincular />
       </section>
