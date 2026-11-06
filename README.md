@@ -94,6 +94,11 @@ Cada persona puede hacer hasta 40 preguntas escritas por día; no se guarda el t
 Importar el repositorio, cargar las mismas variables de entorno (con `NEXT_PUBLIC_SITE_URL` apuntando a la dirección
 pública) y un `CRON_SECRET` cualquiera. `vercel.json` programa la sincronización diaria del padrón a las 6 (hora de Argentina).
 
+La dirección pública es `https://evaluador.smt.gob.ar` (CNAME a `desempe-o-ch.vercel.app` en el DNS de smt.gob.ar).
+`src/proxy.ts` manda `desempe-o-ch.vercel.app` al dominio oficial con la misma ruta, y Ciudad Digital vuelve a
+`https://evaluador.smt.gob.ar/auth/cidituc/callback`. En Supabase (Authentication → URL Configuration), *Site URL* es el
+dominio oficial y *Redirect URLs* incluye `https://evaluador.smt.gob.ar/**`.
+
 ## Reglas de negocio
 
 - Cada agente lo evalúa el evaluador asignado a su unidad; si la unidad no tiene, el del nivel superior.
