@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { Barras, TablaBarras, type FilaBarra } from '@/components/Graficos';
 import { Migue } from '@/components/Migue';
 import { TarjetaGrafico } from '@/components/TarjetaGrafico';
@@ -5,7 +6,7 @@ import { MAIL_CH } from '@/lib/contacto';
 import { respondidas } from '@/lib/escala';
 import { f1, promedio } from '@/lib/formato';
 import { fecha, periodoActual, textoCierre } from '@/lib/periodos';
-import { requerirUsuario } from '@/lib/sesion';
+import { esCH, requerirUsuario } from '@/lib/sesion';
 import { traerTodo } from '@/lib/supabase/admin';
 import { clienteServidor } from '@/lib/supabase/servidor';
 import type { FilaEvaluacion, FilaPadron } from '@/lib/tipos';
@@ -20,14 +21,21 @@ export default async function Equipo({ searchParams }: { searchParams: Promise<{
   const { marcado } = await searchParams;
   const supabase = await clienteServidor();
   const periodo = await periodoActual(supabase);
+  // Quien es de Capital Humano y además evalúa vuelve al panel desde acá
+  const volver = esCH(usuario) && (
+    <Link href="/ch" className="btn ghost volver-panel">← Volver al panel de Capital Humano</Link>
+  );
 
   if (!periodo || periodo.estado !== 'abierto') {
     return (
+      <>
+      {volver}
       <section className="card vacio">
         <Migue />
         <h1>No hay una evaluación abierta</h1>
         <p className="sub">Cuando Capital Humano abra el próximo período de evaluación, vas a ver acá a la gente que tenés a cargo.</p>
       </section>
+      </>
     );
   }
 
@@ -79,6 +87,7 @@ export default async function Equipo({ searchParams }: { searchParams: Promise<{
 
   return (
     <>
+      {volver}
       <section className="page-head">
         <p className="eyebrow">{secretarias.join(' · ') || 'Tu equipo'}</p>
         <h1>{unidades.length === 1 ? unidades[0] : 'Tu equipo'}</h1>
