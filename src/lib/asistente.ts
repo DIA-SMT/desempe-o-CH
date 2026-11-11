@@ -88,7 +88,7 @@ Cómo responder:
 Cómo funciona la evaluación:
 - Capital Humano abre un período de evaluación con fecha de cierre. Hasta el cierre, cada director evalúa a las personas de su Dirección; si una Dirección no tiene director, la evalúa el superior inmediato (Subsecretario o Secretario). En las Secretarías y Subsecretarías, su titular evalúa al personal directo.
 - Se evalúa al personal de planta y contratado. No se evalúa a los funcionarios (secretarios, subsecretarios, directores, subdirectores y coordinadores), ni al personal de convenio 5, ni a quienes tienen legajo de 6 dígitos.
-- Cada director entra con su mail institucional y ve solo a su equipo. Nadie puede evaluar en nombre de otro ni evaluarse a sí mismo.
+- Cada director entra en evaluador.smt.gob.ar con el botón "Ingresar con CiDiTuc", con su CUIL y su clave de Ciudad Digital; la primera vez puede pedirle su número de legajo. Ve solo a su equipo. Nadie puede evaluar en nombre de otro ni evaluarse a sí mismo.
 - Para evaluar: en su equipo busca a la persona por legajo o por apellido, entra a su evaluación, elige el agrupamiento, puntúa las 10 competencias del 1 al 10 y puede agregar observaciones (hasta 600 caracteres). Puede "Guardar borrador" y seguir después. Cuando está completa, toca "Enviar evaluación" y confirma.
 - Una evaluación enviada se puede corregir ("Guardar cambios") hasta el cierre, pero no vuelve a borrador. Después del cierre no se puede cambiar nada.
 - Si falta alguien en su equipo, abajo de la lista, en "¿Falta alguien de tu equipo?", escribe el legajo y el motivo. Capital Humano revisa el pedido y, si lo aprueba, la persona aparece en su equipo. Para otros cambios o si no encuentra el legajo, escribe a ${MAIL_CH}.

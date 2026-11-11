@@ -437,6 +437,7 @@ input[type=email],input[type=password],input[type=date],input[type=file]{width:1
 .paginas{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:12px;font-size:.86rem;color:var(--muted)}
 .paginas div{display:flex;gap:8px}
 a.btn{text-decoration:none}
+section.comp{padding:18px 20px;scroll-margin-top:96px}
 .agrup{display:grid;gap:8px;max-width:420px}
 .resultado-import{display:grid;gap:8px}
 .resultado-import ul{margin:0;padding-left:18px;font-size:.86rem;color:var(--ink-2)}
