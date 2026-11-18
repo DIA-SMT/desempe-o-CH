@@ -10,6 +10,7 @@ import { esCH, requerirUsuario } from '@/lib/sesion';
 import { traerTodo } from '@/lib/supabase/admin';
 import { clienteServidor } from '@/lib/supabase/servidor';
 import type { FilaEvaluacion, FilaPadron } from '@/lib/tipos';
+import { AvanceArea, type FilaArea } from './AvanceArea';
 import { ListaEquipo, type FilaEquipo } from './ListaEquipo';
 import { SolicitudAgente, type SolicitudPropia } from './SolicitudAgente';
 
@@ -41,7 +42,8 @@ export default async function Equipo({ searchParams }: { searchParams: Promise<{
 
   // RLS: cada director ve solo a su equipo y sus propias evaluaciones.
   // Los semestres anteriores llegan por funciones que aplican la misma regla.
-  const [equipo, evaluaciones, { data: solicitudes }, { data: hist }, { data: res }] = await Promise.all([
+  // El avance del área (secretarios y subsecretarios) trae solo el estado de cada evaluación.
+  const [equipo, evaluaciones, { data: solicitudes }, { data: hist }, { data: res }, area] = await Promise.all([
     traerTodo<FilaPadron>((d, h) =>
       supabase.from('padron_periodo').select('legajo, nombre, unidad_codigo, unidad_nombre, secretaria, evaluador_id')
         .eq('periodo_id', periodo.id).eq('evaluador_id', usuario.id).order('nombre').range(d, h)),
@@ -52,6 +54,7 @@ export default async function Equipo({ searchParams }: { searchParams: Promise<{
       .eq('solicitante_id', usuario.id).order('creada_en', { ascending: false }),
     supabase.rpc('historial_equipo', { p_periodo: periodo.id }),
     supabase.rpc('resumen_equipo', { p_periodo: periodo.id }),
+    traerTodo<FilaArea>((d, h) => supabase.rpc('avance_area', { p_periodo: periodo.id }).range(d, h)),
   ]);
   const historial = (hist ?? []) as HistorialPersona[];
   const resumen = (res ?? []) as ResumenEquipo[];
@@ -84,13 +87,15 @@ export default async function Equipo({ searchParams }: { searchParams: Promise<{
   const secretarias = [...new Set(equipo.map((a) => a.secretaria).filter(Boolean))];
   const enviadas = filas.filter((f) => f.estado === 'enviada').length;
   const borradores = filas.filter((f) => f.estado === 'borrador').length;
+  // Secretario o subsecretario que no evalúa a nadie pero tiene gente en su área
+  const soloArea = filas.length === 0 && area.length > 0;
 
   return (
     <>
       {volver}
       <section className="page-head">
-        <p className="eyebrow">{secretarias.join(' · ') || 'Tu equipo'}</p>
-        <h1>{unidades.length === 1 ? unidades[0] : 'Tu equipo'}</h1>
+        <p className="eyebrow">{secretarias.join(' · ') || (soloArea ? 'Seguimiento' : 'Tu equipo')}</p>
+        <h1>{unidades.length === 1 ? unidades[0] : soloArea ? 'Tu área' : 'Tu equipo'}</h1>
         <p className="sub">Período {periodo.nombre}, {textoCierre(periodo)}.</p>
         {filas.length > 0 && (
           <div className="progress">
@@ -114,7 +119,15 @@ export default async function Equipo({ searchParams }: { searchParams: Promise<{
         </section>
       )}
 
-      {filas.length === 0 ? (
+      {soloArea ? (
+        <section className="card vacio" style={{ marginBottom: 16 }}>
+          <h2>En este período no tenés personas para evaluar</h2>
+          <p className="sub">
+            A la gente de tu área la evalúan los directores de cada unidad o la dirección de despacho. Acá abajo
+            podés seguir cómo van. Si esperabas evaluar a alguien, podés pedirlo con su legajo al final de la página.
+          </p>
+        </section>
+      ) : filas.length === 0 ? (
         <section className="card vacio" style={{ marginBottom: 16 }}>
           <h2>Todavía no tenés personas a cargo en este período</h2>
           <p className="sub">
@@ -126,6 +139,8 @@ export default async function Equipo({ searchParams }: { searchParams: Promise<{
       ) : (
         <ListaEquipo filas={filas} marcado={marcado} />
       )}
+
+      {area.length > 0 && <AvanceArea filas={area} />}
 
       {resumen.length > 0 && (
         <div style={{ marginBottom: 16 }}>
