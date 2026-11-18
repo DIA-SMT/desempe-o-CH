@@ -3,7 +3,9 @@
 import { redirect } from 'next/navigation';
 import { nombresCoinciden } from '@/lib/cidituc';
 import { MAIL_CH } from '@/lib/contacto';
-import { COOKIE_VINCULAR, PATH_VINCULAR, abrirSesion, borrarCookie, datosVincular } from '@/lib/ingreso-cidituc';
+import {
+  COOKIE_PORTAL, COOKIE_VINCULAR, PATH_VINCULAR, abrirSesion, borrarCookie, cuentaPorDni, datosPortal, datosVincular,
+} from '@/lib/ingreso-cidituc';
 import { periodoActual } from '@/lib/periodos';
 import { clienteAdmin } from '@/lib/supabase/admin';
 
@@ -69,4 +71,31 @@ export async function vincularLegajo(_: EstadoVincular, form: FormData): Promise
     return { error: 'El sistema no está disponible en este momento. Probá de nuevo más tarde.' };
   }
   redirect('/');
+}
+
+// Entrada desde el portal de CiDiTuc: la persona confirmó que es quien dice CiDiTuc (ver /ingresar/cidituc/confirmar).
+// Se vuelve a buscar la cuenta por si cambió en estos minutos.
+export async function confirmarPortal(): Promise<void> {
+  const datos = await datosPortal();
+  if (!datos) redirect('/ingresar?error=cidituc-estado');
+  let destino = '/';
+  try {
+    const cuenta = await cuentaPorDni(datos.dni);
+    await borrarCookie(COOKIE_PORTAL, PATH_VINCULAR);
+    if (!cuenta || !cuenta.activo) destino = '/ingresar?error=no-habilitado';
+    else if (cuenta.rol === 'admin') destino = '/ingresar?error=cidituc-admin';
+    else {
+      await abrirSesion(cuenta.email);
+      console.log(`cidituc: ingreso desde el portal de ${cuenta.rol} (DNI …${datos.dni.slice(-3)})`);
+    }
+  } catch (e) {
+    console.error('cidituc: no se pudo abrir la sesión desde el portal:', e instanceof Error ? e.message : e);
+    destino = '/ingresar?error=cidituc-servidor';
+  }
+  redirect(destino);
+}
+
+export async function cancelarPortal(): Promise<void> {
+  await borrarCookie(COOKIE_PORTAL, PATH_VINCULAR);
+  redirect('/ingresar');
 }

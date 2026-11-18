@@ -11,6 +11,11 @@
 //      Para esta app pide la clave en cada ingreso y no deja la sesión guardada en el navegador.
 //   3. El callback compara el state, valida el JWT contra <CIDITUC_BACKEND_URL>/usuarios/authStatus
 //      (Authorization: el token crudo, sin "Bearer") y busca al usuario por DNI.
+//   4. También se entra desde el portal cidituc.smt.gob.ar: abre el sistema con ?auth=<JWT> y sin
+//      state, porque el ingreso no empezó acá. El proxy lo pasa al callback, que valida el token igual
+//      pero no abre la sesión hasta que la persona confirma su nombre en /ingresar/cidituc/confirmar.
+//      Ese clic reemplaza al state: sin él, un link armado con el token de otro dejaría a alguien
+//      adentro con una cuenta ajena sin darse cuenta.
 // El JWT se valida y se descarta: no llega al navegador ni queda guardado.
 //
 // Solo usa módulos de Node (sin alias ni funciones de Next), para probarlo con node --test.
@@ -47,6 +52,7 @@ export const esSinMail = (email: string | null | undefined) => !!email?.endsWith
 
 export const COOKIE_STATE = 'cidituc_state';
 export const COOKIE_VINCULAR = 'cidituc_vincular';
+export const COOKIE_PORTAL = 'cidituc_portal';
 export const DURACION_S = 10 * 60;
 
 export const nuevoState = () => randomBytes(32).toString('base64url');

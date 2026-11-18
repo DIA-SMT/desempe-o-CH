@@ -25,6 +25,18 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
+  // El portal cidituc.smt.gob.ar abre el sistema con ?auth=<token> en la dirección que tenga cargada.
+  // Va al callback, que lo valida y pide confirmar quién es antes de abrir la sesión.
+  const auth = request.nextUrl.searchParams.get('auth');
+  if (auth && !request.nextUrl.pathname.startsWith('/auth/')) {
+    const url = new URL('/auth/cidituc/callback', request.url);
+    url.searchParams.set('auth', auth);
+    const res = NextResponse.redirect(url);
+    res.headers.set('Cache-Control', 'no-store');
+    res.headers.set('Referrer-Policy', 'no-referrer');
+    return res;
+  }
+
   let response = NextResponse.next({ request });
 
   const supabase = createServerClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, {

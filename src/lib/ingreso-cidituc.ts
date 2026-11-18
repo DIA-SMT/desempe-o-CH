@@ -3,7 +3,7 @@
 // el rol y lo que ve son los de su cuenta). La cuenta de administración entra solo con contraseña.
 
 import { cookies } from 'next/headers';
-import { COOKIE_STATE, COOKIE_VINCULAR, DURACION_S, leerConfig, verificar } from './cidituc';
+import { COOKIE_PORTAL, COOKIE_STATE, COOKIE_VINCULAR, DURACION_S, leerConfig, verificar } from './cidituc';
 import { clienteAdmin } from './supabase/admin';
 import { clienteServidor } from './supabase/servidor';
 
@@ -41,12 +41,22 @@ export async function borrarCookie(nombre: string, path: string) {
 
 export const PATH_STATE = '/auth/cidituc';
 export const PATH_VINCULAR = '/ingresar';
-export { COOKIE_STATE, COOKIE_VINCULAR };
+export { COOKIE_PORTAL, COOKIE_STATE, COOKIE_VINCULAR };
 
-// Lo que verificó CiDiTuc de quien está vinculando su legajo (cookie firmada de 10 minutos)
+// Lo que verificó CiDiTuc de quien está vinculando su legajo o confirmando su ingreso desde el portal
+// (cookies firmadas de 10 minutos)
 export interface DatosVincular { dni: string; nombre: string; apellido: string; exp: number }
 
-export async function datosVincular(): Promise<DatosVincular | null> {
+async function leerFirmada(nombre: string): Promise<DatosVincular | null> {
   const config = leerConfig();
-  return config ? verificar<DatosVincular>((await cookies()).get(COOKIE_VINCULAR)?.value, config.secreto) : null;
+  return config ? verificar<DatosVincular>((await cookies()).get(nombre)?.value, config.secreto) : null;
+}
+
+export const datosVincular = () => leerFirmada(COOKIE_VINCULAR);
+export const datosPortal = () => leerFirmada(COOKIE_PORTAL);
+
+// ¿La sesión abierta en este navegador ya es de esa cuenta?
+export async function esLaSesionDe(email: string): Promise<boolean> {
+  const { data } = await (await clienteServidor()).auth.getUser();
+  return !!data.user?.email && data.user.email.toLowerCase() === email.toLowerCase();
 }
