@@ -1,6 +1,7 @@
 import { cookies } from 'next/headers';
-import { NextResponse, type NextRequest } from 'next/server';
+import type { NextRequest } from 'next/server';
 import { DURACION_S, dniDeDocumento, firmar, leerConfig, mismoValor, validarToken, venceEn } from '@/lib/cidituc';
+import { redirigirAca } from '@/lib/redireccion';
 import {
   COOKIE_PORTAL, COOKIE_STATE, COOKIE_VINCULAR, PATH_STATE, PATH_VINCULAR, abrirSesion, borrarCookie, cuentaPorDni,
   esLaSesionDe, guardarCookie,
@@ -11,7 +12,7 @@ import {
 // el token se valida igual, pero la sesión se abre recién cuando la persona confirma quién es.
 export async function GET(request: NextRequest) {
   const ir = (destino: string) => {
-    const res = NextResponse.redirect(new URL(destino, request.url));
+    const res = redirigirAca(destino);
     res.headers.set('Cache-Control', 'no-store');
     res.headers.set('Referrer-Policy', 'no-referrer'); // que la dirección con el token no se filtre
     return res;

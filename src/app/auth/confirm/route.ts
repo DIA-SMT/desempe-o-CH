@@ -1,11 +1,12 @@
 import type { EmailOtpType } from '@supabase/supabase-js';
-import { NextResponse, type NextRequest } from 'next/server';
+import type { NextRequest } from 'next/server';
+import { redirigirAca } from '@/lib/redireccion';
 import { clienteServidor } from '@/lib/supabase/servidor';
 
 // Destino del enlace que llega por mail. Acepta el formato con token_hash
 // (plantilla de mail recomendada) y el formato con code (plantilla por defecto).
 export async function GET(request: NextRequest) {
-  const { searchParams, origin } = new URL(request.url);
+  const { searchParams } = request.nextUrl;
   const tokenHash = searchParams.get('token_hash');
   const tipo = searchParams.get('type') as EmailOtpType | null;
   const code = searchParams.get('code');
@@ -18,5 +19,5 @@ export async function GET(request: NextRequest) {
     ok = !(await supabase.auth.exchangeCodeForSession(code)).error;
   }
 
-  return NextResponse.redirect(`${origin}${ok ? '/' : '/ingresar?error=enlace'}`);
+  return redirigirAca(ok ? '/' : '/ingresar?error=enlace');
 }
